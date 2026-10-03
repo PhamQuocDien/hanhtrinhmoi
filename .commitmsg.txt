@@ -1,0 +1,21 @@
+feat(data): add curriculum/subject/textbook registries split by grade
+
+- data/subjects/subject-registry.js: single source of truth for subjects with
+  grade ranges and required/elective/integrated/supplementary status. KHTN is
+  declared as an integrated subject whose learning tracks are Vat ly, Hoa hoc,
+  Sinh hoc. Tin hoc is NOT promoted to an official subject for grades 1-2;
+  it is exposed as supplementary content only.
+- data/textbooks/: book-series and textbook registries so one curriculum can
+  carry many approved textbook series.
+- data/curriculum/grade-01..12.js: one file per grade, generated from legacy
+  data with stable IDs for grade/subject/bookSeries/textbook/chapter/lesson.
+- server/parsers/curriculum/curriculum-parser.js: safe reader for the legacy
+  curriculum file (balanced-brace scan, no full-file eval).
+- scripts/migrate-curriculum.js: idempotent generator, supports --dry-run.
+- scripts/validate-curriculum.js: detects duplicate lesson IDs and codes,
+  missing source, wrong grade/subject, and auto-generated sample titles.
+
+Every record carries source and verificationStatus. Lesson titles that could
+not be verified against an official source are marked NEEDS_VERIFICATION
+rather than invented; subjects without real lesson names are flagged for admin
+import instead of being filled with placeholder titles.

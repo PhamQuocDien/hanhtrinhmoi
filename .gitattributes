@@ -1,0 +1,5 @@
+# Chuẩn hoá ký tự xuống dòng để dữ liệu sinh tự động không sinh diff rác.
+* text=auto eol=lf
+
+# File sinh tự động: đánh dấu để Git coi là văn bản, tránh diff nhị phân.
+data/curriculum/grade-*.js text
