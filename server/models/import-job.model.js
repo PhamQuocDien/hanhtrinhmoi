@@ -9,12 +9,37 @@
  */
 
 const mongoose = require('mongoose');
-const { IMPORT_STATUS } = require('../config/constants');
+const { IMPORT_STATUS, QUESTION_TYPES } = require('../config/constants');
+
+/** Một ô trống của câu điền khuyết đọc được từ DOCX. */
+const parsedBlankSchema = new mongoose.Schema({
+    blankId: { type: String, required: true },
+    position: { type: Number, default: 1 },
+    correctAnswers: { type: [String], default: [] },
+    points: { type: Number, default: null },
+    normalization: { type: mongoose.Schema.Types.Mixed, default: {} },
+    hint: { type: String, default: '', maxlength: 200 }
+}, { _id: false });
+
+/** Một ý Đúng/Sai đọc được từ DOCX. */
+const parsedStatementSchema = new mongoose.Schema({
+    statementId: { type: String, required: true },
+    text: { type: String, required: true, maxlength: 1000 },
+    // null = admin phải xác nhận, parser không đoán.
+    correctAnswer: { type: Boolean, default: null }
+}, { _id: false });
+
+/** Một tiêu chí rubric đọc được từ phần "Hướng dẫn chấm". */
+const parsedRubricItemSchema = new mongoose.Schema({
+    criterionId: { type: String, required: true },
+    description: { type: String, required: true, maxlength: 500 },
+    maxPoints: { type: Number, required: true, min: 0 }
+}, { _id: false });
 
 const parsedQuestionSchema = new mongoose.Schema({
     // Số thứ tự câu trong tài liệu gốc.
     number: { type: Number, required: true, min: 1 },
-    type: { type: String, default: 'single_choice' },
+    type: { type: String, enum: Object.values(QUESTION_TYPES), default: QUESTION_TYPES.SINGLE_CHOICE },
     questionText: { type: String, required: true, maxlength: 8000 },
     options: {
         type: [{
@@ -24,6 +49,10 @@ const parsedQuestionSchema = new mongoose.Schema({
         }],
         default: []
     },
+    blanks: { type: [parsedBlankSchema], default: [] },
+    statements: { type: [parsedStatementSchema], default: [] },
+    rubric: { type: [parsedRubricItemSchema], default: [] },
+
     // null nghĩa là parser KHÔNG xác định được đáp án — tuyệt đối không đoán.
     correctAnswer: { type: mongoose.Schema.Types.Mixed, default: null },
     answerDetected: { type: Boolean, default: false },
@@ -33,16 +62,30 @@ const parsedQuestionSchema = new mongoose.Schema({
             _id: false,
             type: { type: String, default: 'image' },
             url: { type: String, required: true },
-            caption: { type: String, default: '' }
+            mimeType: { type: String, default: '' },
+            caption: { type: String, default: '', maxlength: 300 }
         }],
         default: []
     },
     difficulty: { type: String, default: 'medium' },
     points: { type: Number, default: 1, min: 0, max: 100 },
     lessonId: { type: String, default: null },
+
+    // Lý do parser chọn loại câu — admin nhìn thấy để biết độ tin cậy.
+    typeDetection: {
+        reason: { type: String, default: '' },
+        confidence: { type: String, default: 'medium' }
+    },
+    // Công thức/bảng/hình parser không chắc chuyển đúng.
+    hasFormula: { type: Boolean, default: false },
+    parserVersion: { type: String, default: '' },
+
     // Lỗi/cảnh báo của riêng câu này (thiếu đáp án, thiếu lựa chọn, công thức...).
+    // Dùng `errorList` thay cho `errors` vì `errors` là khoá dành riêng của Mongoose.
     warnings: { type: [String], default: [] },
+    errorList: { type: [String], default: [] },
     valid: { type: Boolean, default: false },
+    needsReview: { type: Boolean, default: false },
     // true nếu admin đã sửa tay sau khi parse.
     editedByAdmin: { type: Boolean, default: false }
 }, { _id: false });

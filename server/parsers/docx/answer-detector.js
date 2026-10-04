@@ -25,8 +25,56 @@ const INLINE_EXPLANATION = /^\s*(?:giải\s*thích(?:\s*đáp\s*án)?|lời\s*gi
  */
 const ANSWER_KEY_LINE = /^\s*(?:câu\s*)?(\d{1,3})\s*[.):\-–—]\s*([A-H](?:\s*[,;và và]+\s*[A-H])*)\s*$/i;
 
-/** Chuỗi phải chứa ít nhất 2 ký hiệu hợp lệ để coi là đáp án nhiều chọn. */
+/** Kiểm tra chuỗi có phải mẫu đáp án nhiều lựa chọn không. */
 const MULTI_ANSWER = /^[A-H](?:\s*[,;và và]+\s*[A-H])+$/i;
+
+/** Đáp án viết bằng chữ, không phải ký hiệu A-D. */
+const WORD_ANSWER = /^(đúng|sai|true|false|không|có|động|vô định|hữu hạn|vô hạn)$/i;
+
+/** Đáp án là một giá trị số (kể cả số thập phân, phân số, phần trăm). */
+const NUMERIC_ANSWER = /^-?\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?\s*%?$/;
+
+/**
+ * Đáp án có phải một danh sách được phân tách bằng dấu phẩy/chấm phẩy không.
+ * Ví dụ ô trống hai chỗ: "Đông; Tây" hoặc "Hà Nội, Paris".
+ */
+function splitListAnswer(raw) {
+    const text = String(raw || '').trim();
+    if (!text) return null;
+    const parts = text
+        .split(/\s*[;,]\s*|\s+và\s+|\s+\/\s+/)
+        .map(part => part.trim())
+        .filter(Boolean);
+    // Một giá trị đơn không phải danh sách.
+    return parts.length > 1 ? parts : null;
+}
+
+/**
+ * Chuẩn hoá đáp án KHÔNG thuộc dạng chọn ký hiệu A-D.
+ * Dùng cho điền khuyết, trả lời ngắn, câu số, Đúng/Sai.
+ *
+ * @returns {string|string[]|boolean|null}
+ */
+function normalizeFreeAnswerValue(raw) {
+    const text = String(raw || '').trim();
+    if (!text) return null;
+
+    if (WORD_ANSWER.test(text)) {
+        return ['đúng', 'true', 'có', 'động'].includes(text.toLowerCase());
+    }
+
+    // Số thuần -> trả về số để câu số so khớp chính xác.
+    if (NUMERIC_ANSWER.test(text)) {
+        const parsed = Number(text.replace(',', '.'));
+        return Number.isFinite(parsed) ? parsed : text;
+    }
+
+    const list = splitListAnswer(text);
+    if (list) return list;
+
+    // Còn lại: giữ nguyên dạng chuỗi để so khớp với chuẩn hoá mặc định.
+    return text;
+}
 
 /**
  * Chuẩn hoá giá trị đáp án từ một chuỗi.
@@ -49,11 +97,17 @@ function normalizeAnswerValue(raw, availableLabels) {
 
 /**
  * Tìm dòng đáp án/giải thích trong thân một câu hỏi.
- * @returns {{answer: string|string[]|null, explanation: string}}
+ *
+ * `availableLabels` rỗng nghĩa là câu KHÔNG có lựa chọn A-D — khi đó đọc
+ * đáp án tự do (điền khuyết, trả lời ngắn, số, Đúng/Sai).
+ *
+ * @returns {{answer: *, explanation: string, answerRaw: string|null}}
  */
 function detectAnswerInQuestion(paragraphs, availableLabels = ['A', 'B', 'C', 'D']) {
     let answer = null;
+    let answerRaw = null;
     let explanation = '';
+    const usesLabels = Array.isArray(availableLabels) && availableLabels.length > 0;
 
     for (const paragraph of paragraphs) {
         const text = paragraph.text || '';
@@ -66,11 +120,14 @@ function detectAnswerInQuestion(paragraphs, availableLabels = ['A', 'B', 'C', 'D
 
         const answerMatch = text.match(INLINE_ANSWER);
         if (answerMatch && answer === null) {
-            answer = normalizeAnswerValue(answerMatch[1], availableLabels);
+            answerRaw = answerMatch[1].trim();
+            answer = usesLabels
+                ? normalizeAnswerValue(answerRaw, availableLabels)
+                : normalizeFreeAnswerValue(answerRaw);
         }
     }
 
-    return { answer, explanation };
+    return { answer, explanation, answerRaw };
 }
 
 /**
@@ -108,8 +165,12 @@ module.exports = {
     INLINE_ANSWER,
     INLINE_EXPLANATION,
     MULTI_ANSWER,
+    NUMERIC_ANSWER,
+    WORD_ANSWER,
     detectAnswerInQuestion,
     detectAnswerKey,
     isMultiAnswer,
-    normalizeAnswerValue
+    normalizeAnswerValue,
+    normalizeFreeAnswerValue,
+    splitListAnswer
 };

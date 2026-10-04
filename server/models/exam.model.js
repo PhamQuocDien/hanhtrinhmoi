@@ -11,7 +11,7 @@
  */
 
 const mongoose = require('mongoose');
-const { EXAM_STATUS, DIFFICULTIES } = require('../config/constants');
+const { EXAM_STATUS, DIFFICULTIES, SOURCE_TYPE } = require('../config/constants');
 
 const examQuestionSchema = new mongoose.Schema({
     questionId: { type: String, required: true },
@@ -49,6 +49,17 @@ const examSchema = new mongoose.Schema({
     createdBy: { type: String, required: true },
     updatedBy: { type: String, default: null },
     importJobId: { type: mongoose.Schema.Types.ObjectId, default: null, index: true },
+
+    // ---- Truy vết nguồn ----
+    // Đề đến từ đâu: nhập DOCX, soạn tay, hay sinh tự động từ ngân hàng câu hỏi.
+    sourceType: {
+        type: String,
+        enum: Object.values(SOURCE_TYPE),
+        default: SOURCE_TYPE.MANUAL
+    },
+    sourceFileName: { type: String, default: '', maxlength: 255 },
+    // Phiên bản bộ dò DOCX đã dùng, để truy vết khi parser đổi hành vi.
+    parserVersion: { type: String, default: '', maxlength: 50 },
 
     // Số lượt làm bài, cập nhật bằng $inc để không mất dữ liệu khi chạy song song.
     attemptCount: { type: Number, default: 0, min: 0 },
