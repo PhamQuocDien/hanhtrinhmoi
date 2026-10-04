@@ -92,4 +92,10 @@ nội dung. Bài chưa có nội dung vẫn dùng được cho luyện tập và
 - `GET /api/student/curriculum/grades/:grade/subjects` — môn của một lớp
 - `GET /api/student/curriculum/grades/:grade/subjects/:subjectId` — chương và bài
 - `GET /api/student/curriculum/lessons/:lessonId` — một bài học
-- `POST /api/student/progress/lessons/complete` — đánh dấu đã học
+- `POST /api/student/progress/lessons/read` — đánh dấu đã đọc bài
+  (KHÔNG đánh dấu hoàn thành; máy chủ trả kèm điều kiện còn thiếu)
+- `GET /api/student/lessons/:lessonId/mini-test` — mini test cuối bài
+- `POST /api/student/lessons/mini-test/submit` — nộp mini test (chỉ gửi `answers`)
+- `GET /api/student/milestones/:grade/:subjectId` — điều kiện checkpoint/giữa kỳ/cuối kỳ
+
+Xem `docs/ASSESSMENT_POLICY.md` để hiểu vì sao mở bài không đồng nghĩa với hoàn thành.

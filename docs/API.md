@@ -68,7 +68,11 @@ Tổng cộng **50** route của nền tảng học tập.
 | `GET` | `/api/student/exams/:examId` |
 | `POST` | `/api/student/exams/:examId/attempts` |
 | `GET` | `/api/student/progress/:grade` |
-| `POST` | `/api/student/progress/lessons/complete` |
+| `POST` | `/api/student/progress/lessons/read` |
+| `GET` | `/api/student/lessons/:lessonId/state` |
+| `GET` | `/api/student/lessons/:lessonId/mini-test` |
+| `POST` | `/api/student/lessons/mini-test/submit` |
+| `GET` | `/api/student/milestones/:grade/:subjectId` |
 | `GET` | `/api/student/questions/practice` |
 
 ## Phân quyền
