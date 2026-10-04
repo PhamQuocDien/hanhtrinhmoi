@@ -19,6 +19,26 @@ const {
 } = require('../../data/subjects/subject-registry');
 const { BOOK_SERIES, getSeriesForGrade, getDefaultSeriesId } = require('../../data/textbooks/book-series-registry');
 const { resolveTextbook, getTextbooksForGrade } = require('../../data/textbooks/textbook-registry');
+const { EDUCATION_LEVELS, levelOfGrade } = require('../../data/curriculum/education-levels');
+const repo = require('../repositories/curriculum.repository');
+
+/**
+ * Danh sách cấp học, kèm các lớp thuộc cấp đó.
+ * Frontend dùng để nhóm lớp mà không tự viết `if (grade <= 5) ...`.
+ */
+function listEducationLevels() {
+    return EDUCATION_LEVELS.map(level => ({
+        ...level,
+        grades: curriculum.getGrades().filter(grade => levelOfGrade(grade).id === level.id)
+    }));
+}
+
+/** Thông tin một cấp học theo mã. */
+function getEducationLevel(levelId) {
+    const level = EDUCATION_LEVELS.find(item => item.id === String(levelId || ''));
+    if (!level) return null;
+    return { ...level, grades: curriculum.getGrades().filter(grade => levelOfGrade(grade).id === level.id) };
+}
 
 /** Tổng quan chương trình cho trang chủ. */
 function getOverview() {
@@ -36,7 +56,12 @@ function listGrades() {
             subjectCount: data.subjectCount,
             lessonCount: data.lessonCount,
             pendingImportCount: data.subjectsPendingImport.length,
-            seriesId: data.seriesId
+            // Cấp học để giao diện không phải tự đoán từ số lớp.
+            educationLevelId: levelOfGrade(data.grade).id,
+            educationLevelName: levelOfGrade(data.grade).shortName,
+            // Một lớp có thể có nhiều bộ sách; đây chỉ là bộ mặc định.
+            seriesCount: getSeriesForGrade(data.grade).length,
+            defaultSeriesId: data.seriesId
         };
     });
 }
@@ -188,6 +213,30 @@ function listTextbooks({ seriesId, grade } = {}) {
         verificationStatus: item.verificationStatus
     }));
 }
+/**
+ * Các bộ sách có thể dùng cho một môn trong một lớp.
+ *
+ * Hệ thống KHÔNG giả định mỗi môn chỉ có một bộ sách. Danh sách trả về động từ
+ * registry, kèm số đầu sách của từng bộ để giao diện hiển thị đúng — kể cả khi
+ * bộ sách đó chưa có đầu sách nào (`textbookCount: 0`).
+ */
+function listSeriesForSubject(grade, subjectId) {
+    return repo.listSeriesForSubject(grade, subjectId);
+}
+
+/**
+ * Cây chương và bài của một môn theo bộ sách đã chọn.
+ *
+ * Đây là dữ liệu cho bước "lớp → môn → bộ sách → sách → chương → bài".
+ */
+function listChaptersForTextbook(grade, subjectId, seriesId) {
+    return repo.listChaptersForTextbook(grade, subjectId, seriesId);
+}
+
+/** Danh sách môn của một lớp, đã chuẩn hoá kèm cấp học và mạch nội dung. */
+function listSubjectsWithDetail(grade) {
+    return repo.listSubjectsOfGrade(grade);
+}
 
 /**
  * Môn có thuộc lớp không. Dùng để chặn truy cập chéo cấp trong API.
@@ -205,14 +254,19 @@ function validateSubjectInGrade(grade, subjectId) {
 module.exports = {
     SUBJECT_STATUS,
     getDefaultSeriesId,
+    getEducationLevel,
     getLessonDetail,
     getOverview,
     getSubjectDetail,
     listAllSubjects,
     listBookSeries,
+    listChaptersForTextbook,
+    listEducationLevels,
     listGrades,
     listLessons,
+    listSeriesForSubject,
     listSubjects,
+    listSubjectsWithDetail,
     listTextbooks,
     validateSubjectInGrade
 };

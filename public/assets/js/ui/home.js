@@ -1,87 +1,72 @@
 /**
- * TRANG CHỦ — chọn lớp và điều hướng theo vai trò.
+ * TRANG CHỦ — dựng header, bộ chọn lớp và luồng chọn chương trình.
  *
- * Trang này KHÔNG nạp toàn bộ chương trình hay ngân hàng câu hỏi: chỉ gọi
- * /api/student/curriculum/grades (12 dòng) để dựng bộ chọn lớp. Nhờ vậy trang
- * chủ mở nhanh và không kéo theo dữ liệu lớn.
+ * Trang này chỉ gọi các API chương trình từng bước khi người dùng chọn, nên mở
+ * trang rất nhanh: ban đầu chỉ có 12 dòng lớp.
  */
 
-import { studentApi, currentUser, AUTH_PATHS, homePathFor, ApiError } from '../core/api.js';
-import { createElement, render, message, formatNumber } from '../core/dom.js';
+import { render, formatNumber } from '../core/dom.js';
+import { initHeader } from './app-header.js';
+import { renderGradePicker, gradePickerHeading } from './grade-picker.js';
+import { CurriculumPicker } from './curriculum-picker.js';
+import { getGrades, getSubjects, getTextbookSeries, getTextbooks, getChapters, lessonHref } from '../student/curriculum.service.js';
+import { studentApi } from '../core/api.js';
 
-const picker = document.getElementById('grade-picker');
-const actionsBox = document.getElementById('home-actions');
+const pickerHost = document.getElementById('curriculum-picker');
 const noteBox = document.getElementById('curriculum-note');
 
-/** Nút đăng nhập / vào bảng điều khiển tuỳ theo trạng thái phiên. */
-async function renderActions() {
-    const user = await currentUser();
-    render(actionsBox, createElement('a', {
-        className: 'btn btn-primary',
-        text: user ? 'Vào bảng điều khiển' : 'Đăng nhập',
-        href: user ? homePathFor(user.role) : AUTH_PATHS.login
-    }));
+/** Dịch vụ chương trình mà bộ chọn dùng. */
+const service = {
+    getSubjects,
+    getTextbookSeries,
+    getTextbooks,
+    getChapters,
+    lessonHref
+};
 
-    if (!user) {
-        render(actionsBox, createElement('a', {
-            className: 'btn btn-secondary',
-            text: 'Đăng ký',
-            href: AUTH_PATHS.register
-        }));
-    }
-}
+/**
+ * Khởi tạo trang.
+ *
+ * @returns {Promise<void>}
+ */
+async function main() {
+    await initHeader();
 
-/** Dựng lưới 12 thẻ lớp. */
-function renderGrades(grades) {
-    picker.setAttribute('aria-busy', 'false');
-    render(picker, ...grades.map(grade => createElement('a', {
-        className: 'tile',
-        href: `/student/subjects.html?grade=${grade.grade}`,
-        children: [
-            createElement('p', { className: 'tile-icon', attrs: { 'aria-hidden': 'true' }, text: `Lớp ${grade.grade}` }),
-            createElement('p', { className: 'tile-title', text: grade.gradeName || `Lớp ${grade.grade}` }),
-            createElement('p', {
-                className: 'tile-meta',
-                text: [
-                    `${formatNumber(grade.subjectCount)} môn`,
-                    `${formatNumber(grade.lessonCount)} bài`
-                ].join(' · ')
-            })
-        ]
-    })));
-}
+    // Bộ chọn các bước sau lớp: môn → bộ sách → sách → chương → bài.
+    const steps = new CurriculumPicker(document.createElement('div'), service);
+    pickerHost.append(steps.host);
 
-/** Hiển thị ghi chú về trạng thái xác minh của dữ liệu chương trình. */
-function renderNote(overview) {
-    if (!overview) return;
-    render(noteBox,
-        `Chương trình ${overview.curriculumVersion} · `,
-        createElement('strong', {
-            text: `${formatNumber(overview.subjectCount)} môn, ${formatNumber(overview.lessonCount)} bài học`
-        }),
-        overview.pendingImportCount
-            ? ` · ${formatNumber(overview.pendingImportCount)} môn chờ nhập nội dung bài học`
-            : '',
-        '. ',
-        overview.verificationStatus !== 'VERIFIED'
-            ? 'Tên bài học đang chờ đối chiếu với bản in sách giáo khoa.'
-            : ''
+    // Bước đầu tiên: chọn lớp. Chọn xong sẽ mở tiếp bước "chọn môn".
+    const grades = await getGrades().catch(() => []);
+    const gradeSection = document.createElement('section');
+    gradeSection.className = 'picker';
+    gradeSection.append(gradePickerHeading(grades.length || null));
+    const gradeGrid = document.createElement('div');
+    gradeSection.append(gradeGrid);
+    pickerHost.prepend(gradeSection);
+
+    await renderGradePicker(
+        gradeGrid,
+        () => getGrades(),
+        chosen => {
+            gradeSection.hidden = true;
+            steps.loadSubjects(chosen);
+            // Đưa người học tới phần môn học sau khi chọn lớp.
+            steps.sections.subject.root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     );
+
+    // Ghi chú trạng thái xác minh của dữ liệu chương trình.
+    try {
+        const overview = await studentApi.getOverview();
+        if (overview) {
+            noteBox.textContent = `Chương trình ${overview.curriculumVersion || ''} · `
+                + `${formatNumber(overview.subjectCount)} môn, ${formatNumber(overview.lessonCount)} bài học. `
+                + 'Dữ liệu chưa đối chiếu xong với nguồn chính thức nên được đánh dấu “đang xác minh”.';
+        }
+    } catch (error) {
+        noteBox.textContent = '';
+    }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    renderActions();
-
-    try {
-        // Hai lời gọi độc lập: bộ chọn lớp hiện ngay, ghi chú chương trình sau.
-        const grades = await studentApi.getGrades();
-        renderGrades(grades);
-        studentApi.getOverview().then(renderNote).catch(() => {});
-    } catch (error) {
-        picker.setAttribute('aria-busy', 'false');
-        const text = error instanceof ApiError
-            ? error.message
-            : 'Không tải được danh sách lớp. Vui lòng tải lại trang.';
-        render(picker, message(text, 'error'));
-    }
-});
+main();

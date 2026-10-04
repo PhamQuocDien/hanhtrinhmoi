@@ -19,8 +19,27 @@ const router = express.Router();
 
 // ---- Chương trình (mở cho mọi tài khoản đã đăng nhập) ----
 router.get('/curriculum/overview', requireAuth, safeAsyncRoute(controller.getOverview));
+
+// Cấp học (tiểu học / THCS / THPT) kèm các lớp thuộc cấp đó.
+router.get('/curriculum/levels', requireAuth, safeAsyncRoute(controller.listEducationLevels));
+
 router.get('/curriculum/grades', requireAuth, safeAsyncRoute(controller.listGrades));
 router.get('/curriculum/grades/:grade/subjects', requireAuth, safeAsyncRoute(controller.listSubjects));
+
+// Bộ sách dùng cho một môn trong một lớp — bước "chọn bộ sách".
+router.get(
+    '/curriculum/grades/:grade/subjects/:subjectId/series',
+    requireAuth,
+    safeAsyncRoute(controller.listSeries)
+);
+
+// Chương và bài theo bộ sách đã chọn — bước "xem sách".
+router.get(
+    '/curriculum/grades/:grade/subjects/:subjectId/chapters',
+    requireAuth,
+    safeAsyncRoute(controller.listChapters)
+);
+
 router.get(
     '/curriculum/grades/:grade/subjects/:subjectId',
     requireAuth,

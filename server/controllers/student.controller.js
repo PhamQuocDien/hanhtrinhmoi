@@ -56,6 +56,42 @@ function listSubjects(req, res) {
     return response.ok(res, subjects);
 }
 
+/** Cấp học (tiểu học / THCS / THPT) kèm các lớp thuộc cấp. */
+function listEducationLevels(req, res) {
+    return response.ok(res, curriculumService.listEducationLevels());
+}
+
+/**
+ * Bộ sách dùng cho một môn trong một lớp.
+ *
+ * Trả về DANH SÁCH ĐỘNG từ registry kèm số đầu sách của từng bộ, nên giao diện không
+ * cần biết trước có những bộ nào và tự hiện thêm bộ mới khi dữ liệu bổ sung.
+ */
+function listSeries(req, res) {
+    const grade = Number(req.params.grade);
+    if (!grade || grade < 1 || grade > 12) {
+        return response.badRequest(res, 'Lớp phải từ 1 đến 12.');
+    }
+    const series = curriculumService.listSeriesForSubject(grade, req.params.subjectId);
+    if (!series.length) return response.notFound(res, 'Chưa có dữ liệu bộ sách cho môn này.');
+    return response.ok(res, { grade, subjectId: req.params.subjectId, series });
+}
+
+/** Chương và bài theo bộ sách đã chọn (query `?seriesId=`). */
+function listChapters(req, res) {
+    const grade = Number(req.params.grade);
+    if (!grade || grade < 1 || grade > 12) {
+        return response.badRequest(res, 'Lớp phải từ 1 đến 12.');
+    }
+    const result = curriculumService.listChaptersForTextbook(
+        grade,
+        req.params.subjectId,
+        String(req.query.seriesId || '').trim() || undefined
+    );
+    if (!result) return response.notFound(res, 'Không tìm thấy môn học trong lớp này.');
+    return response.ok(res, result);
+}
+
 /** Chi tiết một môn kèm danh sách bài học. */
 function getSubjectDetail(req, res) {
     const detail = curriculumService.getSubjectDetail(Number(req.params.grade), req.params.subjectId);
@@ -196,10 +232,13 @@ module.exports = {
     getOverview,
     getProgress,
     getSubjectDetail,
+    listChapters,
+    listEducationLevels,
     listExams,
     listGrades,
     listHistory,
     listPracticeQuestions,
+    listSeries,
     listSubjects,
     markLessonCompleted,
     saveAnswers,

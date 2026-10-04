@@ -7,8 +7,12 @@
     "start": "node server.js",
     "test": "node --experimental-vm-modules tests/run-all.js",
     "test:legacy": "node scripts/validate-project.js && node scripts/test-v13-runtime.js && node scripts/test-v14-runtime.js",
-    "check": "node scripts/validate-curriculum.js && npm test && node scripts/check-syntax.js",
+    "check": "npm run validate:curriculum && npm test && npm run check:syntax && npm run check:frontend && npm run check:modules && node tests/curriculum-browse.test.js",
     "check:syntax": "node scripts/check-syntax.js",
+    "check:frontend": "node --experimental-vm-modules scripts/check-frontend-syntax.js",
+    "check:modules": "node scripts/check-module-contract.js",
+    "check:ui": "node scripts/check-ui-delivery.js",
+    "check:flow": "node scripts/check-curriculum-flow.js",
     "smoke": "node scripts/smoke-http.js",
     "validate:curriculum": "node scripts/validate-curriculum.js",
     "migrate:curriculum": "node scripts/migrate-curriculum.js"

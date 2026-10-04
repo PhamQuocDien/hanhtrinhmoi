@@ -8,43 +8,77 @@
     <link rel="stylesheet" href="/assets/css/education.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+
     <header class="app-header">
         <div class="app-header-inner">
             <a class="app-brand" href="/index.html">
                 <span aria-hidden="true">🎓</span>
                 <span>Hành Tinh Mơ Ước</span>
             </a>
+
+            <nav class="app-nav" id="app-nav" aria-label="Điều hướng chính"></nav>
+
+            <button
+                class="nav-toggle"
+                id="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="app-nav"
+                aria-label="Mở menu điều hướng">
+                <span aria-hidden="true">☰</span>
+            </button>
+
             <div class="app-user" id="home-actions"></div>
         </div>
     </header>
 
-    <main class="page">
-        <section class="card">
-            <h1 class="page-title">Nền tảng học tập tương tác</h1>
-            <p class="page-subtitle">
-                Học theo chương trình của Bộ Giáo dục và Đào tạo, luyện tập theo bài,
-                làm bài kiểm tra và xem kết quả ngay.
-            </p>
-            <div class="grid-2">
+    <main id="main-content">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner">
                 <div>
-                    <h2>Chọn lớp để bắt đầu</h2>
-                    <p class="muted small">Chọn lớp để xem môn học và bài kiểm tra tương ứng.</p>
-                    <div id="grade-picker" class="grid" aria-busy="true">
-                        <p class="loading-text">Đang tải danh sách lớp…</p>
+                    <span class="hero-eyebrow">Nền tảng học tập · Lớp 1–12</span>
+                    <h1 class="hero-title">Hành Tinh Mơ Ước</h1>
+                    <p class="hero-text">
+                        Học theo chương trình giáo dục, chọn lớp, môn học và bộ sách
+                        phù hợp, luyện tập và kiểm tra để theo dõi tiến bộ.
+                    </p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#chon-lop" id="hero-start">Bắt đầu học</a>
+                        <a class="btn btn-secondary" href="/student/dashboard.html">Xem chương trình</a>
                     </div>
                 </div>
-                <div>
-                    <h2>Quy trình học</h2>
-                    <ol class="stack">
-                        <li>Chọn lớp và môn học.</li>
-                        <li>Mở bài học, đọc nội dung và làm phần luyện tập.</li>
-                        <li>Làm bài kiểm tra; câu tự luận được giáo viên chấm tay.</li>
-                        <li>Xem kết quả, lịch sử và tiến độ học tập.</li>
+
+                <aside class="hero-card" aria-label="Các bước học">
+                    <p class="hero-card-title">Lộ trình học tập</p>
+                    <ol class="hero-steps">
+                        <li>
+                            <span class="hero-step-num" aria-hidden="true">1</span>
+                            <span class="hero-step-label">Chọn lớp học và cấp học phù hợp</span>
+                        </li>
+                        <li>
+                            <span class="hero-step-num" aria-hidden="true">2</span>
+                            <span class="hero-step-label">Chọn môn học và bộ sách đang dùng</span>
+                        </li>
+                        <li>
+                            <span class="hero-step-num" aria-hidden="true">3</span>
+                            <span class="hero-step-label">Mở chương, học bài và luyện tập</span>
+                        </li>
+                        <li>
+                            <span class="hero-step-num" aria-hidden="true">4</span>
+                            <span class="hero-step-label">Làm bài kiểm tra và xem kết quả</span>
+                        </li>
                     </ol>
-                    <p class="muted small" id="curriculum-note"></p>
-                </div>
+                </aside>
             </div>
         </section>
+
+        <!-- LUỒNG CHỌN LỚP → MÔN → BỘ SÁCH → SÁCH → CHƯƠNG → BÀI -->
+        <div class="page" id="chon-lop">
+            <div id="curriculum-picker"></div>
+            <p class="muted small" id="curriculum-note"></p>
+        </div>
     </main>
 
     <script type="module" src="/assets/js/ui/home.js"></script>

@@ -90,11 +90,23 @@ async function apiUpload(path, formData) {
 export const studentApi = {
     // Chương trình
     getOverview: () => apiFetch('/student/curriculum/overview'),
+    // Cấp học (tiểu học / THCS / THPT) kèm các lớp thuộc cấp.
+    getEducationLevels: () => apiFetch('/student/curriculum/levels'),
     getGrades: () => apiFetch('/student/curriculum/grades'),
     getSubjects: (grade, withLessons = false) =>
         apiFetch(`/student/curriculum/grades/${grade}/subjects${withLessons ? '?withLessons=1' : ''}`),
     getSubject: (grade, subjectId) =>
         apiFetch(`/student/curriculum/grades/${grade}/subjects/${encodeURIComponent(subjectId)}`),
+
+    // Bộ sách dùng cho một môn trong một lớp — nguồn cho bước "chọn bộ sách".
+    // Danh sách lấy động từ máy chủ nên thêm bộ sách mới không phải sửa giao diện.
+    getSeries: (grade, subjectId) =>
+        apiFetch(`/student/curriculum/grades/${grade}/subjects/${encodeURIComponent(subjectId)}/series`),
+
+    // Chương và bài theo bộ sách đã chọn.
+    getChapters: (grade, subjectId, seriesId) =>
+        apiFetch(`/student/curriculum/grades/${grade}/subjects/${encodeURIComponent(subjectId)}/chapters${buildQuery({ seriesId })}`),
+
     getLesson: lessonId => apiFetch(`/student/curriculum/lessons/${encodeURIComponent(lessonId)}`),
 
     // Luyện tập
