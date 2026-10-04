@@ -103,10 +103,14 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete']) {
 // Điều này ngăn trang đăng nhập/status bị 503 chỉ vì session store tạm thời gián đoạn.
 const publicStaticOptions = { etag: true, maxAge: IS_PRODUCTION ? '1h' : 0 };
 app.use('/assets', express.static(path.join(__dirname, 'assets'), publicStaticOptions));
+// Thư mục giao diện của nền tảng học tập (public/): trang làm bài, trang quản trị.
+app.use(express.static(path.join(__dirname, 'public'), publicStaticOptions));
+// Danh sách tệp ở thư mục gốc được phép phục vụ trực tiếp.
+// Mọi tệp thuộc lớp game cũ đã chuyển sang archive/legacy-games/ nên không còn ở đây.
+// Trang chủ và các trang học tập nằm trong public/ và được phục vụ ở dòng trên.
 const publicFiles = new Set([
-    '/login.html', '/index.html', '/status.html', '/style.css', '/modern-ui.css', '/modern-ui.js',
-    '/global-client.js', '/heartbeat.js', '/ads.txt', '/board-ui-v8.css', '/board-ui-v8.js',
-    '/tournament-v9.css', '/tournament-v9.js'
+    '/login.html', '/index.html', '/status.html', '/style.css',
+    '/modern-ui.css', '/modern-ui.js', '/global-client.js', '/heartbeat.js', '/ads.txt'
 ]);
 const publicStatic = express.static(__dirname, publicStaticOptions);
 app.use((req, res, next) => {
@@ -936,6 +940,14 @@ app.use('/api', (req, res, next) => {
 
 // Bảo vệ toàn bộ API quản trị, tránh người chơi gọi trực tiếp từ trình duyệt.
 app.use('/api/admin', requireAdmin);
+
+// ===================================================================
+// NỀN TẢNG HỌC TẬP — route mới, gắn vào app hiện có.
+// Được đặt SAU middleware phiên và phân tích body ở trên, và TRƯỚC các route
+// legacy của game, để không đổi hành vi phần cũ.
+// Xem server/routes/, server/controllers/, server/services/ để hiểu chi tiết.
+// ===================================================================
+require('./server/routes/mount-education-routes')(app);
 
 // --- 5. API HỆ THỐNG (AUTH) ---
 app.post('/api/house/save-drawing', async (req, res) => {
