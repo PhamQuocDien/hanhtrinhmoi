@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ngân hàng câu hỏi — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Ngân hàng câu hỏi</h1>
+        <p class="page-subtitle">Tất cả 7 dạng: trắc nghiệm, đúng/sai, điền khuyết, trả lời ngắn, câu số và tự luận.</p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"><option value="">Tất cả</option></select>
+            </label>
+            <label class="field" for="subjectId">
+                <span class="field-label">Môn</span>
+                <select id="subjectId"><option value="">Tất cả</option></select>
+            </label>
+            <label class="field" for="type">
+                <span class="field-label">Dạng</span>
+                <select id="type"><option value="">Tất cả</option></select>
+            </label>
+            <label class="field" for="difficulty">
+                <span class="field-label">Mức độ</span>
+                <select id="difficulty">
+                    <option value="">Tất cả</option>
+                    <option value="easy">Dễ</option>
+                    <option value="medium">Trung bình</option>
+                    <option value="hard">Khó</option>
+                </select>
+            </label>
+            <label class="field" for="needsReview">
+                <span class="field-label">Trạng thái</span>
+                <select id="needsReview">
+                    <option value="">Tất cả</option>
+                    <option value="1">Cần người duyệt</option>
+                </select>
+            </label>
+        </div>
+
+        <p class="row-actions">
+            <button type="button" class="btn btn-primary" id="btn-search">Tìm câu hỏi</button>
+            <a class="btn btn-secondary" href="/admin/import-docx.html">Nhập từ Word</a>
+        </p>
+
+        <div id="stats" class="small muted"></div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nội dung</th>
+                        <th scope="col">Dạng</th>
+                        <th scope="col">Lớp / Môn</th>
+                        <th scope="col">Độ khó</th>
+                        <th scope="col">Điểm</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col"><span class="hidden">Thao tác</span></th>
+                    </tr>
+                </thead>
+                <tbody id="questions-body">
+                    <tr><td colspan="7" class="muted">Chọn bộ lọc rồi bấm “Tìm câu hỏi”.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row-actions" id="pagination"></div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/question-bank.js"></script>
+</body>
+</html>

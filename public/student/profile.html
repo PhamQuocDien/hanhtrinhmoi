@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tài khoản — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Tài khoản</h1>
+        <p class="page-subtitle">Thông tin tài khoản và đổi mật khẩu.</p>
+
+        <section class="card">
+            <h2 class="card-title">Thông tin</h2>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <tbody id="profile-body">
+                        <tr><td class="muted">Đang tải…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">Đổi mật khẩu</h2>
+            <form id="password-form" novalidate>
+                <label class="field" for="currentPassword">
+                    <span class="field-label">Mật khẩu hiện tại</span>
+                    <input type="password" id="currentPassword" autocomplete="current-password" required>
+                </label>
+                <label class="field" for="newPassword">
+                    <span class="field-label">Mật khẩu mới</span>
+                    <input type="password" id="newPassword" autocomplete="new-password" minlength="6" maxlength="72" required>
+                    <span class="field-hint">Từ 6 đến 72 ký tự.</span>
+                </label>
+                <div id="password-message" role="alert"></div>
+                <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+            </form>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/student/profile.js"></script>
+</body>
+</html>

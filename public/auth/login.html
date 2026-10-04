@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-header-inner">
+            <a class="app-brand" href="/index.html">
+                <span aria-hidden="true">🎓</span>
+                <span>Hành Tinh Mơ Ước</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Đăng nhập</h1>
+        <p class="page-subtitle">Đăng nhập để học bài, luyện tập và làm bài kiểm tra.</p>
+
+        <form id="login-form" class="card" novalidate>
+            <label class="field" for="username">
+                <span class="field-label">Tên đăng nhập</span>
+                <input type="text" id="username" name="username" autocomplete="username"
+                       minlength="3" maxlength="24" required>
+            </label>
+
+            <label class="field" for="password">
+                <span class="field-label">Mật khẩu</span>
+                <input type="password" id="password" name="password" autocomplete="current-password"
+                       minlength="6" maxlength="72" required>
+            </label>
+
+            <div id="form-message" role="alert"></div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit">Đăng nhập</button>
+        </form>
+
+        <p class="muted">
+            Chưa có tài khoản? <a href="/auth/register.html">Đăng ký ngay</a>.
+        </p>
+    </main>
+
+    <script type="module" src="/assets/js/auth/login.js"></script>
+</body>
+</html>

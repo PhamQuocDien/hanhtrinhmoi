@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bài cần chấm — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Bài cần chấm</h1>
+        <p class="page-subtitle">
+            Câu tự luận không thể chấm tự động. Chấm xong câu cuối cùng, điểm tổng
+            của bài sẽ được chốt và học sinh thấy kết quả.
+        </p>
+
+        <section class="card" id="queue-summary">
+            <h2 class="card-title">Hàng đợi chấm</h2>
+            <div id="stats"><p class="loading-text">Đang tải…</p></div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">Danh sách câu chờ chấm</h2>
+            <div class="filter-bar">
+                <label class="field" for="grade">
+                    <span class="field-label">Lớp</span>
+                    <select id="grade"><option value="">Tất cả</option></select>
+                </label>
+                <label class="field" for="username">
+                    <span class="field-label">Học sinh</span>
+                    <input type="search" id="username" placeholder="Tên đăng nhập…">
+                </label>
+                <button type="button" class="btn btn-primary" id="btn-search">Lọc</button>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Học sinh</th>
+                            <th scope="col">Đề</th>
+                            <th scope="col">Câu</th>
+                            <th scope="col">Bài làm</th>
+                            <th scope="col">Độ dài</th>
+                            <th scope="col">Điểm</th>
+                            <th scope="col"><span class="hidden">Thao tác</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="queue-body">
+                        <tr><td colspan="7" class="muted">Đang tải…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card hidden" id="grading-panel">
+            <h2 class="card-title" id="grading-title">Chấm bài</h2>
+            <div id="grading-body"></div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/admin/grading.js"></script>
+</body>
+</html>

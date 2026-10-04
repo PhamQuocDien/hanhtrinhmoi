@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Học sinh — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Học sinh</h1>
+        <p class="page-subtitle">
+            Danh sách tài khoản học sinh. Việc đổi mật khẩu và khoá tài khoản do
+            quản trị viên thực hiện qua tác vụ bảo trì, không hiển thị ở đây.
+        </p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"><option value="">Tất cả lớp</option></select>
+            </label>
+            <label class="field" for="keyword">
+                <span class="field-label">Tìm theo tên</span>
+                <input type="search" id="keyword" placeholder="Nhập tên đăng nhập…">
+            </label>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tên đăng nhập</th>
+                        <th scope="col">Lớp</th>
+                        <th scope="col">Bộ sách</th>
+                        <th scope="col">Chuỗi đăng nhập</th>
+                        <th scope="col">Đăng nhập gần nhất</th>
+                    </tr>
+                </thead>
+                <tbody id="students-body">
+                    <tr><td colspan="5" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/students.js"></script>
+</body>
+</html>

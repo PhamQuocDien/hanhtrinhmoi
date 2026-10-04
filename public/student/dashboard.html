@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bảng điều khiển — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title" id="greeting">Bảng điều khiển</h1>
+        <p class="page-subtitle" id="profile-line">Đang tải…</p>
+
+        <section class="card" id="continue-card" hidden>
+            <h2 class="card-title">Tiếp tục học</h2>
+            <div id="continue-list"></div>
+        </section>
+
+        <section>
+            <h2>Môn học</h2>
+            <div id="subject-list" aria-busy="true">
+                <p class="loading-text">Đang tải môn học…</p>
+            </div>
+        </section>
+
+        <section class="grid-2">
+            <div class="card">
+                <h2 class="card-title">Bài kiểm tra</h2>
+                <div id="exam-list"><p class="loading-text">Đang tải…</p></div>
+            </div>
+            <div class="card">
+                <h2 class="card-title">Tiến độ học tập</h2>
+                <div id="progress-summary"><p class="loading-text">Đang tải…</p></div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/student/dashboard.js"></script>
+</body>
+</html>

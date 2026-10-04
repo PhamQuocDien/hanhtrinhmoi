@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Môn học — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Danh mục môn học</h1>
+        <p class="page-subtitle">
+            Danh mục môn học là nguồn dữ liệu duy nhất của hệ thống. Môn bắt buộc,
+            môn lựa chọn và mạch nội dung đều được ghi rõ trạng thái.
+        </p>
+
+        <div class="filter-bar">
+            <label class="field" for="keyword">
+                <span class="field-label">Tìm môn học</span>
+                <input type="search" id="keyword" placeholder="Nhập tên hoặc mã môn…">
+            </label>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã</th>
+                        <th scope="col">Tên môn</th>
+                        <th scope="col">Lớp áp dụng</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Loại</th>
+                        <th scope="col">Xác minh</th>
+                    </tr>
+                </thead>
+                <tbody id="subjects-body">
+                    <tr><td colspan="6" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/subjects.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nhập đề từ Word — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Nhập đề thi từ Word</h1>
+        <p class="page-subtitle">
+            Tải tệp .docx lên. Máy chủ tự nhận dạng câu hỏi, dạng câu, lựa chọn,
+            ô điền khuyết, đáp án, giải thích và rubric — rồi bạn xem lại trước khi lưu.
+        </p>
+
+        <section class="card">
+            <h2 class="card-title">1. Chọn metadata và tải tệp lên</h2>
+            <p class="muted small">
+                Lớp và môn là bắt buộc: máy chủ dùng chúng để gán câu hỏi vào đúng
+                vị trí trong chương trình, và để chặn môn không thuộc lớp đã chọn.
+            </p>
+            <form id="upload-form">
+                <div class="filter-bar">
+                    <label class="field" for="grade">
+                        <span class="field-label">Lớp</span>
+                        <select id="grade" required></select>
+                    </label>
+                    <label class="field" for="subjectId">
+                        <span class="field-label">Môn học</span>
+                        <select id="subjectId" required></select>
+                    </label>
+                    <label class="field" for="durationMinutes">
+                        <span class="field-label">Thời gian (phút)</span>
+                        <input type="number" id="durationMinutes" value="45" min="1" max="300">
+                    </label>
+                </div>
+                <label class="field" for="examTitle">
+                    <span class="field-label">Tên đề thi</span>
+                    <input type="text" id="examTitle" placeholder="Để trống thì dùng tên tệp">
+                </label>
+                <label class="field" for="file">
+                    <span class="field-label">Tệp Word (.docx)</span>
+                    <input type="file" id="file" accept=".docx" required>
+                    <span class="field-hint">Chỉ nhận tệp .docx, tối đa 8 MB.</span>
+                </label>
+                <button type="submit" class="btn btn-primary" id="btn-upload">Phân tích tệp</button>
+            </form>
+            <div id="upload-message" role="alert"></div>
+        </section>
+
+        <section class="card hidden" id="preview-card">
+            <h2 class="card-title">2. Xem lại kết quả nhận dạng</h2>
+            <div id="preview-stats"></div>
+            <div id="preview-list"></div>
+            <div class="row-actions">
+                <button type="button" class="btn btn-secondary" id="btn-save-draft">Lưu nháp câu hỏi</button>
+                <button type="button" class="btn btn-primary" id="btn-publish">Tạo đề và công bố</button>
+            </div>
+            <div id="publish-message" role="alert"></div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">Lịch sử nhập</h2>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tệp</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Câu hỏi</th>
+                            <th scope="col">Cảnh báo</th>
+                            <th scope="col">Thời điểm</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <tr><td colspan="5" class="muted">Đang tải…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/admin/import-docx.js"></script>
+</body>
+</html>

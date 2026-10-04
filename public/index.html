@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hành Tinh Mơ Ước — Nền tảng học tập cho học sinh lớp 1–12</title>
+    <meta name="description" content="Nền tảng học tập tương tác cho học sinh lớp 1–12: chương trình, bài học, luyện tập và bài kiểm tra có chấm điểm.">
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-header-inner">
+            <a class="app-brand" href="/index.html">
+                <span aria-hidden="true">🎓</span>
+                <span>Hành Tinh Mơ Ước</span>
+            </a>
+            <div class="app-user" id="home-actions"></div>
+        </div>
+    </header>
+
+    <main class="page">
+        <section class="card">
+            <h1 class="page-title">Nền tảng học tập tương tác</h1>
+            <p class="page-subtitle">
+                Học theo chương trình của Bộ Giáo dục và Đào tạo, luyện tập theo bài,
+                làm bài kiểm tra và xem kết quả ngay.
+            </p>
+            <div class="grid-2">
+                <div>
+                    <h2>Chọn lớp để bắt đầu</h2>
+                    <p class="muted small">Chọn lớp để xem môn học và bài kiểm tra tương ứng.</p>
+                    <div id="grade-picker" class="grid" aria-busy="true">
+                        <p class="loading-text">Đang tải danh sách lớp…</p>
+                    </div>
+                </div>
+                <div>
+                    <h2>Quy trình học</h2>
+                    <ol class="stack">
+                        <li>Chọn lớp và môn học.</li>
+                        <li>Mở bài học, đọc nội dung và làm phần luyện tập.</li>
+                        <li>Làm bài kiểm tra; câu tự luận được giáo viên chấm tay.</li>
+                        <li>Xem kết quả, lịch sử và tiến độ học tập.</li>
+                    </ol>
+                    <p class="muted small" id="curriculum-note"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/ui/home.js"></script>
+</body>
+</html>

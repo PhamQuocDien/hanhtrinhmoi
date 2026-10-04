@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bài kiểm tra — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Bài kiểm tra</h1>
+        <p class="page-subtitle" id="exam-subtitle">Đang tải…</p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"></select>
+            </label>
+            <label class="field" for="subjectId">
+                <span class="field-label">Môn</span>
+                <select id="subjectId"><option value="">Tất cả môn</option></select>
+            </label>
+        </div>
+
+        <div id="exam-list" aria-busy="true">
+            <p class="loading-text">Đang tải bài kiểm tra…</p>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/student/exams.js"></script>
+</body>
+</html>

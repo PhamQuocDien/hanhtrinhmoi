@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tiến độ học tập — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Tiến độ học tập</h1>
+        <p class="page-subtitle">Theo dõi mức độ hoàn thành bài học theo từng môn.</p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"></select>
+            </label>
+        </div>
+
+        <section class="card" id="summary-card">
+            <h2 class="card-title">Tổng quan</h2>
+            <div id="summary-body"><p class="loading-text">Đang tải…</p></div>
+        </section>
+
+        <h2>Tiến độ theo môn</h2>
+        <div id="subject-progress" aria-busy="true">
+            <p class="loading-text">Đang tải…</p>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/student/progress.js"></script>
+</body>
+</html>

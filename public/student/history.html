@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lịch sử làm bài — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Lịch sử làm bài</h1>
+        <p class="page-subtitle">Các bài kiểm tra bạn đã nộp, kèm điểm và trạng thái chấm.</p>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Bài kiểm tra</th>
+                        <th scope="col">Môn</th>
+                        <th scope="col">Lớp</th>
+                        <th scope="col">Ngày nộp</th>
+                        <th scope="col">Điểm</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col"><span class="hidden">Thao tác</span></th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr><td colspan="7" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row-actions" id="pagination"></div>
+    </main>
+
+    <script type="module" src="/assets/js/student/history.js"></script>
+</body>
+</html>

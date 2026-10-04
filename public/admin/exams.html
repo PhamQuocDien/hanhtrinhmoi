@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đề kiểm tra — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Đề kiểm tra</h1>
+        <p class="page-subtitle">Soạn đề, kiểm tra trước khi công bố, và theo dõi lượt làm bài.</p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"><option value="">Tất cả</option></select>
+            </label>
+            <label class="field" for="status">
+                <span class="field-label">Trạng thái</span>
+                <select id="status">
+                    <option value="">Tất cả</option>
+                    <option value="draft">Nháp</option>
+                    <option value="review">Đang duyệt</option>
+                    <option value="published">Đã công bố</option>
+                    <option value="archived">Lưu trữ</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Tiêu đề</th>
+                        <th scope="col">Lớp / Môn</th>
+                        <th scope="col">Câu</th>
+                        <th scope="col">Thời gian</th>
+                        <th scope="col">Lượt làm</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col"><span class="hidden">Thao tác</span></th>
+                    </tr>
+                </thead>
+                <tbody id="exams-body">
+                    <tr><td colspan="7" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row-actions" id="pagination"></div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/exams.js"></script>
+</body>
+</html>

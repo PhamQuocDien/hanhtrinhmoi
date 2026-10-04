@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chương — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Chương</h1>
+        <p class="page-subtitle">Danh sách chương theo lớp và môn, kèm số bài học và mã đầu sách.</p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"></select>
+            </label>
+            <label class="field" for="subjectId">
+                <span class="field-label">Môn</span>
+                <select id="subjectId"><option value="">Tất cả môn</option></select>
+            </label>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Mã chương</th>
+                        <th scope="col">Số</th>
+                        <th scope="col">Tên chương</th>
+                        <th scope="col">Môn / Lớp</th>
+                        <th scope="col">Số bài</th>
+                        <th scope="col">Đầu sách</th>
+                    </tr>
+                </thead>
+                <tbody id="chapters-body">
+                    <tr><td colspan="6" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/chapters.js"></script>
+</body>
+</html>

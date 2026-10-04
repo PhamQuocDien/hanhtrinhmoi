@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-header-inner">
+            <a class="app-brand" href="/index.html">
+                <span aria-hidden="true">🎓</span>
+                <span>Hành Tinh Mơ Ước</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="page">
+        <h1 class="page-title">Đăng ký học sinh</h1>
+        <p class="page-subtitle">
+            Tài khoản mới luôn là tài khoản học sinh. Quản trị viên do hệ thống quản lý,
+            không đăng ký qua trang này.
+        </p>
+
+        <form id="register-form" class="card" novalidate>
+            <label class="field" for="username">
+                <span class="field-label">Tên đăng nhập</span>
+                <input type="text" id="username" name="username" autocomplete="username"
+                       minlength="3" maxlength="24" required>
+                <span class="field-hint">Từ 3 đến 24 ký tự.</span>
+            </label>
+
+            <label class="field" for="grade">
+                <span class="field-label">Lớp đang học</span>
+                <select id="grade" name="grade" required>
+                    <option value="">— Chọn lớp —</option>
+                </select>
+                <span class="field-hint">Lớp quyết định môn học và chương trình bạn thấy.</span>
+            </label>
+
+            <label class="field" for="password">
+                <span class="field-label">Mật khẩu</span>
+                <input type="password" id="password" name="password" autocomplete="new-password"
+                       minlength="6" maxlength="72" required>
+                <span class="field-hint">Từ 6 đến 72 ký tự.</span>
+            </label>
+
+            <label class="field" for="confirm">
+                <span class="field-label">Nhập lại mật khẩu</span>
+                <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                       minlength="6" maxlength="72" required>
+            </label>
+
+            <div id="form-message" role="alert"></div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit">Đăng ký</button>
+        </form>
+
+        <p class="muted">
+            Đã có tài khoản? <a href="/auth/login.html">Đăng nhập</a>.
+        </p>
+    </main>
+
+    <script type="module" src="/assets/js/auth/register.js"></script>
+</body>
+</html>

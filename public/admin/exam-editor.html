@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Soạn câu hỏi và đề — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title" id="page-title">Soạn câu hỏi</h1>
+        <p class="page-subtitle" id="page-subtitle">Chọn dạng câu hỏi; biểu mẫu đổi theo từng dạng.</p>
+
+        <section class="card">
+            <h2 class="card-title">Thông tin câu hỏi</h2>
+            <form id="question-form" novalidate>
+                <div class="filter-bar">
+                    <label class="field" for="grade">
+                        <span class="field-label">Lớp</span>
+                        <select id="grade" required></select>
+                    </label>
+                    <label class="field" for="subjectId">
+                        <span class="field-label">Môn</span>
+                        <select id="subjectId" required></select>
+                    </label>
+                    <label class="field" for="type">
+                        <span class="field-label">Dạng</span>
+                        <select id="type"></select>
+                    </label>
+                    <label class="field" for="difficulty">
+                        <span class="field-label">Độ khó</span>
+                        <select id="difficulty">
+                            <option value="easy">Dễ</option>
+                            <option value="medium" selected>Trung bình</option>
+                            <option value="hard">Khó</option>
+                        </select>
+                    </label>
+                    <label class="field" for="points">
+                        <span class="field-label">Điểm</span>
+                        <input type="number" id="points" value="1" min="0.25" step="0.25">
+                    </label>
+                </div>
+
+                <label class="field" for="questionText">
+                    <span class="field-label">Nội dung câu hỏi</span>
+                    <textarea id="questionText" rows="3" required></textarea>
+                </label>
+
+                <div id="type-fields"></div>
+
+                <label class="field" for="explanation">
+                    <span class="field-label">Giải thích (tuỳ chọn)</span>
+                    <textarea id="explanation" rows="2"></textarea>
+                </label>
+
+                <div id="form-message" role="alert"></div>
+
+                <div class="row-actions">
+                    <button type="submit" class="btn btn-primary" id="btn-save">Lưu câu hỏi</button>
+                    <a class="btn btn-secondary" href="/admin/question-bank.html">Về ngân hàng câu hỏi</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="card hidden" id="exam-section">
+            <h2 class="card-title" id="exam-title">Kiểm tra đề thi</h2>
+            <div id="exam-body"></div>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/admin/exam-editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,912 @@
+/* ============================================================================
+   NỀN TẢNG HỌC TẬP — BIẾN, ĐẶT LẠI, KIỂU CHỮ, NÚT, THẺ, BIỂU MẪU.
+   Mục tiêu: đọc dễ trên màn hình nhỏ (điện thoại là chính), tương phản đủ,
+   không phụ thuộc framework. Các phần khác nằm ở file riêng cùng thư mục.
+   ========================================================================= */
+
+:root {
+    --bg: #f4f7fb;
+    --surface: #ffffff;
+    --surface-alt: #eef2f9;
+    --border: #d4dcea;
+    --text: #16202f;
+    --text-muted: #5b6b82;
+    --primary: #1f5fbf;
+    --primary-dark: #16488f;
+    --success: #1c7a4a;
+    --warning: #a66a00;
+    --danger: #b3261e;
+    --radius: 10px;
+    --gap: 16px;
+    --shadow: 0 2px 8px rgba(22, 32, 47, 0.08);
+    --max-width: 1100px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    margin: 0 0 0.5em;
+    line-height: 1.3;
+}
+
+button, input, textarea, select {
+    font: inherit;
+}
+
+/* ---------------------------------------------------------- NÚT BẤM */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: var(--surface-alt);
+    color: var(--text);
+    cursor: pointer;
+    /* Vùng bấm đủ lớn cho ngón tay trên điện thoại. */
+    min-height: 44px;
+    text-decoration: none;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.btn:hover {
+    background: #e3e9f4;
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    min-height: 36px;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* ---------------------------------------------------------- THÔNG ĐIỆP */
+
+.message {
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--border);
+    background: var(--surface);
+}
+
+.message-error {
+    border-left-color: var(--danger);
+    background: #fdf1f0;
+}
+
+.message-warning {
+    border-left-color: var(--warning);
+    background: #fff8ec;
+}
+
+.message-success {
+    border-left-color: var(--success);
+    background: #effaf4;
+}
+
+.loading-text {
+    color: var(--text-muted);
+    padding: 24px 0;
+}
+
+/* ---------------------------------------------------------- THẺ */
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: var(--gap);
+    box-shadow: var(--shadow);
+}
+
+.card-title {
+    font-size: 1.15rem;
+}
+
+/* ---------------------------------------------------------- BIỂU MẪU */
+
+.field {
+    display: block;
+    margin-bottom: 14px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+    border-color: var(--primary);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.7;
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành. */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* =================================================================
+   GIAO DIỆN LÀM BÀI — mỗi loại câu hỏi có bố cục riêng.
+   ================================================================= */
+
+.exam-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+    padding-bottom: 96px;
+}
+
+/* ---------------------------------------------------------- ĐẦU TRANG */
+
+.exam-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    margin-bottom: var(--gap);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.exam-title h1 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.exam-meta {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.exam-status {
+    text-align: right;
+}
+
+.countdown {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.countdown-warning { color: var(--warning); }
+
+.countdown-danger {
+    color: var(--danger);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    50% { opacity: 0.55; }
+}
+
+.save-state {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    min-height: 1.2em;
+}
+
+/* ---------------------------------------------------------- CÂU HỎI */
+
+.question-list {
+    display: grid;
+    gap: var(--gap);
+}
+
+.question-block {
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.question-block.answered { border-left-color: var(--success); }
+
+.question-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.question-number {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.question-type {
+    padding: 2px 8px;
+    background: var(--surface-alt);
+    border-radius: 999px;
+}
+
+.question-points {
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.question-text {
+    margin: 0 0 14px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.answer-hint {
+    margin: 0 0 10px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------- TRẮC NGHIỆM */
+
+.options {
+    display: grid;
+    gap: 8px;
+}
+
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-alt);
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #e6ecf7;
+}
+
+.option input {
+    width: 20px;
+    height: 20px;
+    margin: 3px 0 0;
+    flex-shrink: 0;
+    accent-color: var(--primary);
+}
+
+.option-label {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.option-key {
+    font-weight: 700;
+    color: var(--primary);
+    min-width: 1.2em;
+}
+
+/* ---------------------------------------------------------- ĐIỀN KHUYẾT */
+
+.fill-line {
+    margin: 0 0 14px;
+    font-size: 1.05rem;
+    line-height: 2.2;
+}
+
+.blank-input {
+    display: inline-block;
+    width: 160px;
+    margin: 0 4px;
+    padding: 4px 8px;
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    border-radius: 0;
+    background: var(--surface-alt);
+}
+
+.blank-input:focus {
+    background: #e6ecf7;
+}
+
+.blank-missing {
+    display: inline-block;
+    min-width: 100px;
+    border-bottom: 2px dashed var(--danger);
+}
+
+.fill-extra {
+    display: grid;
+    gap: 8px;
+}
+
+.fill-extra-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fill-extra-item .blank-input {
+    flex: 1;
+    width: auto;
+}
+
+/* ---------------------------------------------------------- TRẢ LỜI NGẮN / SỐ */
+
+.short-answer-input,
+.numeric-input {
+    max-width: 420px;
+}
+
+.answer-numeric {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.numeric-unit {
+    color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------- TỰ LUẬN */
+
+.essay-input {
+    min-height: 220px;
+    font-size: 1rem;
+}
+
+.essay-counter {
+    display: flex;
+    gap: 14px;
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.essay-warning {
+    margin: 6px 0 0;
+    font-size: 0.9rem;
+    color: var(--warning);
+    min-height: 1.3em;
+}
+
+.essay-note {
+    margin: 8px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.answer-unsupported {
+    padding: 12px;
+    border: 1px dashed var(--danger);
+    border-radius: var(--radius);
+    color: var(--danger);
+}
+
+/* ---------------------------------------------------------- NÚT HÀNH ĐỘNG */
+
+.exam-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 12px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 8px rgba(22, 32, 47, 0.06);
+}
+
+.exam-actions .btn {
+    min-width: 150px;
+}
+
+/* ---------------------------------------------------------- KẾT QUẢ */
+
+.result-summary {
+    padding: 20px;
+    margin-bottom: var(--gap);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.auto-score {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+.final-score {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--success);
+    margin: 8px 0;
+}
+
+.pending-note {
+    padding: 10px 14px;
+    background: #fff8ec;
+    border-left: 4px solid var(--warning);
+    border-radius: var(--radius);
+}
+
+.result-feedback {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.result-review {
+    display: grid;
+    gap: var(--gap);
+}
+
+.result-status {
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.status-correct {
+    background: #e3f5eb;
+    color: var(--success);
+}
+
+.status-wrong {
+    background: #fdecea;
+    color: var(--danger);
+}
+
+.status-pending {
+    background: #fff3dc;
+    color: var(--warning);
+}
+
+.answer-review {
+    padding: 12px;
+    background: var(--surface-alt);
+    border-radius: var(--radius);
+}
+
+.review-line {
+    margin: 4px 0;
+}
+
+.review-note {
+    margin: 10px 0 0;
+    color: var(--warning);
+    font-style: italic;
+}
+
+.review-explanation {
+    margin: 10px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------- THÔNG BÁO NGẮN */
+
+.toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    background: var(--text);
+    color: #fff;
+    border-radius: var(--radius);
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+
+.toast-warning { background: var(--warning); }
+.toast-error { background: var(--danger); }
+
+/* ============================================================================
+   KHUNG TRANG DÙNG CHUNG — thanh trên cùng + vùng nội dung có chiều rộng giới hạn.
+   Dùng cho mọi trang ngoài trang làm bài (trang làm bài có bố cục riêng).
+   ========================================================================= */
+
+.app-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.app-header-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 12px 16px;
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 1.05rem;
+}
+
+.app-user {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------- ĐIỀU HƯỚNG */
+
+.app-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.app-nav-inner {
+    display: flex;
+    gap: 4px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 8px;
+}
+
+.app-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+}
+
+.app-nav a:hover {
+    color: var(--text);
+    background: var(--surface-alt);
+}
+
+.app-nav a[aria-current="page"] {
+    color: var(--primary);
+    font-weight: 600;
+    border-bottom-color: var(--primary);
+}
+
+/* ---------------------------------------------------------- VÙNG NỘI DUNG */
+
+.page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    color: var(--text-muted);
+    margin: 0 0 20px;
+}
+
+/* ---------------------------------------------------------- LƯỚI THẺ */
+
+.grid {
+    display: grid;
+    gap: var(--gap);
+    /* Tự động: cột co lại khi màn hình hẹp — không bao giờ tràn ngang. */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+}
+
+.grid-2 {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+/* Thẻ bấm được dùng cho danh sách môn, đề thi, bài học. */
+.tile {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s, transform 0.15s;
+}
+
+.tile:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.tile-title {
+    font-weight: 700;
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+}
+
+.tile-meta {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.tile-icon {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+}
+
+/* ---------------------------------------------------------- THANH TIẾN ĐỘ */
+
+.progress-bar {
+    height: 10px;
+    background: var(--surface-alt);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 8px 0 4px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.progress-fill.done { background: var(--success); }
+.progress-fill.low { background: var(--warning); }
+
+/* ---------------------------------------------------------- NHÃN TRẠNG THÁI */
+
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: var(--surface-alt);
+    color: var(--text-muted);
+}
+
+.badge-success { background: #e3f5eb; color: var(--success); }
+.badge-warning { background: #fff3dc; color: var(--warning); }
+.badge-danger { background: #fdecea; color: var(--danger); }
+.badge-info { background: #e3ecf9; color: var(--primary); }
+
+/* ---------------------------------------------------------- BẢNG DỮ LIỆU */
+
+.table-wrap {
+    /* Cuộn ngang trong chính bảng thay vì làm tràn cả trang. */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    font-size: 0.94rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.data-table th {
+    background: var(--surface-alt);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ---------------------------------------------------------- BỘ LỌC */
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: var(--gap);
+}
+
+.filter-bar .field {
+    margin-bottom: 0;
+    min-width: 150px;
+    flex: 1 1 150px;
+}
+
+/* ---------------------------------------------------------- TIỆN ÍCH */
+
+.muted { color: var(--text-muted); }
+.small { font-size: 0.88rem; }
+.stack > * + * { margin-top: 12px; }
+.text-right { text-align: right; }
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.hidden { display: none !important; }
+
+.row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ---------------------------------------------------------- MÀN HÌNH NHỎ */
+
+@media (max-width: 600px) {
+    .exam-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+    }
+
+    .exam-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+
+    .countdown {
+        font-size: 1.25rem;
+    }
+
+    .tf-buttons {
+        flex-direction: column;
+    }
+
+    .btn-tf {
+        width: 100%;
+    }
+
+    .exam-actions .btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .blank-input {
+        width: 120px;
+    }
+
+    /* Bộ lọc xuống dòng trên điện thoại, ô nhập vẫn đủ rộng để gõ. */
+    .filter-bar .field {
+        flex-basis: 100%;
+    }
+
+    .app-user {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .page {
+        padding: 16px 12px 48px;
+    }
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành. */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Luyện tập — Hành Tinh Mơ Ước</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Luyện tập</h1>
+        <p class="page-subtitle">
+            Xem ngân hàng câu hỏi đã công bố theo lớp, môn hoặc bài học để ôn trước khi làm bài kiểm tra.
+        </p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"></select>
+            </label>
+            <label class="field" for="subjectId">
+                <span class="field-label">Môn</span>
+                <select id="subjectId"><option value="">Tất cả môn</option></select>
+            </label>
+            <label class="field" for="type">
+                <span class="field-label">Dạng câu hỏi</span>
+                <select id="type"><option value="">Tất cả dạng</option></select>
+            </label>
+            <button type="button" class="btn btn-primary" id="btn-load">Xem câu hỏi</button>
+        </div>
+
+        <p class="muted small" id="practice-note">
+            Câu hỏi luyện tập hiển thị để ôn tập. Để được chấm điểm và xem giải thích,
+            hãy làm <a href="/student/exams.html">bài kiểm tra</a>.
+        </p>
+
+        <div id="practice-root">
+            <p class="muted">Chọn bộ lọc rồi bấm “Xem câu hỏi”.</p>
+        </div>
+    </main>
+
+    <script type="module" src="/assets/js/student/practice.js"></script>
+</body>
+</html>

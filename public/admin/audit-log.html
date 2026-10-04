@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nhật ký thao tác — Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <main class="page">
+        <h1 class="page-title">Nhật ký thao tác</h1>
+        <p class="page-subtitle">
+            Truy vết ai làm gì, lúc nào: nhập đề, sửa câu hỏi, công bố đề, chấm bài.
+            Nhật ký không bao giờ ghi mật khẩu hay đáp án.
+        </p>
+
+        <div class="filter-bar">
+            <label class="field" for="actor">
+                <span class="field-label">Người thực hiện</span>
+                <input type="search" id="actor" placeholder="Tên đăng nhập…">
+            </label>
+            <button type="button" class="btn btn-primary" id="btn-search">Tìm</button>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Thời điểm</th>
+                        <th scope="col">Người</th>
+                        <th scope="col">Vai trò</th>
+                        <th scope="col">Thao tác</th>
+                        <th scope="col">Đối tượng</th>
+                        <th scope="col">Mô tả</th>
+                    </tr>
+                </thead>
+                <tbody id="audit-body">
+                    <tr><td colspan="6" class="muted">Đang tải…</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row-actions" id="pagination"></div>
+    </main>
+
+    <script type="module" src="/assets/js/admin/audit-log.js"></script>
+</body>
+</html>
