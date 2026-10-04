@@ -59,6 +59,9 @@ const { PROGRAM_VERSION, PASS_SCORE, GRADE_FOCUS, CORE_QUALITIES, GENERAL_COMPET
 const { WORLD: SURVIVAL_WORLD, BLOCKS: SURVIVAL_BLOCKS, PLACEABLE: SURVIVAL_PLACEABLE, TOOLS: SURVIVAL_TOOLS, RECIPES: SURVIVAL_RECIPES, ITEM_LABELS: SURVIVAL_ITEM_LABELS, planCraft: planSurvivalCraft, safeState: safeSurvivalState, advanceState: advanceSurvivalState, levelFromXp: survivalLevelFromXp, countInventory: inventoryCounts, validateMineRequest: validateSurvivalMine, validatePlaceRequest: validateSurvivalPlace, applyToolWear: applySurvivalToolWear } = require('./server/modules/survival-v14.js');
 const { BOOKS: APPROVED_BOOK_PROFILES, practicalType: practicalTypeForSubject, scorePractical } = require('./server/modules/learning-v11.js');
 const { createQuestExpiryJob, scheduleQuestExpiryJob } = require('./server/modules/quest-maintenance-v14.js');
+// Lịch học kỳ và cờ mốc checkpoint — dùng chung với hệ thống đánh giá để hai
+// nơi không lệch nhau. Xem server/services/school-calendar.service.js.
+const schoolCalendar = require('./server/services/school-calendar.service');
 
 const app = express();
 app.set('trust proxy', 1);
@@ -2596,13 +2599,12 @@ app.get('/api/learning/roadmap', requireAuth, async (req, res) => {
     const totalLessons = catalog.subjects.reduce((sum, subject) => sum + Number(subject.lessonCount || 0), 0);
     const calendar = await getLearningCalendar();
     const startDate = new Date(calendar.schoolStart || `${new Date().getFullYear()}-09-05`);
-    const currentWeek = Math.max(1, Math.min(35, Math.floor((Date.now() - startDate.getTime()) / 604800000) + 1));
-    const expected = Math.min(totalLessons, Math.round(totalLessons * currentWeek / 35));
-    const weeks = Array.from({ length: 35 }, (_, index) => {
-        const week = index + 1;
-        const phase = week <= 8 ? 'Học kỳ I • Giai đoạn 1' : week <= 18 ? 'Học kỳ I • Củng cố' : week <= 27 ? 'Học kỳ II • Giai đoạn 1' : 'Học kỳ II • Tổng kết';
-        return { week, phase, targetLessons: Math.max(1, Math.round(totalLessons / 35)), checkpoint: [9,18,27,35].includes(week) };
-    });
+    const currentWeek = schoolCalendar.clampWeek(
+        Math.floor((Date.now() - startDate.getTime()) / 604800000) + 1
+    );
+    const expected = schoolCalendar.expectedLessonsAtWeek(totalLessons, currentWeek);
+    // Lịch tuần và cờ checkpoint lấy từ mô-đun lịch học kỳ, không ghi thẳng ở đây.
+    const weeks = schoolCalendar.buildWeekPlan({ totalLessons });
     res.json({ grade, schoolYear: calendar.schoolYear, currentWeek, passed, totalLessons, expected, onTrack: passed >= Math.max(0, expected - 3), weeks });
 });
 app.post('/api/learning/practical/submit', requireAuth, async (req, res) => {

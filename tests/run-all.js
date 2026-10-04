@@ -35,6 +35,9 @@ const SUITES = [
  * Chạy độc lập: `node tests/assessment-policy.test.js`.
  */
 const SELF_RUNNING_SUITES = [
+    // Cấu trúc bộ kiểm thử phải đúng trước, nếu không các nhóm sau có thể
+    // chạy sai số lần mà vẫn báo đạt.
+    ['Cấu trúc bộ kiểm thử', './structure.test'],
     ['Dữ liệu chương trình và bộ sách', './curriculum-browse.test'],
     ['Chính sách đánh giá và mốc tiến độ', './assessment-policy.test']
 ];
@@ -51,6 +54,9 @@ async function main() {
     }
 
     // Các bộ tự chạy: ném lỗi khi hỏng, không dùng bộ đếm của harness.
+    // Chạy kiểm tra cấu trúc TRƯỚC để phát hiện sớm một khối `suite()` bị chèn
+    // nhầm vào vòng lặp — lỗi khiến cùng một nhóm chạy hàng trăm lần mà vẫn
+    // báo "đạt", che mất việc kiểm tra thật sự đã diễn ra.
     for (const [name, path] of SELF_RUNNING_SUITES) {
         console.log(`\n${'═'.repeat(60)}`);
         console.log(`▶ ${name}`);

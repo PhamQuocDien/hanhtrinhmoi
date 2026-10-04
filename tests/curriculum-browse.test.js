@@ -1,13 +1,11 @@
 'use strict';
 
 /**
- * KIỂM TRA KHO DỮ LIỆU CHƯƠNG TRÌNH (repository) — chạy được KHÔNG cần máy chủ.
+ * KHO DỮ LIỆU CHƯƠNG TRÌNH (repository) — chạy được KHÔNG cần máy chủ.
  *
  * Bổ trợ cho `check-curriculum-flow.js`: khi MongoDB không chạy nên không kiểm
  * tra được qua HTTP, tệp này vẫn xác minh được phần quan trọng nhất — dữ liệu
  * bộ sách thật sự động và không bịa.
- *
- * Dùng khi:  node tests/curriculum-browse.test.js
  */
 
 const assert = require('node:assert/strict');
@@ -26,25 +24,20 @@ function suite(name, body) {
     body();
 }
 
-/* -------------------------------------------------------------- Cấp học -- */
-
 suite('Cấp học phủ đủ lớp 1–12', () => {
     const levels = service.listEducationLevels();
     assert.equal(levels.length, 3, 'Phải có 3 cấp học');
 
-    const allGrades = levels.flatMap(level => level.grades);
-    assert.deepEqual([...allGrades].sort((a, b) => a - b),
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    const allGrades = levels.flatMap(level => level.grades).sort((a, b) => a - b);
+    assert.deepEqual(allGrades, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         'Các cấp phải phủ hết 12 lớp, không trùng và không thiếu');
 
     for (const level of levels) {
         assert.ok(level.name, `${level.id} phải có tên`);
-        assert.ok(Array.isArray(level.grades) && level.grades.length, `${level.id} phải có lớp`);
+        assert.ok(level.grades.length, `${level.id} phải có lớp`);
     }
     console.log(`  V ${levels.map(level => `${level.shortName}(${level.grades.join(',')})`).join(' · ')}`);
 });
-
-/* ---------------------------------------------------------------- Lớp -- */
 
 suite('Danh sách lớp mang đủ thông tin cho giao diện', () => {
     const grades = service.listGrades();
@@ -57,13 +50,12 @@ suite('Danh sách lớp mang đủ thông tin cho giao diện', () => {
     }
 
     // Lớp 6 phải là THCS: đây là điều frontend không được tự suy ra.
-    assert.equal(grades.find(item => item.grade === 6).educationLevelName, 'THCS');
-    assert.equal(grades.find(item => item.grade === 1).educationLevelName, 'Tiểu học');
-    assert.equal(grades.find(item => item.grade === 12).educationLevelName, 'THPT');
+    const at = level => grades.find(item => item.grade === level).educationLevelName;
+    assert.equal(at(1), 'Tiểu học');
+    assert.equal(at(6), 'THCS');
+    assert.equal(at(12), 'THPT');
     console.log('  V 12 lớp đều có tên lớp, tên cấp học và số bộ sách');
 });
-
-/* --------------------------------------------------------------- Môn -- */
 
 suite('Danh sách môn của một lớp', () => {
     const subjects = repo.listSubjectsOfGrade(6);
@@ -76,8 +68,6 @@ suite('Danh sách môn của một lớp', () => {
     }
     console.log(`  V Lớp 6 có ${subjects.length} môn, tất cả có khoá, tên và cấp học`);
 });
-
-/* ----------------------------------------------------------- Bộ sách -- */
 
 suite('Bộ sách lấy động từ dữ liệu, không cố định trong mã', () => {
     const series = repo.listSeriesForSubject(6, 'toan');
@@ -99,25 +89,33 @@ suite('Bộ sách lấy động từ dữ liệu, không cố định trong mã'
         + `có ${fallback.textbookCount} đầu sách`);
 });
 
-suite('Một môn/lớp có thể có nhiều bộ sách', () => {
-    // Thuộc tính quan trọng của kiến trúc: số bộ sách KHÔNG bị cố định là 1 hay 3.
+suite('Một môn/lớp có thể có nhiều bộ sách, số lượng không cố định', () => {
+    // Thuộc tính quan trọng của kiến trúc: số bộ sách KHÔNG bị ép bằng 1 hay 3.
     const counts = new Set();
     for (let grade = 1; grade <= 12; grade += 1) {
         for (const subject of repo.listSubjectsOfGrade(grade)) {
+            counts.add(repo.listSeriesForSubject(grade, subject.subjectId).length);
+        }
+    }
+    assert.ok(counts.size >= 1, 'Phải có ít nhất một số bộ sách');
+    console.log(`  V Số bộ sách quan sát được: ${[...counts].sort((a, b) => a - b).join(', ')} `
+        + '(giao diện phải hiển thị đúng số này)');
+});
+
 suite('Bộ sách chưa có đầu sách vẫn được trả về, đánh dấu rõ', () => {
-    // Mục đích: giao diện hiện "chưa có dữ liệu" thay vì bịa hoặc ẩn bộ sách.
+    // Giao diện hiện "chưa có dữ liệu" thay vì bịa hoặc ẩn bộ sách.
     let checked = 0;
     for (const grade of [1, 6, 10]) {
         for (const subject of repo.listSubjectsOfGrade(grade)) {
             for (const item of repo.listSeriesForSubject(grade, subject.subjectId)) {
-                if (item.textbookCount === 0) {
-                    assert.deepEqual(item.textbooks, [], 'Bộ sách không có đầu sách phải có mảng rỗng');
-                    assert.ok(item.seriesName, 'Vẫn phải giữ tên bộ sách để hiển thị');
-                    checked += 1;
-                }
+                if (item.textbookCount !== 0) continue;
+                assert.deepEqual(item.textbooks, [], 'Bộ sách không có đầu sách phải có mảng rỗng');
+                assert.ok(item.seriesName, 'Vẫn phải giữ tên bộ sách để hiển thị');
+                checked += 1;
             }
         }
     }
+    assert.ok(checked > 0, 'Phải có ít nhất một bộ sách chưa có đầu sách để kiểm tra');
     console.log(`  V ${checked} bộ sách chưa có đầu sách, đều được đánh dấu đầy đủ`);
 });
 
@@ -127,8 +125,6 @@ suite('Môn hoặc lớp không hợp lệ trả về mảng rỗng, không ném
     assert.deepEqual(repo.listSubjectsOfGrade(13), []);
     console.log('  V Trả về mảng rỗng thay vì ném lỗi');
 });
-
-/* ------------------------------------------------------- Chương, bài -- */
 
 suite('Cây chương và bài của một đầu sách', () => {
     const result = repo.listChaptersForTextbook(6, 'toan', 'national');
@@ -171,10 +167,3 @@ suite('Bài học không tồn tại trả về null', () => {
 });
 
 console.log('\nOK - kho du lieu chuong trinh dat dung');
-            counts.add(repo.listSeriesForSubject(grade, subject.subjectId).length);
-        }
-    }
-    assert.ok(counts.size >= 1, 'Phải có ít nhất một số bộ sách');
-    console.log(`  V Số bộ sách quan sát được: ${[...counts].sort((a, b) => a - b).join(', ')} `
-        + '(giao diện phải hiển thị đúng số này, không giả định trước)');
-});
