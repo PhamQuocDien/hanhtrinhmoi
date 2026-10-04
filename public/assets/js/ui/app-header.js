@@ -17,7 +17,8 @@ export const NAV_ITEMS = Object.freeze([
     { label: 'Luyện tập', href: '/student/practice.html' },
     { label: 'Bài kiểm tra', href: '/student/exams.html' },
     { label: 'Kết quả', href: '/student/result.html' },
-    { label: 'Tiến độ', href: '/student/progress.html' }
+    { label: 'Tiến độ', href: '/student/progress.html' },
+    { label: 'Mốc kiểm tra', href: '/student/milestones.html' }
 ]);
 
 /** Các mục menu cho quản trị viên. */

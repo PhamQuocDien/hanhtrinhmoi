@@ -1637,6 +1637,43 @@ table.data-table {
     color: var(--ink-700);
 }
 /* ============================================================================
+   MỐC ĐÁNH GIÁ VÀ THANH TIẾN ĐỘ
+   ========================================================================= */
+
+.milestone-card { display: flex; flex-direction: column; gap: var(--space-3); }
+
+.milestone-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.milestone-head .card-title { margin-bottom: 0; }
+
+/* Thanh tiến độ dùng chung cho phạm vi đã học */
+.progress-track {
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--ink-100);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--brand-600);
+    transition: width 0.3s ease;
+}
+
+/* Trên điện thoại: nhãn và trạng thái xuống dòng để không bị bóp */
+@media (max-width: 480px) {
+    .milestone-head { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============================================================================
+   RESPONSIVE
+/* ============================================================================
    RESPONSIVE
    Desktop >= 1200px · Tablet 768–1199px · Mobile < 768px
    Các lưới dùng `auto-fill` + `minmax` nên tự co theo bề rộng; phần này chỉ sửa

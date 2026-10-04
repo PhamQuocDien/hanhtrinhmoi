@@ -14,6 +14,8 @@ const curriculumService = require('../services/curriculum.service');
 const examService = require('../services/exam.service');
 const progressService = require('../services/progress.service');
 const questionService = require('../services/question.service');
+const miniTestService = require('../services/mini-test.service');
+const milestoneService = require('../services/milestone.service');
 const scoring = require('../services/scoring.service');
 
 /** Chuyển lỗi nghiệp vụ { error, message } thành mã HTTP cho chuẩn. */
@@ -115,18 +117,128 @@ async function getProgress(req, res) {
     return response.ok(res, await progressService.getSummary(req.session.user.username, grade));
 }
 
-/** Ghi nhận đã đọc xong một bài. */
-async function markLessonCompleted(req, res) {
+/**
+ * Ghi nhận học sinh đã đọc xong một bài.
+ *
+ * KHÔNG đánh dấu hoàn thành ở đây. Phản hồi kèm luôn điều kiện còn thiếu để học
+ * sinh biết phải làm gì tiếp (làm mini test, đạt ngưỡng...).
+ */
+async function markLessonRead(req, res) {
     const lesson = curriculumService.getLessonDetail(req.body.lessonId);
     if (!lesson) return response.notFound(res, 'Không tìm thấy bài học.');
 
-    await progressService.markLessonCompleted(req.session.user.username, {
+    await progressService.markLessonRead(req.session.user.username, {
         grade: lesson.grade,
         subjectId: lesson.subjectId,
         lessonId: lesson.lessonId,
         minutesSpent: Number(req.body.minutesSpent) || 0
     });
-    return response.ok(res, { lessonId: lesson.lessonId, completed: true });
+
+    const verdict = await progressService.evaluateAndMarkCompleted(req.session.user.username, {
+        grade: lesson.grade,
+        subjectId: lesson.subjectId,
+        lessonId: lesson.lessonId
+    });
+
+    return response.ok(res, {
+        lessonId: lesson.lessonId,
+        readingDone: true,
+        completed: verdict.completed,
+        reasons: verdict.reasons || [],
+        requiresMiniTest: verdict.requiresMiniTest,
+        miniTestPassPercent: verdict.miniTestPassPercent
+    });
+}
+
+/** Trạng thái học tập của một bài: đã đọc chưa, mini test ra sao, đủ điều kiện chưa. */
+async function getLessonState(req, res) {
+    const lessonId = req.params.lessonId;
+    const lesson = curriculumService.getLessonDetail(lessonId);
+    if (!lesson) return response.notFound(res, 'Không tìm thấy bài học.');
+
+    const miniTest = await miniTestService.getMiniTestState(req.session.user.username, {
+        grade: lesson.grade,
+        subjectId: lesson.subjectId,
+        lessonId
+    });
+
+    return response.ok(res, { lessonId, grade: lesson.grade, subjectId: lesson.subjectId, miniTest });
+}
+
+/** Mở mini test của một bài — không kèm đáp án đúng. */
+async function getMiniTest(req, res) {
+    const lesson = curriculumService.getLessonDetail(req.params.lessonId);
+    if (!lesson) return response.notFound(res, 'Không tìm thấy bài học.');
+
+    const miniTest = await miniTestService.prepareMiniTest({
+        grade: lesson.grade,
+        subjectId: lesson.subjectId,
+        lessonId: lesson.lessonId,
+        seriesId: req.query.seriesId || null
+    });
+
+    // Bài chưa có câu hỏi: báo rõ thay vì trả đề rỗng làm học sinh tưởng lỗi.
+    if (!miniTest) {
+        return response.ok(res, {
+            available: false,
+            lessonId: lesson.lessonId,
+            message: 'Bài học này chưa có câu hỏi để làm mini test.'
+        });
+    }
+
+    return response.ok(res, { available: true, ...miniTest });
+}
+
+/**
+ * Nộp bài mini test.
+ *
+ * Chỉ nhận `answers`; điểm luôn do máy chủ chấm, không nhận `score` từ client.
+ */
+async function submitMiniTest(req, res) {
+    const lesson = curriculumService.getLessonDetail(req.body.lessonId);
+    if (!lesson) return response.notFound(res, 'Không tìm thấy bài học.');
+
+    const result = await miniTestService.submitMiniTest(req.session.user.username, {
+        grade: lesson.grade,
+        subjectId: lesson.subjectId,
+        lessonId: lesson.lessonId,
+        seriesId: req.body.seriesId || null,
+        answers: req.body.answers || {}
+    });
+
+    if (result.error) return response.badRequest(res, result.message);
+    return response.ok(res, result);
+}
+
+/**
+ * Trạng thái các mốc checkpoint / giữa kỳ / cuối kỳ của một môn.
+ *
+ * Eligibility luôn tính ở máy chủ từ tiến độ thật và policy; giao diện chỉ hiển thị.
+ */
+async function getMilestones(req, res) {
+    const grade = Number(req.params.grade);
+    const subjectId = req.params.subjectId;
+    if (!grade || grade < 1 || grade > 12) {
+        return response.badRequest(res, 'Lớp phải từ 1 đến 12.');
+    }
+
+    const completedLessonId = await progressService.getCompletedLessonIds(
+        req.session.user.username, grade, subjectId
+    );
+
+    const milestones = milestoneService.evaluateMilestone({
+        grade,
+        subjectId,
+        seriesId: req.query.seriesId || null,
+        completedLessonId,
+        semester: req.query.semester,
+        academicYear: req.query.academicYear
+    });
+
+    return response.ok(res, {
+        ...milestones,
+        sourceLabel: milestoneService.sourceLabel(milestones.checkpoint.sourceKind)
+    });
 }
 
 /** Ngân hàng câu hỏi luyện tập — KHÔNG kèm đáp án đúng. */
@@ -229,6 +341,9 @@ module.exports = {
     getAttempt,
     getExam,
     getLesson,
+    getLessonState,
+getMilestones,
+getMiniTest,
     getOverview,
     getProgress,
     getSubjectDetail,
@@ -240,8 +355,9 @@ module.exports = {
     listPracticeQuestions,
     listSeries,
     listSubjects,
-    markLessonCompleted,
+    markLessonRead,
     saveAnswers,
     startAttempt,
+    submitMiniTest,
     submitAttempt
 };

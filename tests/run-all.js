@@ -13,6 +13,7 @@
 const { summary } = require('./harness');
 
 // Tên tệp kiểm thử theo thứ tự ưu tiên: nền tảng trước, chi tiết sau.
+// Tên tệp kiểm thử theo thứ tự ưu tiên: nền tảng trước, chi tiết sau.
 const SUITES = [
     ['Chương trình lớp 1–12', './curriculum.test'],
     ['Chấm điểm 7 dạng câu hỏi', './scoring.test'],
@@ -22,6 +23,21 @@ const SUITES = [
     ['Giao diện web', './frontend.test']
 ];
 
+/**
+ * Các bộ kiểm thử viết theo kiểu tự chạy (in kết quả bằng `console.log`).
+ *
+ * Vì sao cần: các bộ này kiểm tra cả quy tắc nghiệp vụ lẫn thông điệp hiển
+ * thị cho người học (ví dụ "Mini test chưa đạt: cần ít nhất 60%..."), nên phải
+ * dùng `node:assert` trực tiếp thay vì bộ đếm của harness. Bộ đếm của harness
+ * chỉ nhận hàm đồng bộ trả về `undefined`; các bộ này có bước bất đồng bộ
+ * nên không vừa khuôn đó.
+ *
+ * Chạy độc lập: `node tests/assessment-policy.test.js`.
+ */
+const SELF_RUNNING_SUITES = [
+    ['Dữ liệu chương trình và bộ sách', './curriculum-browse.test'],
+    ['Chính sách đánh giá và mốc tiến độ', './assessment-policy.test']
+];
 async function main() {
     console.log('🧪 Kiểm thử nền tảng học tập — Hành Tinh Mơ Ước');
 
@@ -32,6 +48,14 @@ async function main() {
         const suiteModule = require(path);
         // eslint-disable-next-line no-await-in-loop
         await suiteModule.run();
+    }
+
+    // Các bộ tự chạy: ném lỗi khi hỏng, không dùng bộ đếm của harness.
+    for (const [name, path] of SELF_RUNNING_SUITES) {
+        console.log(`\n${'═'.repeat(60)}`);
+        console.log(`▶ ${name}`);
+        // eslint-disable-next-line global-require, import/no-dynamic-require
+        require(path);
     }
 
     process.exit(summary());

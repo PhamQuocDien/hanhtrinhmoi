@@ -64,10 +64,41 @@ router.get('/attempts/history', requireAuth, safeAsyncRoute(controller.listHisto
 
 // ---- Tiến độ ----
 router.get('/progress/:grade', requireAuth, safeAsyncRoute(controller.getProgress));
+
+// Đánh dấu đã đọc xong bài. KHÔNG tự đánh dấu hoàn thành — policy mới quyết định.
 router.post(
-    '/progress/lessons/complete',
+    '/progress/lessons/read',
     requireAuth,
-    safeAsyncRoute(controller.markLessonCompleted)
+    safeAsyncRoute(controller.markLessonRead)
+);
+
+// Trạng thái học tập của một bài (đã đọc, mini test, điều kiện hoàn thành).
+router.get(
+    '/lessons/:lessonId/state',
+    requireAuth,
+    safeAsyncRoute(controller.getLessonState)
+);
+
+// ---- Mini test: kiểm tra cuối bài ----
+// Mở mini test — KHÔNG kèm đáp án đúng.
+router.get(
+    '/lessons/:lessonId/mini-test',
+    requireAuth,
+    safeAsyncRoute(controller.getMiniTest)
+);
+// Nộp bài — chỉ nhận `answers`, điểm do máy chủ chấm.
+router.post(
+    '/lessons/mini-test/submit',
+    requireAuth,
+    safeAsyncRoute(controller.submitMiniTest)
+);
+
+// ---- Mốc đánh giá: checkpoint / giữa kỳ / cuối kỳ ----
+// Eligibility luôn tính ở máy chủ từ tiến độ thật và chính sách đã cấu hình.
+router.get(
+    '/milestones/:grade/:subjectId',
+    requireAuth,
+    safeAsyncRoute(controller.getMilestones)
 );
 
 module.exports = router;

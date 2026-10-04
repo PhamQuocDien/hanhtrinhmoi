@@ -50,9 +50,12 @@ const CLIENT_CALLS = [
     'GET /api/auth/me',
     // Chương trình
     'GET /api/student/curriculum/overview',
+    'GET /api/student/curriculum/levels',
     'GET /api/student/curriculum/grades',
     'GET /api/student/curriculum/grades/:grade/subjects',
     'GET /api/student/curriculum/grades/:grade/subjects/:subjectId',
+    'GET /api/student/curriculum/grades/:grade/subjects/:subjectId/series',
+    'GET /api/student/curriculum/grades/:grade/subjects/:subjectId/chapters',
     'GET /api/student/curriculum/lessons/:lessonId',
     // Luyện tập và đề thi
     'GET /api/student/questions/practice',
@@ -64,9 +67,15 @@ const CLIENT_CALLS = [
     'POST /api/student/attempts/:attemptId/submit',
     'GET /api/student/attempts/:attemptId',
     'GET /api/student/attempts/history',
-    // Tiến độ
+    // Tiến độ — đánh dấu đã đọc, KHÔNG phải đánh dấu hoàn thành
     'GET /api/student/progress/:grade',
-    'POST /api/student/progress/lessons/complete',
+    'POST /api/student/progress/lessons/read',
+    // Mini test — kiểm tra cuối bài
+    'GET /api/student/lessons/:lessonId/mini-test',
+    'POST /api/student/lessons/mini-test/submit',
+    'GET /api/student/lessons/:lessonId/state',
+    // Mốc đánh giá: checkpoint / giữa kỳ / cuối kỳ
+    'GET /api/student/milestones/:grade/:subjectId',
     // Quản trị
     'GET /api/admin/catalog',
     'GET /api/admin/curriculum/tree',

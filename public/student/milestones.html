@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mốc đánh giá — Hành Tinh Mơ Ước</title>
+    <meta name="description" content="Theo dõi điều kiện làm bài kiểm tra định kỳ: checkpoint, giữa kỳ và cuối kỳ.">
+    <link rel="stylesheet" href="/assets/css/education.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-header-inner">
+            <a class="app-brand" href="/index.html">
+                <span aria-hidden="true">🎓</span>
+                <span>Hành Tinh Mơ Ước</span>
+            </a>
+            <nav class="app-nav" id="app-nav" aria-label="Điều hướng chính"></nav>
+            <button
+                class="nav-toggle"
+                id="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="app-nav"
+                aria-label="Mở menu điều hướng">
+                <span aria-hidden="true">☰</span>
+            </button>
+            <div class="app-user" id="home-actions"></div>
+        </div>
+    </header>
+
+    <main class="page" id="main-content">
+        <h1 class="page-title">Mốc đánh giá</h1>
+        <p class="page-subtitle">
+            Xem điều kiện để được làm bài kiểm tra theo chương và giữa kỳ, cuối kỳ.
+            Điều kiện do máy chủ tính từ tiến độ học tập thật của bạn.
+        </p>
+
+        <div class="filter-bar">
+            <label class="field" for="grade">
+                <span class="field-label">Lớp</span>
+                <select id="grade"></select>
+            </label>
+            <label class="field" for="subject">
+                <span class="field-label">Môn học</span>
+                <select id="subject"></select>
+            </label>
+        </div>
+
+        <div id="policy-note"></div>
+
+        <section id="milestone-panel" aria-busy="true">
+            <p class="loading-text">Đang tải…</p>
+        </section>
+    </main>
+
+    <script type="module" src="/assets/js/student/milestones.js"></script>
+</body>
+</html>

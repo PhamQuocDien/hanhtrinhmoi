@@ -56,6 +56,7 @@ const REQUIRED_PAGES = Object.freeze([
     'student/result.html',
     'student/history.html',
     'student/progress.html',
+    'student/milestones.html',
     'student/profile.html',
     'admin/dashboard.html',
     'admin/students.html',

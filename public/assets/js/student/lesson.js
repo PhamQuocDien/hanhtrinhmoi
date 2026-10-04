@@ -96,13 +96,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         contentBox.setAttribute('aria-busy', 'false');
     }
 
-    // Đánh dấu hoàn thành: máy chủ ghi vào tiến độ, client chỉ báo kết quả.
-    document.getElementById('btn-complete').addEventListener('click', async () => {
+    // Đánh dấu đã đọc xong: máy chủ quyết định bài có hoàn thành hay không.
+    // Học sinh luôn thấy lý do còn thiếu nếu chưa đủ điều kiện.
+    const completeBtn = document.getElementById('btn-complete');
+    completeBtn.addEventListener('click', async () => {
+        completeBtn.disabled = true;
         try {
-            await studentApi.markLessonCompleted(lessonId);
-            toast('Đã đánh dấu bài học hoàn thành.');
+            const result = await studentApi.markLessonRead(lessonId);
+
+            if (result.completed) {
+                toast('Bài học đã đạt yêu cầu hoàn thành.');
+                completeBtn.textContent = 'Đã hoàn thành';
+                return;
+            }
+
+            // Chưa đủ điều kiện: nói rõ còn thiếu gì thay vì báo thành công.
+            const reason = (result.reasons || [])[0] || 'Chưa đủ điều kiện hoàn thành.';
+            toast(reason, 'error');
+            completeBtn.disabled = false;
         } catch (error) {
             toast(error.message || 'Không lưu được tiến độ.', 'error');
+            completeBtn.disabled = false;
         }
     });
 });

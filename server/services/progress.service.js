@@ -10,10 +10,19 @@
 const Progress = require('../models/progress.model');
 const Attempt = require('../models/attempt.model');
 const curriculumService = require('./curriculum.service');
+const milestoneService = require('./milestone.service');
 const { getSubject } = require('../../data/subjects/subject-registry');
 
-/** Ghi nhận học sinh đã đọc xong một bài. */
-async function markLessonCompleted(username, { grade, subjectId, lessonId, minutesSpent = 0 }) {
+/**
+ * Ghi nhận học sinh đã đọc xong một bài.
+ *
+ * KHÔNG đánh dấu `completed` ở đây: mở/đọc bài không đủ để coi là hoàn thành.
+ * Việc đánh dấu do `milestoneService.evaluateLessonCompletion()` quyết định sau
+ * khi học sinh làm mini test đạt — máy chủ là nguồn quyết định.
+ *
+ * @returns {Promise<object|null>} bản ghi tiến độ
+ */
+async function markLessonRead(username, { grade, subjectId, lessonId, minutesSpent = 0 }) {
     if (!lessonId) return null;
     return Progress.findOneAndUpdate(
         { username, lessonId },
@@ -21,14 +30,64 @@ async function markLessonCompleted(username, { grade, subjectId, lessonId, minut
             $set: {
                 grade: Number(grade),
                 subjectId,
-                completed: true,
-                completedAt: new Date(),
+                readingDone: true,
                 lastStudiedAt: new Date()
             },
             $inc: { minutesSpent: Math.max(0, Number(minutesSpent) || 0) }
         },
         { upsert: true, new: true, setDefaultsOnInsert: true }
     );
+}
+
+/**
+ * Đánh dấu bài học hoàn thành nếu thoả điều kiện policy.
+ *
+ * Hàm này là IDEMPOTENT: gọi lại nhiều lần không làm tăng tiến độ hai lần.
+ *
+ * @param {string} username học sinh
+ * @param {object} params lớp, môn, bài
+ * @returns {Promise<object>} kết luận kèm lý do nếu chưa đạt
+ */
+async function evaluateAndMarkCompleted(username, { grade, subjectId, lessonId }) {
+    const progress = await Progress.findOne({ username, lessonId }).lean();
+    if (!progress) {
+        return { completed: false, reasons: ['Chưa có dữ liệu tiến độ cho bài học này.'] };
+    }
+
+    const verdict = milestoneService.evaluateLessonCompletion({
+        grade,
+        subjectId,
+        readingDone: Boolean(progress.readingDone),
+        miniTestAttempted: (progress.miniTestAttempts || 0) > 0,
+        miniTestBestPercent: progress.miniTestBestPercent ?? progress.bestScore ?? 0
+    });
+
+    if (verdict.completed && !progress.completed) {
+        await Progress.updateOne(
+            { username, lessonId },
+            { $set: { completed: true, completedAt: new Date() } }
+        );
+        return { ...verdict, completed: true, justCompleted: true };
+    }
+
+    return { ...verdict, justCompleted: false };
+}
+
+/**
+ * Tập bài học đã đạt yêu cầu hoàn thành.
+ *
+ * Dùng để tính coverage cho checkpoint / giữa kỳ / cuối kỳ.
+ *
+ * @param {string} username học sinh
+ * @param {number} grade lớp
+ * @param {string} subjectId môn
+ * @returns {Promise<Set<string>>}
+ */
+async function getCompletedLessonIds(username, grade, subjectId) {
+    const rows = await Progress.find({ username, grade: Number(grade), subjectId, completed: true })
+        .select('lessonId')
+        .lean();
+    return new Set(rows.map(row => row.lessonId));
 }
 
 /** Ghi nhận học sinh đang học (chưa đánh dấu hoàn thành). */
@@ -148,10 +207,12 @@ async function getSummary(username, grade) {
 }
 
 module.exports = {
+    evaluateAndMarkCompleted,
+    getCompletedLessonIds,
     getRecentLessons,
     getSubjectProgress,
     getSummary,
-    markLessonCompleted,
+    markLessonRead,
     recordAttemptResult,
     touchLesson
 };

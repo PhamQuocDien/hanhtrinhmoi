@@ -135,9 +135,33 @@ export const studentApi = {
 
     // Tiến độ
     getProgress: grade => apiFetch(`/student/progress/${grade}`),
-    markLessonCompleted: (lessonId, minutesSpent = 0) => apiFetch(
-        '/student/progress/lessons/complete',
+
+    // Đánh dấu đã đọc xong bài. KHÔNG phải đánh dấu hoàn thành — việc đó do
+    // chính sách của máy chủ quyết định sau khi làm mini test.
+    markLessonRead: (lessonId, minutesSpent = 0) => apiFetch(
+        '/student/progress/lessons/read',
         { method: 'POST', body: { lessonId, minutesSpent } }
+    ),
+
+    // Trạng thái học tập của một bài: đã đọc chưa, mini test, còn thiếu gì.
+    getLessonState: lessonId => apiFetch(
+        `/student/lessons/${encodeURIComponent(lessonId)}/state`
+    ),
+
+    // Mini test — bài kiểm tra cuối bài, KHÔNG phải điểm định kỳ.
+    getMiniTest: (lessonId, seriesId) => apiFetch(
+        `/student/lessons/${encodeURIComponent(lessonId)}/mini-test${buildQuery({ seriesId })}`
+    ),
+    // Chỉ gửi đáp án; không gửi điểm vì máy chủ tự chấm.
+    submitMiniTest: (lessonId, answers, seriesId) => apiFetch(
+        '/student/lessons/mini-test/submit',
+        { method: 'POST', body: { lessonId, answers, seriesId } }
+    ),
+
+    // Mốc đánh giá: checkpoint / giữa kỳ / cuối kỳ.
+    // Chỉ để hiển thị — máy chủ vẫn tự kiểm tra khi mở đề.
+    getMilestones: (grade, subjectId, params) => apiFetch(
+        `/student/milestones/${grade}/${encodeURIComponent(subjectId)}${buildQuery(params || {})}`
     )
 };
 

@@ -18,6 +18,9 @@ const progressSchema = new mongoose.Schema({
     // ---- Đã học ----
     completed: { type: Boolean, default: false, index: true },
     completedAt: { type: Date, default: null },
+    // Học sinh đã xác nhận đọc xong nội dung bài.
+    // Mở bài KHÔNG tự đặt cờ này — hoàn thành là việc của policy.
+    readingDone: { type: Boolean, default: false },
     // Số phút học tự ghi nhận từ phía client; không dùng để tính điểm.
     minutesSpent: { type: Number, default: 0, min: 0 },
 
@@ -25,6 +28,14 @@ const progressSchema = new mongoose.Schema({
     practiceAttempts: { type: Number, default: 0, min: 0 },
     bestScore: { type: Number, default: 0, min: 0, max: 100 },
     lastScore: { type: Number, default: 0, min: 0, max: 100 },
+
+    // ---- Mini test (bài kiểm tra cuối bài) ----
+    // Số lần đã làm mini test; policy quyết định tối đa bao nhiêu lần.
+    miniTestAttempts: { type: Number, default: 0, min: 0 },
+    // Kết quả tốt nhất (%). Dùng `$max` nên làm lại không làm mất kết quả đạt.
+    miniTestBestPercent: { type: Number, default: 0, min: 0, max: 100 },
+    miniTestPassed: { type: Boolean, default: false },
+    miniTestPassedAt: { type: Date, default: null },
 
     lastStudiedAt: { type: Date, default: null, index: true }
 }, { timestamps: true, collection: 'learning_progress' });
