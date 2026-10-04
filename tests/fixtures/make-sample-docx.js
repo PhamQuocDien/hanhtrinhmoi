@@ -108,6 +108,68 @@ function sampleQuestion(number, stem, options, answer, explanation) {
 }
 
 /** Nội dung tài liệu mẫu có câu hỏi, lựa chọn, đáp án và giải thích. */
+/**
+ * Đề mẫu ĐỦ CÁC DẠNG câu hỏi — dùng để kiểm thử toàn bộ pipeline DOCX.
+ *
+ *   2 single_choice
+ *   1 multiple_choice
+ *   1 true_false
+ *   2 fill_blank (1 ô, 2 ô)
+ *   1 short_answer
+ *   1 numeric
+ *   2 essay (có rubric)
+ *
+ * Câu hỏi KHÔNG có đáp án trong nội dung -> đáp án nằm ở bảng cuối tài liệu,
+ * đúng như cách giáo viên thường soạn đề.
+ */
+function buildMixedExamDocumentXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:body>
+<w:p><w:r><w:t>ĐỀ KIỂM TRA HỌC KỲ 1 — TOÁN 8</w:t></w:r></w:p>
+<w:p><w:r><w:t>Thời gian: 45 phút</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 1. Tính 2 + 2 bằng:</w:t></w:r></w:p>
+<w:p><w:r><w:t>A. 3</w:t></w:r></w:p>
+<w:p><w:r><w:t>B. 4</w:t></w:r></w:p>
+<w:p><w:r><w:t>C. 5</w:t></w:r></w:p>
+<w:p><w:r><w:t>D. 6</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 2. Số nào là số nguyên tố nhỏ hơn 10?</w:t></w:r></w:p>
+<w:p><w:r><w:t>A. 4</w:t></w:r></w:p>
+<w:p><w:r><w:t>B. 6</w:t></w:r></w:p>
+<w:p><w:r><w:t>C. 7</w:t></w:r></w:p>
+<w:p><w:r><w:t>D. 8</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 3. Chọn các số chia hết cho 3.</w:t></w:r></w:p>
+<w:p><w:r><w:t>A. 9</w:t></w:r></w:p>
+<w:p><w:r><w:t>B. 10</w:t></w:r></w:p>
+<w:p><w:r><w:t>C. 12</w:t></w:r></w:p>
+<w:p><w:r><w:t>D. 14</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 4. Mặt Trời mọc ở hướng ______ và lặn ở hướng ______.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Đáp án: Đông; Tây</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 5. Thủ đô của Việt Nam là ____________.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Đáp án: Hà Nội</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 6. Trong các số 12, 15, 20, số nào chia hết cho 3 và 5?</w:t></w:r></w:p>
+<w:p><w:r><w:t>Đáp án: 15</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 7. Mọi số nguyên tố lớn hơn 2 đều là số lẻ.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Đáp án: Đúng</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 8. Tính giá trị của biểu thức 3 x 5 - 4.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Đáp án: 11</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 9. Hãy phân tích vai trò của việc học tập đối với sự phát triển của mỗi người.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Hướng dẫn chấm:</w:t></w:r></w:p>
+<w:p><w:r><w:t>- Ý 1: 2 điểm</w:t></w:r></w:p>
+<w:p><w:r><w:t>- Ý 2: 2 điểm</w:t></w:r></w:p>
+<w:p><w:r><w:t>- Lập luận: 1 điểm</w:t></w:r></w:p>
+<w:p><w:r><w:t>Câu 10. Hãy trình bày cách phân biệt hình thoi và hình bình hành.</w:t></w:r></w:p>
+<w:p><w:r><w:t>Hướng dẫn chấm:</w:t></w:r></w:p>
+<w:p><w:r><w:t>- Nêu định nghĩa: 2 điểm</w:t></w:r></w:p>
+<w:p><w:r><w:t>- So sánh: 1 điểm</w:t></w:r></w:p>
+<w:p><w:r><w:t>ĐÁP ÁN</w:t></w:r></w:p>
+<w:p><w:r><w:t>1. B</w:t></w:r></w:p>
+<w:p><w:r><w:t>2. C</w:t></w:r></w:p>
+<w:p><w:r><w:t>3. A, C</w:t></w:r></w:p>
+</w:body></w:document>`;
+}
+
+/** Đề thi chỉ có trắc nghiệm — dùng để kiểm thử đường cũ. */
 function buildDocumentXml() {
     const questions = [
         sampleQuestion(
@@ -225,6 +287,13 @@ function buildSampleFiles() {
             { name: 'word/document.xml', data: buildImageDocumentXml() },
             { name: 'word/_rels/document.xml.rels', data: buildRelsXml() },
             { name: 'word/media/image1.png', data: TINY_PNG }
+        ]),
+        // Đề đủ 7 dạng câu hỏi — dùng kiểm thử toàn bộ pipeline.
+        mixedExam: buildZip([
+            { name: '[Content_Types].xml', data: contentTypes },
+            { name: '_rels/.rels', data: rootRels },
+            { name: 'word/document.xml', data: buildMixedExamDocumentXml() },
+            { name: 'word/_rels/document.xml.rels', data: emptyRels }
         ])
     };
 }
