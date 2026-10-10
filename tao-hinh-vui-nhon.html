@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Siêu Tạo Hình - 100 Cấp Độ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { background: linear-gradient(135deg, #ff9ff3, #feca57); overflow-x: hidden; }
+        
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .timer-display {
+            font-size: 2.2rem; font-weight: bold; color: #ee5253;
+            background: #fff; padding: 5px 25px; border-radius: 50px;
+            border: 4px solid #ee5253; min-width: 100px;
+        }
+
+        .main-container { display: flex; gap: 30px; padding: 20px; justify-content: center; }
+
+        /* Khung Mẫu (Bên trái) */
+        .blueprint-sidebar {
+            width: 250px; background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;
+        }
+
+        .blueprint-box {
+            background: #f1f2f6; border: 4px solid #6c5ce7; border-radius: 15px;
+            padding: 10px; margin-bottom: 20px;
+        }
+
+        .mini-grid {
+            display: grid; grid-template-columns: repeat(8, 22px); grid-template-rows: repeat(8, 22px);
+            gap: 1px; background: #ddd; margin: 0 auto;
+        }
+        .mini-cell { width: 22px; height: 22px; background: white; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+        /* Bàn làm việc (Giữa) */
+        .workspace {
+            background: white; padding: 20px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .main-grid {
+            display: grid; grid-template-columns: repeat(8, 55px); grid-template-rows: repeat(8, 55px);
+            gap: 2px; background: #dfe6e9; border: 10px solid #6c5ce7; border-radius: 10px;
+        }
+
+        .grid-cell {
+            width: 55px; height: 55px; background: #fff; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 2.5rem;
+            transition: 0.2s;
+        }
+        .grid-cell:hover { background: #f0f0f0; transform: scale(0.95); }
+
+        /* Thanh công cụ (Bên phải) */
+        .toolbar {
+            width: 180px; background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .tool-items { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tool {
+            width: 60px; height: 60px; border: 2px solid #eee; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 2rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .tool.active { border-color: #6c5ce7; background: #efecff; transform: scale(1.1); box-shadow: 0 0 10px rgba(108,92,231,0.3); }
+
+        .btn-check {
+            width: 100%; padding: 15px; background: #2ecc71; color: white; border: none;
+            border-radius: 12px; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+            margin-top: 20px; box-shadow: 0 5px 0 #27ae60;
+        }
+        .btn-check:active { transform: translateY(3px); box-shadow: none; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <div class="game-header">
+        <h1 style="color: #6c5ce7; margin:0;">🧩 THỬ THÁCH SIÊU TẠO HÌNH</h1>
+        <div class="timer-display">⏳ <span id="timer">60</span>s</div>
+        <div style="font-size: 1.2rem; font-weight: bold;">
+            CẤP ĐỘ: <span id="level-label" style="color: #d35400; font-size: 2rem;">1</span>
+            <a href="thanh-pho-sang-tao.html" class="back-button" style="margin-left:20px; background:#636e72">Thoát</a>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="blueprint-sidebar">
+            <h3>BẢN THIẾT KẾ MẪU</h3>
+            <div class="blueprint-box">
+                <div id="mini-grid" class="mini-grid"></div>
+            </div>
+            <p style="font-size: 0.9rem; color: #636e72;">Hãy đặt các hình vào vị trí giống hệt như mẫu nhé!</p>
+        </div>
+
+        <div class="workspace">
+            <div id="main-grid" class="main-grid"></div>
+        </div>
+
+        <div class="toolbar">
+            <h3>HÌNH KHỐI</h3>
+            <div id="tool-list" class="tool-items"></div>
+            <button class="btn-check" onclick="checkWin()">HOÀN THÀNH ✅</button>
+            <button class="btn-check" style="background:#e74c3c; box-shadow: 0 5px 0 #c0392b; margin-top:10px" onclick="clearWorkspace()">XÓA HẾT 🗑️</button>
+        </div>
+    </div>
+
+    <script>
+        const GRID_SIZE = 8; // Bàn 8x8 cho vừa sức bé
+        const shapes = {
+            'circle_red': '🔴', 'circle_blue': '🔵', 'square_yellow': '🟨', 
+            'square_green': '🟩', 'tri_orange': '🔺', 'star': '⭐',
+            'heart': '❤️', 'diamond': '💎'
+        };
+
+        let currentTool = 'circle_red';
+        let currentLevel = 1;
+        let timeLeft = 60;
+        let timerInterval;
+        let modelData = Array(GRID_SIZE * GRID_SIZE).fill(null);
+        let userData = Array(GRID_SIZE * GRID_SIZE).fill(null);
+
+        // --- 1. KHỞI TẠO ---
+        async function initGame() {
+            try {
+                const res = await fetch('/api/user/progress');
+                if (res.ok) {
+                    const data = await res.json();
+                    currentLevel = data.shapeLevel || 1;
+                }
+            } catch (e) { console.warn("Offline"); }
+
+            renderTools();
+            createGrids();
+            startLevel();
+        }
+
+        function renderTools() {
+            const container = document.getElementById('tool-list');
+            for (const [key, icon] of Object.entries(shapes)) {
+                const div = document.createElement('div');
+                div.className = `tool ${key === currentTool ? 'active' : ''}`;
+                div.innerHTML = icon;
+                div.onclick = () => {
+                    currentTool = key;
+                    document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                container.appendChild(div);
+            }
+        }
+
+        function createGrids() {
+            const mini = document.getElementById('mini-grid');
+            const main = document.getElementById('main-grid');
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                // Ô mẫu
+                const mCell = document.createElement('div');
+                mCell.className = 'mini-cell';
+                mCell.id = `m-${i}`;
+                mini.appendChild(mCell);
+
+                // Ô chơi
+                const uCell = document.createElement('div');
+                uCell.className = 'grid-cell';
+                uCell.onclick = () => placeShape(i, uCell);
+                main.appendChild(uCell);
+            }
+        }
+
+        // --- 2. LOGIC TRẬN ĐẤU ---
+        function startLevel() {
+            clearInterval(timerInterval);
+            document.getElementById('level-label').textContent = currentLevel;
+            
+            // Thời gian: 60s - (mỗi cấp giảm 0.5s). Tối thiểu 15s.
+            timeLeft = Math.max(15, 60 - Math.floor(currentLevel / 2));
+            document.getElementById('timer').textContent = timeLeft;
+
+            generateModel();
+            clearWorkspace();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("⏰ Hết giờ rồi! Đừng nản chí, làm lại màn này nhé.");
+                    startLevel();
+                }
+            }, 1000);
+        }
+
+        function generateModel() {
+            modelData.fill(null);
+            // Số lượng hình tăng theo cấp độ (Cấp 1: 3 hình, Cấp 100: 25 hình)
+            const count = 3 + Math.floor(currentLevel / 4.5);
+            const keys = Object.keys(shapes);
+
+            for (let i = 0; i < count; i++) {
+                let idx;
+                do { idx = Math.floor(Math.random() * (GRID_SIZE * GRID_SIZE)); } 
+                while (modelData[idx] !== null);
+                
+                modelData[idx] = keys[Math.floor(Math.random() * keys.length)];
+            }
+
+            // Vẽ lên bản thiết kế mẫu
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                const cell = document.getElementById(`m-${i}`);
+                cell.innerHTML = modelData[i] ? shapes[modelData[i]] : '';
+                cell.style.background = modelData[i] ? '#fff' : '#f1f2f6';
+            }
+        }
+
+        function placeShape(idx, el) {
+            // Nếu ô đã có hình đó rồi thì xóa, nếu chưa có thì đặt vào
+            if (userData[idx] === currentTool) {
+                userData[idx] = null;
+                el.innerHTML = '';
+            } else {
+                userData[idx] = currentTool;
+                el.innerHTML = shapes[currentTool];
+                // Hiệu ứng nảy
+                el.animate([{transform:'scale(0.5)'}, {transform:'scale(1)'}], {duration:100});
+            }
+        }
+
+        function clearWorkspace() {
+            userData.fill(null);
+            document.querySelectorAll('.grid-cell').forEach(c => c.innerHTML = '');
+        }
+
+        // --- 3. KIỂM TRA & LƯU ĐIỂM ---
+        async function checkWin() {
+            let match = true;
+            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+                if (userData[i] !== modelData[i]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                clearInterval(timerInterval);
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+                try {
+                    const res = await fetch('/api/game/shape-win', { method: 'POST' });
+                    const data = await res.json();
+                    
+                    setTimeout(() => {
+                        alert(`🎉 TUYỆT VỜI! Cấp độ ${currentLevel} hoàn tất!\nĐiểm thưởng: +20`);
+                        currentLevel = data.newLevel;
+                        startLevel();
+                    }, 500);
+                } catch (e) {
+                    currentLevel++;
+                    startLevel();
+                }
+            } else {
+                alert("❌ Chưa giống mẫu rồi bé ơi! Hãy quan sát kỹ lại bản thiết kế mẫu nhé.");
+            }
+        }
+
+        initGame();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

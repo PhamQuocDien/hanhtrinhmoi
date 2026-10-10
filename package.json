@@ -1,0 +1,26 @@
+{
+  "name": "hanh-tinh-mo-uoc",
+  "version": "39.0.0",
+  "description": "Hành Trình Mới — V39 age-aware onboarding, adaptive survey and diagnostic flow",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node scripts/test-v13-runtime.js && node scripts/test-v14-runtime.js && node scripts/test-v15-runtime.js && node scripts/test-v16-runtime.js && node scripts/test-v16-resilience.js && node scripts/test-v17-runtime.js && node scripts/test-v19-runtime.js && node scripts/test-v20-content.js && node scripts/test-v21-phase2.js && node scripts/test-v21-phase2-hardening.js && node scripts/test-v22-learning-experience.js && node scripts/test-v23-phase3.js && node scripts/test-v23-phase3-worker.js && node scripts/test-v24-phase4-integration.js && node scripts/test-v25-phase5-learning-experience.js && node scripts/test-v26-phase6-local-ai.js && node scripts/test-v27-phase7-11.js && node scripts/test-v27-assessment-coding-score.js && node scripts/test-v28-phase1-foundations.js && node scripts/test-v30-content-and-uploads.js && node scripts/test-v31-smart-learning.js && node scripts/test-v32-course-integrity.js && node scripts/test-v33-resilience-onboarding.js && node scripts/test-v33-free-judge0.js && node scripts/test-v34-learning-integrity.js && node scripts/test-v34-remediation.js && node scripts/test-v35-ai-essay-history.js && node scripts/test-v37-release-hardening.js && node scripts/test-v37-assessment-integrity.js && node scripts/test-v38-course-quality.js && node scripts/test-v39-onboarding.js",
+    "check": "node scripts/test-v13-runtime.js && node scripts/test-v14-runtime.js && node scripts/test-v15-runtime.js && node scripts/test-v16-runtime.js && node scripts/test-v16-resilience.js && node scripts/test-v17-runtime.js && node scripts/test-v19-runtime.js && node scripts/test-v20-content.js && node scripts/test-v21-phase2.js && node scripts/test-v21-phase2-hardening.js && node scripts/test-v22-learning-experience.js && node scripts/test-v23-phase3.js && node scripts/test-v23-phase3-worker.js && node scripts/test-v24-phase4-integration.js && node scripts/test-v25-phase5-learning-experience.js && node scripts/test-v26-phase6-local-ai.js && node scripts/test-v27-phase7-11.js && node scripts/test-v27-assessment-coding-score.js && node scripts/test-v28-phase1-foundations.js && node scripts/test-v30-content-and-uploads.js && node scripts/test-v31-smart-learning.js && node scripts/test-v32-course-integrity.js && node scripts/test-v33-resilience-onboarding.js && node scripts/test-v33-free-judge0.js && node scripts/test-v34-learning-integrity.js && node scripts/test-v34-remediation.js && node scripts/test-v35-ai-essay-history.js && node scripts/test-v37-release-hardening.js && node scripts/test-v37-assessment-integrity.js && node scripts/test-v38-course-quality.js && node scripts/test-v39-onboarding.js",
+    "test:remediation": "node scripts/test-v34-remediation.js",
+    "validate": "node scripts/validate-project.js",
+    "validate:legacy": "node scripts/validate-legacy-project.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^8.0.0",
+    "socket.io": "^4.7.2"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}

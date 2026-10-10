@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà Văn Nhí Tài Ba - Premium Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --danger: #ff7675;
+            --warning: #fdcb6e;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 15px 35px rgba(108, 92, 231, 0.2);
+        }
+
+        body {
+            background: #f0f2f5 url('https://www.transparenttextures.com/patterns/cubes.png');
+            font-family: 'Baloo 2', cursive;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #2d3436;
+        }
+
+        /* Header phong cách Luxury */
+        .main-title {
+            font-size: 3rem;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #6c5ce7, #d63031);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-weight: 800;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .container {
+            max-width: 900px;
+            width: 92%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            margin: 20px;
+            border-radius: 40px;
+            box-shadow: var(--shadow);
+            border: 8px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Level Grid */
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 25px;
+            background: rgba(108, 92, 231, 0.05);
+            border-radius: 30px;
+            border: 2px inset rgba(0,0,0,0.02);
+        }
+
+        .lvl-btn {
+            height: 70px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            background: #fff;
+            color: #b2bec3;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.3rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .lvl-btn.unlocked {
+            background: linear-gradient(145deg, #6c5ce7, #4834d4);
+            color: white;
+            box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .lvl-btn.current {
+            background: linear-gradient(145deg, #fdcb6e, #e17055);
+            color: white;
+            transform: scale(1.1);
+            z-index: 2;
+            border: 3px solid #fff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(225, 112, 85, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(225, 112, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(225, 112, 85, 0); }
+        }
+
+        /* Form & Inputs */
+        .input-group {
+            margin-bottom: 20px;
+            background: #f8f9fd;
+            padding: 20px;
+            border-radius: 25px;
+            border: 2px solid #fff;
+            transition: 0.3s;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #4834d4;
+            font-size: 1.1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #dfe6e9;
+            border-radius: 15px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+            outline: none;
+            background: white;
+            transition: 0.3s;
+        }
+
+        /* Story Book & Score */
+        .story-book {
+            background: #fff url('https://www.transparenttextures.com/patterns/old-paper.png');
+            padding: 50px;
+            border-radius: 5px 30px 30px 5px;
+            box-shadow: 15px 15px 30px rgba(0,0,0,0.1);
+            line-height: 2.2;
+            font-size: 1.4rem;
+            text-align: left;
+            border-left: 15px solid var(--primary);
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .score-badge {
+            position: absolute;
+            top: -40px;
+            right: -10px;
+            background: linear-gradient(145deg, #ff7675, #d63031);
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            transform: rotate(15deg);
+            border: 6px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .score-badge small { font-size: 0.8rem; margin-top: -5px; }
+
+        .highlight {
+            color: var(--primary);
+            background: rgba(108, 92, 231, 0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 800;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 18px 40px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:active { transform: scale(0.95); }
+
+        .btn-start { background: linear-gradient(to bottom, #00cec9, #00b894); width: 100%; box-shadow: 0 6px 0 #008f72; }
+        .btn-home { background: linear-gradient(to bottom, #ff7675, #e17055); box-shadow: 0 6px 0 #c0392b; }
+        .btn-next { background: linear-gradient(to bottom, #6c5ce7, #4834d4); box-shadow: 0 6px 0 #2d3436; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <h1 class="main-title">✍️ XƯỞNG SÁNG TÁC NHÍ ✍️</h1>
+
+    <div class="container">
+        <div id="level-screen">
+            <div style="background: #fff3e0; padding: 15px; border-radius: 20px; margin-bottom: 25px;">
+                <h3 style="margin:0; color: #e67e22;">🌟 Bé đang là Nhà văn Tập sự</h3>
+                <p id="progress-text" style="margin:5px 0;">Hãy vượt qua các thử thách để trở thành Đại văn hào!</p>
+            </div>
+            <div id="login-warning" style="display:none; color:#d63031; font-weight:700; margin-bottom:15px; background: rgba(214, 48, 49, 0.1); padding: 10px; border-radius: 10px;">⚠️ Bé chưa đăng nhập! Kết quả sẽ không được lưu vào bộ sưu tập.</div>
+            <div class="level-grid" id="level-list">Đang chuẩn bị giấy bút...</div>
+            <div style="margin-top: 30px;">
+                <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Về Sảnh Chính</button>
+            </div>
+        </div>
+
+        <div id="game-screen" style="display:none;">
+            <div id="level-header" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); padding: 30px; border-radius: 30px; margin-bottom: 30px; text-align: center; border: 4px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                <h2 id="level-title" style="margin:0; font-size: 2rem;">Cấp 1</h2>
+                <div style="display:inline-block; margin-top:10px; background:rgba(255,255,255,0.5); padding:5px 20px; border-radius:50px; font-weight:700;">🎯 Mục tiêu: Đạt chuẩn 9 điểm</div>
+            </div>
+            
+            <form id="story-form">
+                <div id="inputs-container"></div>
+                <button type="submit" class="btn btn-start">🚀 XUẤT BẢN TÁC PHẨM</button>
+            </form>
+            <button class="btn btn-home" style="margin-top:20px; padding: 10px 30px; font-size: 1rem;" onclick="backToMenu()">🔙 Quay lại</button>
+        </div>
+
+        <div id="result-screen" style="display:none;">
+            <h2 style="color: var(--success); font-size: 2rem;">🏆 TÁC PHẨM HOÀN TẤT 🏆</h2>
+            <div class="story-book">
+                <div class="score-badge">
+                    <span id="score-display">0</span>
+                    <small>điểm</small>
+                </div>
+                <div id="final-story-content"></div>
+            </div>
+            <div style="background: #fff; border: 3px solid var(--primary); padding: 20px; border-radius: 25px; margin: 30px 0; position: relative;">
+                <span style="position:absolute; top:-15px; left:20px; background:var(--primary); color:white; padding:2px 15px; border-radius:10px; font-size:0.9rem;">LỜI KHUYÊN</span>
+                <p id="teacher-comment" style="font-weight: 700; color: #2f3542; margin: 0; font-size: 1.1rem;"></p>
+            </div>
+            <div style="display:flex; gap:15px; justify-content: center;">
+                <button class="btn btn-home" onclick="backToMenu()">🏠 Menu Chính</button>
+                <button id="next-level-btn" class="btn btn-next" onclick="nextLevel()">Cấp Tiếp Theo ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GIỮ NGUYÊN TOÀN BỘ LOGIC GỐC ĐỂ ĐẢM BẢO KẾT NỐI SERVER ---
+        let unlockedLevel = 1;
+        let currentLevel = 1;
+        let currentTemplate = "";
+
+        const themeLibrary = {
+            forest: { title: "Khu Rừng Thần Tiên", color: "#27ae60",
+                parts: {
+                    intro: ["Vào một {time}, giữa khu rừng {place} bạt ngàn cây xanh, ", "Ngày xửa ngày xưa, tại vùng đất {place} kỳ bí vào một {time} yên bình, ", "Trong một hốc cây cổ thụ tại {place} vào {time} nọ, "],
+                    meeting: ["bé bắt gặp bạn {animal} với dáng vẻ {adj_animal} đang dạo chơi. ", "bé bỗng nghe thấy tiếng gọi của {animal}, một người bạn rất {adj_animal}. ", "bé nhìn thấy chú {animal} {adj_animal} đang ngồi đọc sách. "],
+                    conflict: ["Nhưng một thử thách ập đến khi {obstacle} bất ngờ xuất hiện và lấy đi {mission}. ", "Thật không may, {obstacle} hung dữ đã che khuất lối đi dẫn đến {mission} quan trọng. ", "Bỗng nhiên {obstacle} bay đến và giấu mất {mission} của mọi người. "],
+                    action: ["Không hề sợ hãi, bé đã sử dụng {magic_item} để đối đầu. Sự {my_adj} của bé đã hóa giải mọi chuyện. ", "Bằng lòng {my_adj}, bé liền mang {magic_item} ra và nhanh trí vượt qua {obstacle}. ", "Nhờ sự {my_adj} và chiếc {magic_item} thần kỳ, bé đã khiến {obstacle} phải lùi bước. "],
+                    ending: ["Cuối cùng, khu rừng đã trở nên {result} hơn bao giờ hết. Bé cảm thấy {result} vì sự {my_adj} của mình.", "Thật là một kết thúc {result}! Bé và {animal} sẽ mãi là những người bạn {result} nhất.", "Từ đó, {place} luôn tràn ngập niềm vui {result} nhờ sự {my_adj} của bé."]
+                }
+            },
+            space: { title: "Thiên Hà Xa Xôi", color: "#2980b9",
+                parts: {
+                    intro: ["Trên chuyến tàu không gian đến {place} vào một {time} đầy sao, ", "Giữa dải ngân hà {place} lấp lánh vào {time} năm 3000, "],
+                    meeting: ["bé đã gặp gỡ phi hành gia {animal} trông vô cùng {adj_animal}. ", "bé vô tình cứu được một sinh vật {animal} {adj_animal} đang bị lạc. "],
+                    conflict: ["Bỗng nhiên một cơn bão {obstacle} quét qua, đe dọa phá hủy {mission} của con tàu. ", "Một đám mây {obstacle} khổng lồ bất ngờ bao vây, làm hỏng hệ thống {mission} quan trọng. "],
+                    action: ["Bé nhanh chóng khởi động {magic_item} để sửa chữa. Với tinh thần {my_adj}, bé đã vượt qua nguy hiểm. ", "Sử dụng {magic_item} một cách thông minh, bé đã thể hiện sự {my_adj} để giải cứu hành tinh. "],
+                    ending: ["Vũ trụ lại trở nên {result} và rực rỡ. Chuyến đi này giúp bé trở nên {result} và {my_adj} hơn.", "Thật là một kỳ tích {result}! Mọi vì sao đều tỏa sáng mừng cho sự {my_adj} của bé."]
+                }
+            },
+            ocean: { title: "Cung Điện Đại Dương", color: "#16a085",
+                parts: {
+                    intro: ["Sâu dưới đáy biển {place} vào một {time} trong xanh, ", "Bên trong rạn san hô lấp lánh tại {place} vào {time}, "],
+                    meeting: ["bé thấy nàng tiên cá {animal} đang bơi lội {adj_animal}. ", "bé gặp chú cá heo {animal} vô cùng {adj_animal} đang dẫn đường. "],
+                    conflict: ["Bất ngờ một con bạch tuộc {obstacle} khổng lồ xuất hiện và lấy mất {mission}. ", "Một dòng hải lưu {obstacle} cực mạnh đã cuốn trôi {mission} của vương quốc. "],
+                    action: ["Bé đã dùng {magic_item} để tạo ra luồng sáng. Sự {my_adj} của bé đã cứu tất cả. ", "Bằng lòng {my_adj}, bé mượn {magic_item} từ vua biển để vượt qua {obstacle}. "],
+                    ending: ["Biển cả trở nên {result} hơn. Bé nhận ra lòng {my_adj} là món quà {result} nhất.", "Mọi loài cá đều nhảy múa {result} để cảm ơn sự {my_adj} của nhà văn nhí."]
+                }
+            },
+            magic: { title: "Học Viện Phù Thủy", color: "#8e44ad",
+                parts: {
+                    intro: ["Dưới mái trường phù thủy {place} cổ kính vào một {time} đầy sao, ", "Trong cuốn sách ma thuật bí ẩn tại {place} vào {time}, "],
+                    meeting: ["bé gặp được một phù thủy {animal} có bộ râu {adj_animal}. ", "bé bỗng thấy một chú rồng {animal} {adj_animal} đang bay lượn. "],
+                    conflict: ["Nhưng một lời nguyền {obstacle} ập đến và làm biến mất {mission}. ", "Thật không may, một con yêu tinh {obstacle} đã đánh cắp {mission} của trường. "],
+                    action: ["Bé nhanh chóng rút {magic_item} và đọc lời chú dũng cảm. Với sự {my_adj}, bé đã hóa giải mọi chuyện. ", "Bằng lòng {my_adj}, bé dùng {magic_item} để tạo nên một vòng bảo vệ cực mạnh. "],
+                    ending: ["Ngôi trường trở nên {result} hơn bao giờ hết. Bé cảm thấy {result} vì đã rất {my_adj}.", "Thật là một phép màu {result}! Bé đã trở thành phù thủy {my_adj} xuất sắc nhất."]
+                }
+            }
+        };
+
+        async function init() {
+            try {
+                const res = await fetch('/api/user/progress');
+                if(res.status === 401) document.getElementById('login-warning').style.display = 'block';
+                const data = await res.json();
+                unlockedLevel = data.storyLevel || 1;
+            } catch(e) { console.log("Offline Mode"); }
+            renderLevels();
+        }
+
+        function renderLevels() {
+            const list = document.getElementById('level-list');
+            list.innerHTML = '';
+            for(let i=1; i<=100; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `lvl-btn ${i < unlockedLevel ? 'unlocked' : ''} ${i === unlockedLevel ? 'current' : ''}`;
+                btn.disabled = i > unlockedLevel;
+                btn.onclick = () => startLevel(i);
+                list.appendChild(btn);
+            }
+        }
+
+        function startLevel(lvl) {
+            currentLevel = lvl;
+            document.getElementById('level-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            const themeKeys = Object.keys(themeLibrary);
+            const theme = themeLibrary[themeKeys[(lvl - 1) % themeKeys.length]];
+            const p = theme.parts;
+
+            currentTemplate = p.intro[rand(p.intro)] + p.meeting[rand(p.meeting)] + 
+                              p.conflict[rand(p.conflict)] + p.action[rand(p.action)] + 
+                              p.ending[rand(p.ending)];
+
+            document.getElementById('level-title').textContent = `Cấp ${lvl}: ${theme.title}`;
+            document.getElementById('level-title').style.color = "#fff";
+
+            const placeholders = [...currentTemplate.matchAll(/\{(\w+)\}/g)].map(m => m[1]);
+            const uniquePlaceholders = [...new Set(placeholders)];
+            const container = document.getElementById('inputs-container');
+            container.innerHTML = '';
+
+            const labels = {
+                time: "Thời gian diễn ra", place: "Địa điểm kỳ thú", animal: "Người bạn/Nhân vật",
+                adj_animal: "Vẻ bề ngoài nhân vật", mission: "Vật phẩm bé tìm kiếm", obstacle: "Kẻ phá đám/Thử thách",
+                magic_item: "Món đồ thần kỳ", my_adj: "Phẩm chất tốt của bé", result: "Cảm xúc kết thúc"
+            };
+
+            uniquePlaceholders.forEach(key => {
+                const div = document.createElement('div');
+                div.className = 'input-group';
+                div.innerHTML = `
+                    <label>${labels[key] || key}:</label>
+                    <input type="text" id="${key}" placeholder="Ví dụ: một buổi sáng sớm lung linh..." required 
+                           oninput="updateCount('${key}')">
+                    <small id="cnt-${key}" style="color:#bdc3c7; display:block; margin-top:5px; font-weight:700;">0 từ</small>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('story-form').onsubmit = (e) => {
+                e.preventDefault();
+                submitWork(uniquePlaceholders);
+            };
+            window.scrollTo(0, 0);
+        }
+
+        function updateCount(id) {
+            const val = document.getElementById(id).value.trim();
+            const words = val.split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById(`cnt-${id}`).innerText = words + " từ";
+            document.getElementById(`cnt-${id}`).style.color = words >= 3 ? "#00b894" : "#ff7675";
+        }
+
+        function submitWork(keys) {
+            let storyText = currentTemplate;
+            let bonus = 0;
+            let totalWords = 0;
+
+            keys.forEach(key => {
+                const val = document.getElementById(key).value.trim();
+                const wordCount = val.split(/\s+/).filter(w => w.length > 0).length;
+                totalWords += wordCount;
+
+                if (wordCount >= 4) bonus += 12; 
+                else if (wordCount >= 2) bonus += 6;
+
+                const lux = ["vô cùng", "rực rỡ", "lung linh", "tươi đẹp", "dũng cảm", "nhanh trí", "kỳ ảo", "tuyệt vời", "lấp lánh", "huyền bí"];
+                lux.forEach(w => { if(val.toLowerCase().includes(w)) bonus += 4; });
+
+                storyText = storyText.replace(new RegExp(`{${key}}`, 'g'), `<span class="highlight">${val}</span>`);
+            });
+
+            let finalScore = 30 + bonus;
+            if (finalScore > 100) finalScore = 100;
+            if (currentLevel > 5 && totalWords < 15) finalScore -= 15; 
+
+            showResult(storyText, finalScore);
+        }
+
+        function showResult(story, score) {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('final-story-content').innerHTML = story;
+            document.getElementById('score-display').textContent = score;
+
+            let comment = "";
+            if (score >= 70) {
+                comment = "🌟 Tuyệt tác! Câu chuyện của bé vô cùng sinh động. Ban giám khảo quyết định tặng bé chuẩn 9 điểm để thăng cấp!";
+                document.getElementById('next-level-btn').style.display = 'inline-flex';
+                saveToDatabase(score);
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
+            } else {
+                comment = "👏 Bé viết khá tốt rồi! Nhưng để trở thành Nhà văn thực thụ, bé hãy thử dùng thêm các từ mô tả như 'lung linh', 'rực rỡ' và viết dài hơn xíu nhé!";
+                document.getElementById('next-level-btn').style.display = 'none';
+            }
+            document.getElementById('teacher-comment').textContent = comment;
+            window.scrollTo(0, 0);
+        }
+
+        async function saveToDatabase(score) {
+            try {
+                await fetch('/api/game/story-win', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ level: currentLevel, score: score, taskName: 'Sáng Tác' })
+                });
+                if(currentLevel === unlockedLevel) unlockedLevel++;
+            } catch(e) {}
+        }
+
+        function nextLevel() { if (currentLevel < 100) startLevel(currentLevel + 1); }
+        
+        function backToMenu() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('level-screen').style.display = 'block';
+            renderLevels();
+        }
+
+        function rand(arr) { return Math.floor(Math.random() * arr.length); }
+        init();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

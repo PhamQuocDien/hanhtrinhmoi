@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Hành Trình Mới · Ứng dụng Quản trị</title>
+    <link rel="stylesheet" href="/assets/css/admin/admin-base.css">
+    <link rel="stylesheet" href="/assets/css/admin/admin-layout.css">
+    <link rel="stylesheet" href="/assets/css/admin/admin-dashboard.css">
+    <link rel="stylesheet" href="/assets/css/admin/admin-quick-create.css?v=39.0.0">
+    <link rel="stylesheet" href="/assets/css/admin/admin-phase3.css?v=39.0.0">
+    <link rel="stylesheet" href="/assets/css/admin/admin-learning-engine.css?v=39.0.0">
+    <link rel="stylesheet" href="/assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="admin-app">
+    <div id="admin-loading" class="admin-screen-state">Đang xác thực phiên quản trị…</div>
+    <div id="admin-forbidden" class="admin-screen-state is-error" hidden></div>
+    <div id="admin-shell" class="admin-shell" hidden>
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="admin-brand"><span class="admin-brand-mark">HT</span><span><strong>Hành Trình Mới</strong><small>Ứng dụng Quản trị</small></span></div>
+            <nav class="admin-nav" aria-label="Điều hướng quản trị">
+                <a href="#dashboard" data-view="dashboard" class="is-active">◈ <span>Tổng quan</span></a>
+                <div class="admin-nav-label">Người dùng</div>
+                <a href="#users" data-view="users">♙ <span>Người dùng & trạng thái</span></a>
+                <a href="#assignment-review" data-view="assignment-review">✓ <span>Bài nộp chờ chấm</span></a>
+                <div class="admin-nav-label">Giáo dục</div>
+                <a href="#builder" data-view="builder">✎ <span>Trình tạo nội dung</span></a>
+                <a href="#curriculum" data-view="curriculum">▦ <span>Môn / chương trình</span></a>
+                <a href="#courses" data-view="courses">▤ <span>Khóa học</span></a>
+                <a href="#lessons" data-view="lessons">▤ <span>Bài học & bài giảng</span></a>
+                <a href="#course-factory" data-view="course-factory">🧠 <span>AI nội bộ & Course Factory</span></a>
+                <a href="#learning-engine" data-view="learning-engine">🧭 <span>Chất lượng, thực hành & Analytics</span></a>
+                <a href="#guide" data-view="guide">☷ <span>Hướng dẫn quản trị nội dung</span></a>
+                <a href="#ai-studio" data-view="ai-studio">☁ <span>AI Studio (API tùy chọn)</span></a>
+                <a href="#questions" data-view="questions">? <span>Ngân hàng câu hỏi</span></a>
+                <a href="#assessments" data-view="assessments">▣ <span>Đánh giá & kỳ thi</span></a>
+                <a href="#survey" data-view="survey">◎ <span>Khảo sát</span></a>
+                <a href="#placement" data-view="placement">◉ <span>Kiểm tra đầu vào</span></a>
+                <a href="#learning-path" data-view="learning-path">⌁ <span>Quy tắc lộ trình</span></a>
+                <div class="admin-nav-label">Catalog</div>
+                <a href="#universities" data-view="universities">⌂ <span>Cơ sở đào tạo</span></a>
+                <a href="#english" data-view="english">EN <span>TOEIC & IELTS</span></a>
+                <a href="#national-exam" data-view="national-exam">▥ <span>Kỳ thi mô phỏng</span></a>
+                <div class="admin-nav-label">Hệ thống</div>
+                <a href="#import" data-view="import">⇧ <span>Tạo nội dung / Nhập Word</span></a>
+                <a href="#notifications" data-view="notifications">✦ <span>Thông báo</span></a>
+                <a href="#achievements" data-view="achievements">★ <span>Thành tích & phần thưởng</span></a>
+                <a href="#sources" data-view="sources">◇ <span>Danh mục nguồn</span></a>
+                <a href="#audit" data-view="audit">◷ <span>Nhật ký quản trị</span></a>
+                <a href="#settings" data-view="settings">⚙ <span>Cài đặt hệ thống</span></a>
+            </nav>
+            <button id="admin-logout" class="admin-logout">↪ Đăng xuất</button>
+        </aside>
+        <div class="admin-main">
+            <header class="admin-topbar"><button id="admin-menu" class="admin-menu" aria-label="Mở menu">☰</button><div class="admin-breadcrumb"><span>Admin</span><b>/</b><strong id="admin-breadcrumb-current">Tổng quan</strong></div><div class="admin-top-actions"><span class="admin-live-dot">●</span><span id="admin-account-name">Admin</span><button id="admin-account" class="admin-account">A</button></div></header>
+            <main class="admin-content"><div id="admin-view" class="admin-view"></div></main>
+        </div>
+    </div>
+    <script src="/assets/js/api.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-users.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-cms.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-ai-studio.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-quick-create.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-guide.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-content-studio.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-course-factory.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-learning-engine.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-assignment-review.js?v=39.0.0"></script>
+    <script src="/assets/js/admin/admin-app.js?v=39.0.0"></script>
+<script src="/assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

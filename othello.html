@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Vua Phục Kích - 100 Cấp Độ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { background: radial-gradient(circle, #27ae60, #145a32); color: white; min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Baloo 2', cursive; overscroll-behavior: none; }
+        .game-layout { display: flex; gap: 20px; justify-content: center; padding: 20px; flex-wrap: wrap; width: 100%; box-sizing: border-box; }
+        
+        /* Bàn cờ */
+        .board-container { 
+            background: #145a32; padding: 10px; border-radius: 10px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 8px solid #0b3d21; 
+        }
+        .othello-grid { display: grid; grid-template-columns: repeat(8, 40px); grid-template-rows: repeat(8, 40px); background: #0b3d21; gap: 2px; }
+        
+        .cell { width: 40px; height: 40px; background: #2ecc71; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .cell:active { background: #27ae60; }
+        /* Gợi ý nước đi: Dấu chấm nhỏ */
+        .cell.valid-move::after { content: ''; width: 10px; height: 10px; background: rgba(0,0,0,0.3); border-radius: 50%; border: 1px solid rgba(255,255,255,0.5); }
+
+        .piece { width: 34px; height: 34px; border-radius: 50%; transition: transform 0.4s, background-color 0.4s; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .piece.black { background: linear-gradient(135deg, #444, #000); }
+        .piece.white { background: linear-gradient(135deg, #fff, #ddd); transform: rotateY(180deg); }
+
+        /* Sidebar */
+        .sidebar { width: 95%; max-width: 350px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); padding: 15px; border-radius: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; }
+        
+        .mode-tabs { display: flex; gap: 5px; margin-bottom: 5px; }
+        .tab-btn { flex: 1; padding: 10px 5px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; opacity: 0.7; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
+        .tab-btn.active { opacity: 1; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .tab-pve { background: #f1c40f; color: #333; }
+        .tab-pvp { background: #9b59b6; color: white; }
+        .tab-local { background: #e67e22; color: white; }
+
+        .mode-content { display: none; }
+        .mode-content.active { display: block; }
+
+        .score-row { display: flex; justify-content: space-around; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
+        .active-turn { border: 2px solid #f1c40f; box-shadow: 0 0 10px #f1c40f; border-radius: 5px; background: rgba(255,255,255,0.1); }
+        
+        .status-box { background: white; color: #333; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; min-height: 20px; margin-bottom: 10px; }
+        .btn-game { width: 100%; padding: 12px; border: none; border-radius: 50px; font-family: inherit; font-weight: bold; cursor: pointer; margin-bottom: 5px; color: white; transition: 0.2s; font-size: 1rem; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+        .btn-game:active { transform: translateY(2px); box-shadow: none; }
+        .btn-pass { background: #e74c3c; } .btn-home { background: #95a5a6; }
+        
+        select, input { width: 100%; padding: 10px; border-radius: 8px; border: none; font-family: inherit; font-weight: bold; font-size: 1rem; text-align: center; margin-bottom: 10px; box-sizing: border-box; }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+<link rel="stylesheet" href="assets/css/games/board-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+  <link rel="stylesheet" href="assets/css/games/board-ui.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+    <div id="tourney-timer" style="background:#e74c3c; color:white; padding:10px; border-radius:10px; margin-bottom:10px; display:none; position:fixed; top:10px; right:10px; z-index:100;">
+        ⏱️ CÒN LẠI: <span id="time-left">10:00</span>
+    </div>
+
+    <div class="header-bar" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 10px 20px; box-sizing: border-box; background: rgba(0,0,0,0.3);">
+        <button class="btn-game btn-home" style="width: auto; padding: 5px 15px;" onclick="window.location.href='index.html'">⬅️ Về</button>
+        <h1 style="text-shadow: 2px 2px 0 #000; margin: 0; flex-grow: 1; text-align: center;">🟢 VUA PHỤC KÍCH ⚪</h1>
+        <div style="width: 50px;"></div>
+    </div>
+
+    <div class="game-layout">
+        <div class="board-container">
+            <div id="othello-board" class="othello-grid"></div>
+        </div>
+
+        <div class="sidebar">
+            <div class="score-row">
+                <div id="p1-score" class="active-turn">⚫ <span id="score-b">2</span></div>
+                <div id="p2-score">⚪ <span id="score-w">2</span></div>
+            </div>
+
+            <div id="status" class="status-box">Chọn chế độ chơi!</div>
+
+            <div class="mode-tabs">
+                <button class="tab-btn tab-pve active" onclick="switchMode('pve')">🤖 Đấu Máy</button>
+                <button class="tab-btn tab-pvp" onclick="switchMode('pvp')">🌐 Online</button>
+                <button class="tab-btn tab-local" onclick="switchMode('local')">👥 2 Người</button>
+            </div>
+
+            <div id="pve-panel" class="mode-content active">
+                <div style="background: #f1c40f; padding: 5px; border-radius: 8px; margin-bottom: 10px; color:#333; font-weight:bold;">
+                    Cấp độ hiện tại: <span id="lvl-display">1</span>
+                </div>
+                <select id="ai-level-select"></select>
+                <button class="btn-game" style="background:#2ecc71" onclick="startAiGame()">▶️ Bắt Đầu</button>
+            </div>
+
+            <div id="pvp-panel" class="mode-content">
+                <input type="text" id="room-input" placeholder="Nhập mã phòng...">
+                <div style="display:flex; gap:5px;">
+                    <button class="btn-game" style="background:#2ecc71; flex:1" onclick="createRoom()">Tạo</button>
+                    <button class="btn-game" style="background:#3498db; flex:1" onclick="joinRoom()">Vào</button>
+                </div>
+                <button class="btn-game" style="background:#e67e22" onclick="findRandomMatch()">🎲 Ghép Ngẫu Nhiên</button>
+            </div>
+
+            <div id="local-panel" class="mode-content">
+                <p>Hai bạn chơi chung trên một thiết bị.</p>
+                <button class="btn-game" style="background:#2ecc71" onclick="startLocalGame()">▶️ Bắt Đầu</button>
+            </div>
+
+            <div id="control-area" style="display:none; margin-top: 15px;">
+                <button class="btn-game btn-pass" id="btn-pass" onclick="handlePassManual()">⏩ Bỏ Lượt (Pass)</button>
+                <button class="btn-game btn-home" onclick="location.reload()">🚪 Thoát</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const boardEl = document.getElementById('othello-board');
+        const statusEl = document.getElementById('status');
+        const aiLevelSelect = document.getElementById('ai-level-select');
+        let socket = io();
+
+        let board = [], turn = 1, myRole = 1, userLevel = 1, currentMode = 'pve', currentRoom = '';
+        let isGameActive = false, validMoves = [], gameStartTime, matchTimer = null, secondsLeft = 600, passCount = 0;
+
+        // --- 1. KHỞI TẠO ---
+        async function init() {
+            try {
+                const res = await fetch('/api/user/progress');
+                const data = await res.json();
+                userLevel = data.othelloLevel || 1;
+                document.getElementById('lvl-display').textContent = userLevel;
+                renderAiLevels();
+            } catch(e) {}
+            resetBoardUI();
+            const tournamentRoom = new URLSearchParams(location.search).get('room');
+            if (tournamentRoom) {
+                currentMode = 'pvp';
+                switchMode('pvp');
+                document.getElementById('room-input').value = tournamentRoom.toUpperCase();
+                statusEl.textContent = 'Đang vào phòng giải đấu...';
+                socket.emit('joinOthelloRoom', tournamentRoom.toUpperCase());
+            }
+        }
+
+        function renderAiLevels() {
+            aiLevelSelect.innerHTML = '';
+            for(let i=1; i<=100; i++) {
+                let opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `Cấp ${i} ${i > userLevel ? '🔒' : ''}`;
+                if(i > userLevel) opt.disabled = true;
+                aiLevelSelect.appendChild(opt);
+            }
+            aiLevelSelect.value = userLevel;
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab-${mode}`).classList.add('active');
+            document.getElementById(`${mode}-panel`).classList.add('active');
+            isGameActive = false;
+            document.getElementById('control-area').style.display = 'none';
+            resetBoardUI();
+        }
+
+        // --- 2. GAME LOGIC ---
+        function resetBoardUI() {
+            board = Array(8).fill(0).map(() => Array(8).fill(0));
+            board[3][3] = 2; board[4][4] = 2; board[3][4] = 1; board[4][3] = 1;
+            turn = 1;
+            renderBoard();
+            updateScores();
+        }
+
+        function renderBoard() {
+            boardEl.innerHTML = '';
+            validMoves = getValidMoves(turn);
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    if (isGameActive && isMyTurn() && validMoves.some(m => m.r === r && m.c === c)) {
+                        cell.classList.add('valid-move');
+                    }
+                    if(board[r][c] !== 0) {
+                        const piece = document.createElement('div');
+                        piece.className = `piece ${board[r][c] === 1 ? 'black' : 'white'}`;
+                        cell.appendChild(piece);
+                    }
+                    cell.onclick = () => handleCellClick(r, c);
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        function isMyTurn() {
+            if (currentMode === 'local') return true;
+            if (currentMode === 'pve') return turn === 1;
+            return turn === myRole;
+        }
+
+        function handleCellClick(r, c) {
+            if (!isGameActive || !isMyTurn()) return;
+            if (!validMoves.some(m => m.r === r && m.c === c)) return;
+
+            if (currentMode === 'pvp') {
+                socket.emit('othelloMove', { room: currentRoom, r, c });
+                return;
+            }
+            executeMove(r, c);
+        }
+
+        function executeMove(r, c) {
+            const flipList = getPiecesToFlip(r, c, turn);
+            board[r][c] = turn;
+            flipList.forEach(p => board[p.r][p.c] = turn);
+
+            turn = turn === 1 ? 2 : 1;
+            passCount = 0;
+            renderBoard();
+            updateScores();
+            updateStatusText();
+
+            // Xử lý AI hoặc Tắc cờ
+            if (isGameActive) {
+                if (validMoves.length === 0) {
+                    setTimeout(checkDoublePass, 500);
+                } else if (currentMode === 'pve' && turn === 2) {
+                    setTimeout(makeAiMove, 600);
+                }
+            }
+        }
+
+        function checkDoublePass() {
+            const nextMoves = getValidMoves(turn);
+            if (nextMoves.length === 0) {
+                endGameCalculated();
+            } else {
+                statusEl.textContent = "Hết nước đi, tự động bỏ lượt!";
+                turn = turn === 1 ? 2 : 1;
+                if (currentMode === 'pvp') socket.emit('move', { room: currentRoom, move: 'pass' });
+                renderBoard();
+                updateStatusText();
+            }
+        }
+
+        function handlePassManual() {
+            if (validMoves.length > 0) return alert("Bé vẫn còn nước đi mà!");
+            if (currentMode === 'pvp') {
+                socket.emit('othelloPass', { room: currentRoom });
+                return;
+            }
+            checkDoublePass();
+        }
+
+        function updateStatusText() {
+            const turnName = turn === 1 ? 'Đen (⚫)' : 'Trắng (⚪)';
+            if (currentMode === 'local') statusEl.textContent = `Đến lượt: ${turnName}`;
+            else if (currentMode === 'pve') statusEl.textContent = (turn === 1) ? "Lượt của BẠN (⚫)" : "🤖 Máy đang nghĩ...";
+            else statusEl.textContent = (turn === myRole) ? "Lượt của BẠN!" : "Đợi đối thủ...";
+        }
+
+        // --- 3. AI ---
+        function makeAiMove() {
+            if (validMoves.length === 0) return checkDoublePass();
+            const weights = [
+                [100,-20,10,5,5,10,-20,100], [-20,-50,-2,-2,-2,-2,-50,-20],
+                [10,-2,-1,-1,-1,-1,-2,10], [5,-2,-1,-1,-1,-1,-2,5],
+                [5,-2,-1,-1,-1,-1,-2,5], [10,-2,-1,-1,-1,-1,-2,10],
+                [-20,-50,-2,-2,-2,-2,-50,-20], [100,-20,10,5,5,10,-20,100]
+            ];
+            let bestMove = validMoves[0], maxScore = -Infinity;
+            validMoves.forEach(m => {
+                let score = weights[m.r][m.c] + (Math.random() * 10);
+                if (score > maxScore) { maxScore = score; bestMove = m; }
+            });
+            executeMove(bestMove.r, bestMove.c);
+        }
+
+        // --- 4. CORE LOGIC ---
+        function getPiecesToFlip(r, c, color) {
+            if (board[r][c] !== 0) return [];
+            const opponent = color === 1 ? 2 : 1;
+            let toFlip = [];
+            const dirs = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+            for (let [dr, dc] of dirs) {
+                let temp = [], nr = r + dr, nc = c + dc;
+                while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[nr][nc] === opponent) {
+                    temp.push({r: nr, c: nc});
+                    nr += dr; nc += dc;
+                }
+                if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[nr][nc] === color && temp.length > 0) {
+                    toFlip = toFlip.concat(temp);
+                }
+            }
+            return toFlip;
+        }
+
+        function getValidMoves(color) {
+            let moves = [];
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    if (board[r][c] === 0 && getPiecesToFlip(r, c, color).length > 0) moves.push({r, c});
+                }
+            }
+            return moves;
+        }
+
+        function updateScores() {
+            let b=0, w=0;
+            board.forEach(row => row.forEach(c => { if(c===1) b++; if(c===2) w++; }));
+            document.getElementById('score-b').textContent = b;
+            document.getElementById('score-w').textContent = w;
+            document.getElementById('p1-score').classList.toggle('active-turn', turn === 1);
+            document.getElementById('p2-score').classList.toggle('active-turn', turn === 2);
+        }
+
+        // --- 5. KẾT THÚC & API ---
+        async function endGameCalculated() {
+            isGameActive = false;
+            const b = parseInt(document.getElementById('score-b').textContent);
+            const w = parseInt(document.getElementById('score-w').textContent);
+            
+            let winner = b > w ? "Đen" : (w > b ? "Trắng" : "Hòa");
+            boardNotice(`Kết thúc: ${winner === 'Hòa' ? 'Hòa cờ!' : winner + ' thắng!'}`,3200);
+
+            if (currentMode === 'pve' && b > w) {
+                confetti();
+                await fetch('/api/game/othello-win', { 
+                    method: 'POST', 
+                    headers: {'Content-Type':'application/json'}, 
+                    body: JSON.stringify({ level: userLevel }) 
+                });
+            }
+            setTimeout(()=>location.reload(),3300);
+        }
+
+        // --- 6. ONLINE ---
+        function startAiGame() { currentMode = 'pve'; startGame(); }
+        function startLocalGame() { currentMode = 'local'; startGame(); }
+        function startGame() {
+            isGameActive = true;
+            document.getElementById('control-area').style.display = 'block';
+            resetBoardUI();
+            updateStatusText();
+            gameStartTime = Date.now();
+        }
+
+        function createRoom() { statusEl.textContent = 'Đang tạo phòng...'; socket.emit('createOthelloRoom'); }
+        function joinRoom() { const code=document.getElementById('room-input').value.trim().toUpperCase(); if(!code){statusEl.textContent='Hãy nhập mã phòng.';return;} socket.emit('joinOthelloRoom', code); }
+        function findRandomMatch() { socket.emit('findMatch', 'othello'); }
+
+        socket.on('othelloRoomCreated', (roomCode) => {
+            currentRoom = String(roomCode || '').toUpperCase();
+            document.getElementById('room-input').value = currentRoom;
+            statusEl.textContent = `Đã tạo phòng ${currentRoom}. Hãy gửi mã này cho đối thủ.`;
+        });
+
+        socket.on('waiting', (data) => {
+            currentRoom = String(data?.room || currentRoom || '').toUpperCase();
+            statusEl.textContent = data?.message || 'Đang chờ đối thủ...';
+        });
+
+        socket.on('notification', (message) => {
+            statusEl.textContent = String(message || 'Có lỗi xảy ra.');
+        });
+
+        socket.on('matchFound', (data) => {
+            currentMode = 'pvp'; currentRoom = data.room;
+            myRole = data.role === 'b' ? 1 : 2;
+            startGame();
+            if (Array.isArray(data.board)) board = data.board.map(row => [...row]);
+            turn = Number(data.turnRole || 1);
+            renderBoard();
+            updateScores();
+            updateStatusText();
+            statusEl.textContent = myRole === 1 ? "Bạn cầm Đen (đi trước)" : "Bạn cầm Trắng (đi sau)";
+            if (data.matchDuration) startTournamentTimer(data.matchDuration);
+        });
+
+        socket.on('othelloState', (data) => {
+            if (!Array.isArray(data?.board)) return;
+            board = data.board.map(row => [...row]);
+            turn = Number(data.turnRole || 1);
+            renderBoard();
+            updateScores();
+            updateStatusText();
+            if (data.passedRole) {
+                const passedName = Number(data.passedRole) === myRole ? 'Bạn' : 'Đối thủ';
+                statusEl.textContent = `${passedName} không còn nước hợp lệ nên được tự động bỏ lượt.`;
+            }
+        });
+
+        socket.on('othelloGameOver', (data) => {
+            isGameActive = false;
+            clearInterval(matchTimer);
+            const result = data?.draw ? 'Ván đấu hòa.' : (Number(data?.winnerRole) === myRole ? 'Bạn đã thắng!' : 'Đối thủ đã thắng.');
+            statusEl.textContent = `${result} Tỷ số Đen ${data?.black ?? 0} – ${data?.white ?? 0} Trắng.`;
+            if (Number(data?.winnerRole) === myRole && typeof confetti === 'function') confetti();
+        });
+
+        socket.on('gameOver', (data) => {
+            if (data?.reason !== 'timeout') return;
+            isGameActive = false;
+            clearInterval(matchTimer);
+            statusEl.textContent = data.winner ? `Hết giờ. ${data.winner} thắng.` : 'Trận đấu đã kết thúc.';
+        });
+
+        function startTournamentTimer(mins) {
+            clearInterval(matchTimer);
+            secondsLeft = Math.max(60, Number(mins || 10) * 60);
+            const timerBox = document.getElementById('tourney-timer');
+            const timeLeft = document.getElementById('time-left');
+            timerBox.style.display = 'block';
+            const draw = () => {
+                const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+                const ss = String(secondsLeft % 60).padStart(2, '0');
+                timeLeft.textContent = `${mm}:${ss}`;
+            };
+            draw();
+            matchTimer = setInterval(() => {
+                secondsLeft -= 1;
+                draw();
+                if (secondsLeft <= 0) {
+                    clearInterval(matchTimer);
+                    isGameActive = false;
+                    if (currentRoom) socket.emit('timeoutLoss', { room: currentRoom, loserUsername: localStorage.getItem('currentUser') || '' });
+                }
+            }, 1000);
+        }
+
+        init();
+    </script>
+    <script src="assets/js/games/board-ui.js"></script>
+<script src="assets/js/games/board-ui.js"></script>
+<script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Nhiệm Vụ Hàng Ngày - Hành Tinh Mơ Ước</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); font-family: 'Baloo 2', cursive; min-height: 100vh; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 800px; width: 90%; background: white; margin: 40px auto; padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center; }
+        h1 { color: #d35400; font-size: 3rem; text-shadow: 2px 2px 0 white; }
+        
+        .quest-section { margin-bottom: 30px; text-align: left; }
+        .quest-section h2 { border-left: 8px solid #e67e22; padding-left: 15px; color: #2c3e50; }
+
+        .quest-card {
+            background: #fff9e6; border: 3px solid #f1c40f; border-radius: 20px;
+            padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s;
+        }
+        .quest-info { flex-grow: 1; }
+        .quest-title { font-size: 1.4rem; font-weight: 800; color: #e67e22; }
+        .quest-desc { color: #7f8c8d; font-size: 1.1rem; }
+        .quest-reward { background: #2ecc71; color: white; padding: 5px 15px; border-radius: 50px; font-weight: bold; margin-top: 5px; display: inline-block; }
+        
+        .progress-container { width: 150px; text-align: center; }
+        .progress-bar { height: 15px; background: #dfe6e9; border-radius: 10px; overflow: hidden; margin-top: 5px; }
+        .progress-fill { height: 100%; background: #2ecc71; transition: width 0.5s; }
+        .progress-text { font-weight: bold; font-size: 1.2rem; color: #2c3e50; }
+
+        .btn-home { background: #e74c3c; color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px; box-shadow: 0 5px 0 #c0392b; }
+        .btn-home:active { transform: translateY(3px); box-shadow: none; }
+        
+        .empty-msg { font-style: italic; color: #95a5a6; text-align: center; padding: 20px; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+  <link rel="stylesheet" href="assets/platform/legacy-flow.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body data-legacy-flow="quests">
+
+    <div class="container">
+        <h1>🏆 NHIỆM VỤ CỦA BÉ</h1>
+
+        <div class="quest-section">
+            <h2>🌟 Nhiệm Vụ Đặc Biệt</h2>
+            <div id="admin-quests">
+                <p class="empty-msg">Hiện không có nhiệm vụ đặc biệt.</p>
+            </div>
+        </div>
+
+        <div class="quest-section">
+            <h2>📅 Thử Thách Hàng Ngày</h2>
+            <div id="daily-quests">
+                <p class="empty-msg">Đang tải nhiệm vụ...</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn-home">🏠 Quay Về Trang Chủ</a>
+    </div>
+
+    <script>
+ async function loadQuests() {
+    try {
+        const res = await fetch('/api/user/progress');
+        if (!res.ok) {
+            window.location.href = 'login.html';
+            return;
+        }
+        const user = await res.json();
+        const allQuests = user.quests || [];
+
+        // 1. Hiển thị Nhiệm vụ Admin giao
+        // CHỈNH SỬA TẠI ĐÂY: Thêm điều kiện lọc undefined để nhận diện các nhiệm vụ cũ chưa có tag isDaily
+        const adminArea = document.getElementById('admin-quests');
+        const adminQuests = allQuests.filter(q => q.isDaily === false || q.isDaily === undefined);
+        
+        if (adminQuests.length > 0) {
+            adminArea.innerHTML = adminQuests.map(q => createQuestHTML(q, false)).join('');
+        } else {
+            adminArea.innerHTML = '<p class="empty-msg">Admin chưa giao nhiệm vụ đặc biệt nào!</p>';
+        }
+
+        // 2. Hiển thị Nhiệm vụ Hàng ngày (Nhiệm vụ có isDaily = true)
+        const dailyArea = document.getElementById('daily-quests');
+        const dailyQuests = allQuests.filter(q => q.isDaily === true);
+        
+        if (dailyQuests.length > 0) {
+            dailyArea.innerHTML = dailyQuests.map(q => createQuestHTML(q, true)).join('');
+        } else {
+            dailyArea.innerHTML = '<p class="empty-msg">Bé đã hoàn thành hết thử thách hôm nay rồi!</p>';
+        }
+
+    } catch (error) {
+        console.error("Lỗi tải nhiệm vụ:", error);
+    }
+}
+function createQuestHTML(q, isDaily) {
+    const percent = Math.min(100, (q.progress / q.target) * 100);
+    const reward = q.reward || 0;
+    const penalty = q.penalty || 0;
+    const timeLimit = q.timeLimit || 0;
+
+    let timerHTML = '';
+    if (timeLimit > 0 && q.startTime) {
+        // Tạo một ID duy nhất cho đồng hồ này
+        timerHTML = `<div class="quest-reward" style="background:#2c3e50; margin-left:5px;">
+                        ⏱️ Còn: <span class="countdown" data-start="${q.startTime}" data-limit="${timeLimit}">--:--</span>
+                     </div>`;
+    }
+
+    let penaltyText = timeLimit > 0 ? `<div class="quest-reward" style="background: #e74c3c; margin-left: 5px;">⚠️ Phạt: -${penalty}</div>` : '';
+
+    return `
+        <div class="quest-card">
+            <div class="quest-info">
+                <div class="quest-title">${isDaily ? '📅' : '🌟'} ${q.taskType}</div>
+                <div class="quest-desc">Mục tiêu: <strong>${q.target} lần</strong></div>
+                <div class="quest-reward">Thưởng: +${reward}</div>
+                ${penaltyText}
+                ${timerHTML}
+            </div>
+            <div class="progress-container">
+                <div class="progress-text">${q.progress} / ${q.target}</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: ${percent}%"></div></div>
+            </div>
+        </div>
+    `;
+}
+// Hàm chạy đồng hồ đếm ngược mỗi giây
+setInterval(() => {
+    const now = Date.now();
+    document.querySelectorAll('.countdown').forEach(el => {
+        const start = parseInt(el.getAttribute('data-start'));
+        const limit = parseInt(el.getAttribute('data-limit'));
+        const deadline = start + (limit * 1000);
+        const diff = deadline - now;
+
+        if (diff <= 0) {
+            el.innerHTML = "HẾT GIỜ!";
+            el.style.color = "red";
+            // Tự động load lại sau 2 giây để mất nhiệm vụ (vì server đã xóa)
+            setTimeout(() => loadQuests(), 2000); 
+        } else {
+            const mins = Math.floor(diff / 60000);
+            const secs = Math.floor((diff % 60000) / 1000);
+            el.innerHTML = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    });
+}, 1000);
+     loadQuests();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+  <script src="assets/js/api.js?v=39.0.0"></script>
+  <script src="assets/platform/legacy-flow.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

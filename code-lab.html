@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Code Lab · Hành Trình Mới</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="modern-ui.css">
+<link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7fb;color:#1f2937;margin:0}.wrap{max-width:1200px;margin:30px auto;padding:0 18px}.panel{background:#fff;border-radius:18px;padding:20px;box-shadow:0 8px 30px rgba(15,23,42,.08);margin-bottom:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.select,.btn,textarea{border:1px solid #d7dce5;border-radius:10px;padding:10px}.select{background:#fff}.btn{cursor:pointer;background:#111827;color:#fff}.btn.secondary{background:#eef2ff;color:#1f2937}.code{width:100%;min-height:430px;font:14px/1.5 Consolas,monospace;background:#0b1020;color:#e5e7eb;box-sizing:border-box}.stdin{width:100%;min-height:140px;box-sizing:border-box}.out{white-space:pre-wrap;background:#0b1020;color:#d1fae5;border-radius:12px;padding:14px;min-height:220px}.err{color:#fecaca}.note{font-size:14px;color:#64748b}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;font-size:12px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="panel"><h1>💻 Code Lab</h1><p class="note">Chạy bài tập lập trình trực tiếp trong khóa học. Kết quả thực thi được lưu vào hệ thống để AI phân tích lỗi và điều chỉnh bài luyện.</p><div class="row"><span class="badge">JavaScript · Python · C · C++ · Java</span><a class="btn secondary" href="khoa-hoc-chi-tiet.html">← Khóa học</a></div></div>
+<div class="grid">
+<div class="panel"><h2>Code</h2><div class="row"><label>Ngôn ngữ <select id="language" class="select"><option value="javascript">JavaScript</option><option value="python">Python</option><option value="cpp">C++</option><option value="c">C</option><option value="java">Java</option></select></label><button id="run" class="btn">▶ Chạy code</button><button id="sample" class="btn secondary">Nạp ví dụ</button></div><textarea id="code" class="code"></textarea><h3>Input</h3><textarea id="stdin" class="stdin" placeholder="Dữ liệu stdin..."></textarea></div>
+<div class="panel"><h2>Kết quả</h2><div id="status" class="note">Chưa chạy.</div><pre id="output" class="out"></pre></div>
+</div></div>
+<script src="assets/js/api.js?v=39.0.0"></script>
+<script>
+const samples={javascript:'function solve(){\n  const input=prompt() || "Hello Hành Trình Mới";\n  console.log(input);\n}\nsolve();',python:'name=input() if True else ""\nprint("Hello", name)',cpp:'#include <iostream>\n#include <string>\nusing namespace std;\nint main(){\n    string name; getline(cin,name);\n    cout << "Hello " << name << "\\n";\n    return 0;\n}',c:'#include <stdio.h>\nint main(){\n    printf("Hello Hanh Trinh Moi\\n");\n    return 0;\n}',java:'import java.io.*;\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String name = br.readLine();\n        System.out.println("Hello " + name);\n    }\n}'};
+const $=id=>document.getElementById(id);function load(){ $('code').value=samples[$('language').value]; }
+$('language').addEventListener('change',load);$('sample').addEventListener('click',load);load();
+$('run').addEventListener('click',async()=>{ $('status').textContent='Đang biên dịch/chạy...'; $('output').textContent=''; try{ const r=await fetch('/api/ai-learning/code/execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({language:$('language').value,code:$('code').value,stdin:$('stdin').value,courseId:new URLSearchParams(location.search).get('courseId'),lessonId:new URLSearchParams(location.search).get('lessonId')})}); const j=await r.json(); const d=j.data||{}; $('status').textContent=`${d.status||'ERROR'} · ${d.runtimeMs||0} ms${d.executionId?' · Đã lưu':''}`; $('output').textContent=[d.compileError?'[Compile]\n'+d.compileError:'',d.stdout?'[Output]\n'+d.stdout:'',d.stderr?'[Error]\n'+d.stderr:'',d.message||'',d.error||''].filter(Boolean).join('\n\n'); }catch(e){$('status').textContent='Lỗi kết nối';$('output').textContent=e.message;}});
+</script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body></html>

@@ -1,0 +1,35 @@
+/* V27.1 assessment layout: preserve inline radio/checkbox controls while text inputs fill the field. */
+.flow-form .assessment-question{display:grid;gap:12px;width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:18px;border:1px solid #d7e2ef;border-radius:14px;background:#fff;overflow-wrap:anywhere}
+.flow-form .assessment-question legend{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;max-width:100%;padding:0 4px 6px;font-size:1rem;line-height:1.45;font-weight:800;color:#102a43;white-space:normal}
+.assessment-question .question-prompt{min-width:0;flex:1}
+.assessment-question .question-points{flex:0 0 auto;padding:4px 8px;border-radius:999px;background:#edf4ff;color:#234ea5;font-size:.78rem;white-space:nowrap}
+.assessment-question .question-type-badge{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:4px 8px;border-radius:999px;background:#f1f5f9;color:#52677c;font-size:.74rem;font-weight:800}
+.assessment-question .assessment-options{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
+.flow-form .assessment-question label.assessment-choice{display:flex!important;flex-direction:row!important;align-items:flex-start!important;justify-content:flex-start!important;gap:11px!important;width:100%;min-width:0;box-sizing:border-box;margin:0;padding:12px 13px;border:1px solid #dbe5ef;border-radius:10px;background:#fff;color:#233b53;font-weight:500;line-height:1.5;text-align:left;cursor:pointer}
+.flow-form .assessment-question label.assessment-choice:hover{border-color:#9db8df;background:#f8fbff}
+.flow-form .assessment-question label.assessment-choice:has(input:checked){border-color:#4879d5;background:#eff6ff;color:#173d83}
+.flow-form .assessment-question label.assessment-choice input[type="radio"],.flow-form .assessment-question label.assessment-choice input[type="checkbox"]{display:block!important;flex:0 0 18px!important;width:18px!important;min-width:18px!important;max-width:18px!important;height:18px!important;margin:3px 0 0!important;padding:0!important;accent-color:#315fe9;box-sizing:border-box}
+.assessment-choice-text{display:block;flex:1 1 auto;min-width:0;overflow-wrap:anywhere;white-space:normal}
+.flow-form .assessment-question .assessment-match-list{display:grid;gap:8px}
+.flow-form .assessment-question label.assessment-match{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(150px,.9fr);align-items:center;gap:12px;width:100%;box-sizing:border-box;padding:10px;border:1px solid #dbe5ef;border-radius:10px;background:#fff;font-weight:600}
+.flow-form .assessment-question .assessment-match select{width:100%;min-width:0;box-sizing:border-box}
+.assessment-question .assessment-note{padding:12px 14px;border:1px solid #dfe9f3;border-radius:10px;background:#f5f8fc;color:#486075;line-height:1.6;overflow-wrap:anywhere}
+.assessment-question .assessment-score-guide{padding:12px 14px;border:1px solid #c9def8;border-radius:11px;background:#f2f7ff;color:#264567;line-height:1.55}
+.assessment-score-guide h4{margin:0 0 7px;font-size:.92rem}
+.assessment-score-guide ul,.assessment-score-guide ol{margin:6px 0 0;padding-left:22px}
+.assessment-score-guide li{margin:3px 0}
+.assessment-question .assessment-public-cases{display:grid;gap:8px}.assessment-question .algorithm-sample-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.assessment-question .algorithm-sample-grid>div{min-width:0}.assessment-question .algorithm-sample-grid span{display:block;margin-bottom:4px;font-weight:700;color:#36566c}
+.assessment-question .assessment-case{min-width:0;border:1px solid #e1e8ef;border-radius:9px;padding:10px 12px;background:#fbfdff}
+.assessment-question .assessment-case pre,.assessment-question pre{max-width:100%;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+.assessment-question .code-toolbar{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+.assessment-question .code-toolbar label{display:grid;gap:5px;min-width:180px;flex:1}
+.flow-form .assessment-question .code-toolbar select{width:100%;min-width:0}
+.flow-form .assessment-question textarea.text-input,.flow-form .assessment-question input.text-input{width:100%;box-sizing:border-box}
+.assessment-question .assessment-output{max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;border-radius:9px;background:#101827;color:#eff6ff;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.assessment-question .assessment-order{display:grid;gap:7px;margin:0;padding-left:25px}
+.assessment-question .assessment-order li{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:10px;border:1px solid #e1e8ef;border-radius:9px;background:#f8fbff}
+.assessment-question .assessment-order li>span:first-child{min-width:0;overflow-wrap:anywhere}
+.assessment-question .assessment-speaking{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.assessment-question .assessment-passage{padding:14px;border-left:4px solid #7da0d8;border-radius:8px;background:#f6f9fe;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65}
+.assessment-question .assessment-match select{padding:10px;border:1px solid #cbd6e2;border-radius:9px;background:#fff;font:inherit}
+@media(max-width:650px){.assessment-question .algorithm-sample-grid{grid-template-columns:minmax(0,1fr)}.flow-form .assessment-question{padding:13px}.flow-form .assessment-question legend{flex-direction:column;gap:7px}.assessment-question .question-points{align-self:flex-start}.flow-form .assessment-question label.assessment-match{grid-template-columns:minmax(0,1fr)}.assessment-question .code-toolbar label{min-width:100%}}

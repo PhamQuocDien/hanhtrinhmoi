@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vua Ô Chữ - 100 Cấp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #f39c12; font-family: 'Baloo 2', cursive; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        .container { 
+            background: white; width: 90%; max-width: 800px; 
+            margin: 20px; padding: 20px; border-radius: 20px; 
+            box-shadow: 0 10px 0 rgba(0,0,0,0.1); 
+            text-align: center;
+        }
+
+        /* Màn hình chọn Level */
+        #level-select-screen { display: block; }
+        .level-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
+            gap: 10px; max-height: 60vh; overflow-y: auto; padding: 10px;
+        }
+        .lvl-btn { 
+            padding: 10px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; 
+            background: #eee; color: #555; transition: 0.2s;
+        }
+        .lvl-btn.unlocked { background: #2ecc71; color: white; box-shadow: 0 4px 0 #27ae60; }
+        .lvl-btn.current { background: #e67e22; color: white; transform: scale(1.1); box-shadow: 0 4px 0 #d35400; }
+        .lvl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Màn hình chơi */
+        #game-screen { display: none; }
+        .crossword-table { margin: 20px auto; border-collapse: collapse; border: 4px solid #2c3e50; }
+        .cw-cell { 
+            width: 40px; height: 40px; border: 1px solid #95a5a6; 
+            position: relative; padding: 0;
+        }
+        .cw-cell.black { background: #2c3e50; }
+        .cw-cell.white { background: #fff; }
+        
+        .cw-cell input { 
+            width: 100%; height: 100%; border: none; text-align: center; 
+            font-size: 1.2rem; font-weight: bold; text-transform: uppercase; 
+            color: #2c3e50; background: transparent; outline: none; 
+            font-family: inherit;
+        }
+        .cw-cell input:focus { background: #fff3cd; }
+        .cw-cell .num { 
+            position: absolute; top: 1px; left: 2px; 
+            font-size: 0.6rem; color: #7f8c8d; pointer-events: none;
+        }
+
+        .clues-area { 
+            display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
+            text-align: left; background: #ecf0f1; padding: 15px; border-radius: 10px;
+        }
+        .clue-col { flex: 1; min-width: 200px; }
+        .clue-col h3 { margin-top: 0; color: #e67e22; border-bottom: 2px solid #bdc3c7; padding-bottom: 5px; }
+        ul { padding-left: 20px; margin: 0; }
+        li { margin-bottom: 5px; font-size: 0.95rem; }
+
+        .controls { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+        .btn { padding: 10px 20px; border-radius: 50px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+        .btn:active { transform: translateY(2px); box-shadow: none; }
+.cw-cell { 
+    width: 35px; height: 35px; /* Giảm kích thước ô một chút */
+    border: 1px solid #bdc3c7; 
+}
+@media (max-width: 500px) {
+    .cw-cell { width: 30px; height: 30px; }
+    .cw-cell input { font-size: 1rem; }
+    .header h1 { font-size: 1.2rem; }
+}
+.clues-area {
+    max-height: 200px; /* Giới hạn chiều cao */
+    overflow-y: auto;  /* Cho phép cuộn */
+    border: 2px solid #ddd;
+}
+.clue-col h3 {
+    position: sticky; /* Giữ tiêu đề khi cuộn */
+    top: 0;
+    background: #ecf0f1;
+    z-index: 10;
+}
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <h1 style="color: white; margin: 10px 0; text-shadow: 2px 2px 0 rgba(0,0,0,0.2);">🧩 VUA Ô CHỮ 🧩</h1>
+
+    <div class="container">
+        <div id="level-select-screen">
+            <h2>Chọn Thử Thách</h2>
+            <div class="level-grid" id="level-list">Đang tải...</div>
+            <button class="btn" style="background:#e74c3c; margin-top:20px;" onclick="window.location.href='index.html'">🏠 Về Trang Chủ</button>
+        </div>
+
+        <div id="game-screen">
+            <h2 id="level-title" style="color:#2c3e50; margin:0;">Cấp độ 1</h2>
+            
+            <table class="crossword-table" id="cw-grid"></table>
+
+            <div class="clues-area">
+                <div class="clue-col">
+                    <h3>Hàng Ngang</h3>
+                    <ul id="across-list"></ul>
+                </div>
+                <div class="clue-col">
+                    <h3>Hàng Dọc</h3>
+                    <ul id="down-list"></ul>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" style="background:#f1c40f; color:#333" onclick="useHint()">💡 Gợi Ý (<span id="hint-count">3</span>)</button>
+                <button class="btn" style="background:#2ecc71" onclick="checkWin()">✅ Kiểm Tra</button>
+                <button class="btn" style="background:#95a5a6" onclick="backToMenu()">🔙 Thoát</button>
+            </div>
+        </div>
+    </div>
+<script>
+    let currentLevel = 1;
+    let unlockedLevel = 1;
+    let hints = 3;
+    let gameStartTime;
+
+    // 1. KHO TỪ VỰNG CHO CÁC CẤP ĐỘ NGẪU NHIÊN (CẤP 6-100)
+const vocab = [
+    // --- 25 TỪ CŨ CỦA BẠN ---
+    {w:'MEO', h:'Con gì thích bắt chuột?'}, {w:'CHO', h:'Bạn trung thành giữ nhà?'},
+    {w:'GA', h:'Gáy ò ó o báo thức?'}, {w:'VIT', h:'Kêu cạp cạp, bơi dưới ao?'},
+    {w:'HEO', h:'Ăn no ngủ kỹ, kêu ụt ịt?'}, {w:'VOI', h:'Có vòi dài và tai to?'},
+    {w:'HO', h:'Chúa tể rừng xanh?'}, {w:'CAM', h:'Quả vỏ cam, nhiều vitamin C?'},
+    {w:'TAO', h:'Quả đỏ, Bạch Tuyết đã ăn?'}, {w:'NHO', h:'Mọc thành chùm tím hoặc xanh?'},
+    {w:'BUT', h:'Bé dùng để viết bài?'}, {w:'BAN', h:'Bé ngồi học trên cái gì?'},
+    {w:'SACH', h:'Mở ra bao nhiêu điều hay?'}, {w:'HOA', h:'Nở rực rỡ và có mùi thơm?'},
+    {w:'GIAY', h:'Bé mang vào chân khi đi học?'}, {w:'MU', h:'Đội lên đầu để che nắng?'},
+    {w:'AO', h:'Mặc vào người cho ấm?'}, {w:'KEO', h:'Vị ngọt, bé không nên ăn nhiều?'},
+    {w:'SUA', h:'Uống vào cho cao lớn?'}, {w:'COM', h:'Bé ăn mỗi ngày để no bụng?'},
+    {w:'DEN', h:'Thắp sáng căn phòng vào ban đêm?'}, {w:'QUAT', h:'Làm cho bé mát khi trời nóng?'},
+    {w:'CA', h:'Bơi lội dưới nước?'}, {w:'RUA', h:'Con gì bò chậm chạp, có mai cứng?'},
+    {w:'THO', h:'Con gì tai dài, thích ăn cà rốt?'},
+
+    // --- BỔ SUNG 72 TỪ MỚI (CHỦ ĐỀ ĐỘNG VẬT) ---
+    {w:'ONG', h:'Con gì cần cù làm mật?'},
+    {w:'BUOM', h:'Cánh mỏng rực rỡ, thích đậu trên hoa?'},
+    {w:'KIEN', h:'Rất nhỏ bé, thường đi thành đàn tìm thức ăn?'},
+    {w:'GAU', h:'Thích ăn mật ong, ngủ đông rất lâu?'},
+    {w:'HUOU', h:'Có đôi gạc đẹp trên đầu, chạy rất nhanh?'},
+    {w:'NGUA', h:'Chạy rất nhanh, kêu hí hí?'},
+    {w:'DE', h:'Kêu be be, có đôi sừng nhỏ?'},
+    {w:'CUU', h:'Có bộ lông trắng tinh, mềm mại để làm áo?'},
+    {w:'SOC', h:'Đuôi to, thích ăn hạt dẻ?'},
+    {w:'CAO', h:'Rất tinh ranh, đuôi dài?'},
+    {w:'KHI', h:'Leo trèo rất giỏi, thích ăn chuối?'},
+    {w:'MUOI', h:'Hút máu người, gây bệnh sốt xuất huyết?'},
+    {w:'TRAN', h:'Con vật dài, không chân, hay quấn vào cây?'},
+    {w:'NAI', h:'Loài vật hiền lành, có sừng nhú mầm?'},
+    {w:'CHIM', h:'Có cánh bay lượn, hay hót líu lo?'},
+    {w:'MUC', h:'Động vật biển có nhiều tua và phun ra mực đen?'},
+    {w:'TOM', h:'Bơi giật lùi, có đôi càng nhỏ?'},
+    {w:'CUA', h:'Bò ngang, có hai càng to?'},
+
+    // --- CHỦ ĐỀ TRÁI CÂY & ĐỒ ĂN ---
+    {w:'DUA', h:'Quả có nhiều mắt, thịt vàng chua ngọt?'},
+    {w:'MIT', h:'Vỏ nhiều gai, múi vàng rất thơm?'},
+    {w:'LE', h:'Quả vỏ xanh hoặc vàng, vị ngọt mát?'},
+    {w:'BO', h:'Quả thịt xanh dẻo, vỏ màu nâu đen?'},
+    {w:'NA', h:'Quả có nhiều mắt, khi chín rất ngọt?'},
+    {w:'SEN', h:'Hoa đẹp dưới bùn, hạt ăn rất bùi?'},
+    {w:'XOI', h:'Món ăn làm từ gạo nếp, thường ăn buổi sáng?'},
+    {w:'BUN', h:'Sợi trắng dài, thường ăn với nước dùng?'},
+    {w:'PHO', h:'Món ăn nổi tiếng của Việt Nam, có thịt bò hoặc gà?'},
+    {w:'GIO', h:'Làm từ thịt lợn, thường có trong mâm cỗ Tết?'},
+    {w:'KHE', h:'Quả có 5 khía, hình ngôi sao?'},
+    {w:'BUOI', h:'Quả to, tết thường bày mâm ngũ quả?'},
+    {w:'ME', h:'Quả vị rất chua, hay dùng nấu canh?'},
+    {w:'OI', h:'Quả vỏ xanh, giòn, nhiều hạt?'},
+    {w:'MAN', h:'Quả màu đỏ tím, vị chua ngọt?'},
+    {w:'DUA', h:'Trái cây giải khát, bên trong có nước ngọt và cùi trắng?'},
+
+    // --- CHỦ ĐỀ ĐỒ DÙNG GIA ĐÌNH ---
+    {w:'COC', h:'Bé dùng để đựng nước uống?'},
+    {w:'BAT', h:'Bé dùng để đựng cơm ăn hàng ngày?'},
+    {w:'THIA', h:'Bé dùng để xúc thức ăn?'},
+    {w:'DUA', h:'Bé dùng để gắp thức ăn khi đã lớn?'},
+    {w:'CHAN', h:'Đắp lên người khi đi ngủ cho ấm?'},
+    {w:'GOI', h:'Bé kê đầu khi đi ngủ cho êm?'},
+    {w:'CHIEU', h:'Trải lên giường hoặc sàn nhà để nằm?'},
+    {w:'CHOI', h:'Dùng để quét nhà cho sạch?'},
+    {w:'GUONG', h:'Bé soi vào để thấy hình ảnh của mình?'},
+    {w:'LUOC', h:'Dùng để chải tóc cho gọn gàng?'},
+    {w:'KINH', h:'Đeo vào mắt để nhìn rõ hơn?'},
+    {w:'TU', h:'Dùng để đựng quần áo hoặc sách vở?'},
+    {w:'NOI', h:'Dùng để nấu canh, nấu cơm?'},
+    {w:'CHAO', h:'Dùng để rán trứng, xào rau?'},
+    {w:'KEO', h:'Dùng để cắt giấy, cắt vải?'},
+    {w:'DAO', h:'Dùng để thái thịt, gọt hoa quả?'},
+    {w:'KIM', h:'Rất nhỏ và nhọn, dùng để khâu vá?'},
+    {w:'DEP', h:'Bé đi dưới chân để bảo vệ đôi chân?'},
+
+    // --- CHỦ ĐỀ TRƯỜNG HỌC & CƠ THỂ ---
+    {w:'BANG', h:'Cô giáo viết chữ lên đây để bé nhìn?'},
+    {w:'PHAN', h:'Viên trắng dùng để viết lên bảng đen?'},
+    {w:'CAP', h:'Bé đựng sách vở để mang đến trường?'},
+    {w:'THUOC', h:'Dùng để kẻ đường thẳng cho ngay ngắn?'},
+    {w:'TAY', h:'Dùng để xóa những chỗ viết sai bằng bút chì?'},
+    {w:'RANG', h:'Bộ phận trong miệng dùng để nhai thức ăn?'},
+    {w:'MAT', h:'Bộ phận giúp bé nhìn thấy mọi vật?'},
+    {w:'TAI', h:'Bộ phận giúp bé nghe thấy âm thanh?'},
+    {w:'MUI', h:'Bộ phận giúp bé ngửi thấy mùi thơm?'},
+    {w:'CHAN', h:'Giúp bé đứng vững và bước đi?'},
+
+    // --- CHỦ ĐỀ THIÊN NHIÊN ---
+    {w:'MAY', h:'Trắng bồng bềnh bay trên bầu trời?'},
+    {w:'GIO', h:'Thổi mát rượi vào mùa hè?'},
+    {w:'NANG', h:'Ánh sáng ấm áp từ ông mặt trời?'},
+    {w:'RUNG', h:'Nơi có rất nhiều cây xanh và thú dữ?'},
+    {w:'BIEN', h:'Nơi có nước mặn và nhiều sóng vỗ?'},
+    {w:'SONG', h:'Dòng nước chảy dài, có thuyền đi lại?'},
+    {w:'NUI', h:'Rất cao, đỉnh chạm tận mây xanh?'},
+    {w:'SAO', h:'Lấp lánh trên bầu trời vào ban đêm?'},
+    {w:'TRANG', h:'Chiếu sáng dịu dàng vào đêm rằm?'},
+    {w:'DAT', h:'Nơi cây cối mọc lên và chúng ta đi lại?'},
+    {w:'LUA', h:'Cây lương thực chính, tạo ra hạt gạo?'},
+    {w:'MUA', h:'Những giọt nước rơi từ trên trời xuống?'}
+];
+        // 2. DỮ LIỆU 5 CẤP ĐỘ ĐẦU TIÊN CỐ ĐỊNH CỰC CHUẨN
+    const fixedLevels = [
+    // --- LEVEL 1-10: CƠ BẢN (2 từ) ---
+    { id:1, size:6, words:[{d:'a',r:2,c:1,w:'MEO',h:'Bắt chuột giỏi?'},{d:'d',r:1,c:2,w:'HEO',h:'Ăn no nằm thở?'}] },
+    { id:2, size:6, words:[{d:'a',r:3,c:1,w:'CHO',h:'Giữ nhà?'},{d:'d',r:2,c:2,w:'CA',h:'Sống dưới nước?'}] },
+    { id:3, size:6, words:[{d:'a',r:2,c:1,w:'CAM',h:'Quả màu da cam?'},{d:'d',r:1,c:2,w:'CA',h:'Có vảy, bơi dưới ao?'}] },
+    { id:4, size:7, words:[{d:'a',r:3,c:2,w:'SACH',h:'Bé đọc mỗi ngày?'},{d:'d',r:1,c:4,w:'HOA',h:'Đẹp và thơm?'}] },
+    { id:5, size:7, words:[{d:'a',r:2,c:2,w:'BUT',h:'Dùng để viết?'},{d:'d',r:2,c:2,w:'BAN',h:'Nơi bé ngồi học?'}] },
+    { id:6, size:7, words:[{d:'a',r:4,c:1,w:'GHE',h:'Vật dụng để ngồi?'},{d:'d',r:2,c:2,w:'HOA',h:'Rực rỡ sắc màu?'}] },
+    { id:7, size:8, words:[{d:'a',r:3,c:2,w:'VOI',h:'Có vòi rất dài?'},{d:'d',r:2,c:3,w:'NHO',h:'Quả mọc thành chùm?'}] },
+    { id:8, size:8, words:[{d:'a',r:4,c:2,w:'GA',h:'Gáy báo thức?'},{d:'d',r:3,c:3,w:'TAO',h:'Quả táo đỏ?'}] },
+    { id:9, size:8, words:[{d:'a',r:2,c:3,w:'MUA',h:'Nước rơi từ trời?'},{d:'d',r:2,c:4,w:'CA',h:'Con gì bơi lội?'}] },
+    { id:10, size:8, words:[{d:'a',r:5,c:1,w:'KEO',h:'Vị ngọt bé thích?'},{d:'d',r:3,c:2,w:'MEO',h:'Thích ăn cá?'} ]},
+
+    // --- LEVEL 11-40: TRUNG BÌNH (3 từ giao nhau) ---
+    { id:11, size:8, words:[
+        {d:'a',r:3,c:1,w:'CAM',h:'Quả vỏ cam?'},
+        {d:'d',r:2,c:3,w:'MEO',h:'Bắt chuột?'},
+        {d:'a',r:2,c:3,w:'MU',h:'Đội đầu che nắng?'} // Giao tại chữ M (r2,c3)
+    ]},
+    { id:12, size:8, words:[
+        {d:'a',r:2,c:2,w:'CHO',h:'Giữ nhà?'},
+        {d:'d',r:2,c:2,w:'CA',h:'Bơi dưới nước?'},
+        {d:'a',r:3,c:2,w:'AO',h:'Mặc cho ấm?'} // Giao tại chữ A (r3,c2)
+    ]},
+    { id:13, size:9, words:[
+        {d:'a',r:4,c:2,w:'SACH',h:'Để bé đọc?'},
+        {d:'d',r:2,c:4,w:'BUT',h:'Để bé viết?'}, // Giao tại chữ C (r4,c4)
+        {d:'a',r:2,c:3,w:'BAN',h:'Ngồi học?'} // Giao tại chữ B (r2,c3)
+    ]},
+    { id:14, size:9, words:[
+        {d:'a',r:3,c:2,w:'HOA',h:'Thơm rực rỡ?'},
+        {d:'d',r:1,c:4,w:'GA',h:'Gáy ò ó o?'}, // Giao tại chữ A (r3,c4)
+        {d:'a',r:1,c:2,w:'GIAY',h:'Đi vào chân?'} // Giao tại chữ G (r1,c4)
+    ]},
+    { id:15, size:10, words:[
+        {d:'a',r:3,c:2,w:'VIT',h:'Kêu cạp cạp?'},
+        {d:'d',r:2,c:4,w:'TAO',h:'Quả táo?'}, // Giao tại chữ T (r3,c4)
+        {d:'a',r:2,c:2,w:'THO',h:'Tai dài ăn cà rốt?'} // Giao tại chữ T (r2,c4)
+    ]},
+    // ... Cấp 16-40 sẽ dùng thuật toán auto-fill ở dưới
+];
+
+// 3. THUẬT TOÁN TỰ ĐỘNG TẠO 100 CẤP ĐỘ KHÔNG TRÙNG LẶP
+function buildMoreLevels() {
+    // Định nghĩa các "Khung xương" ô chữ an toàn
+    const templates = [
+        // Mẫu 1: Từ 1 (Ngang) và Từ 2 (Dọc) giao nhau tại ô (r,c)
+        { 
+            size: 8, 
+            t: (lvl) => [
+                { d: 'a', r: 3, c: 2, intersectIdx: 2 }, // Từ ngang, điểm giao là chữ thứ 3 (index 2)
+                { d: 'd', r: 1, c: 4, intersectIdx: 2 }  // Từ dọc, điểm giao là chữ thứ 3 (index 2)
+            ]
+        },
+        // Mẫu 2: Giao nhau tại chữ đầu tiên của từ dọc
+        {
+            size: 9,
+            t: (lvl) => [
+                { d: 'a', r: 4, c: 1, intersectIdx: 3 }, // Từ ngang, giao tại chữ thứ 4
+                { d: 'd', r: 4, c: 4, intersectIdx: 0 }  // Từ dọc, giao tại chữ đầu tiên
+            ]
+        }
+    ];
+
+    for (let i = fixedLevels.length + 1; i <= 100; i++) {
+        const templateObj = templates[i % templates.length];
+        const layout = templateObj.t(i);
+        
+        // Bước quan trọng: Tìm cặp từ có chữ cái trùng nhau tại điểm giao
+        let w1, w2, found = false;
+        let attempts = 0;
+
+        while (!found && attempts < 500) {
+            w1 = vocab[Math.floor(Math.random() * vocab.length)];
+            w2 = vocab[Math.floor(Math.random() * vocab.length)];
+            
+            // Kiểm tra: 
+            // 1. Độ dài từ phải đủ để nằm trong template
+            // 2. Hai từ phải khác nhau
+            // 3. Chữ cái tại điểm giao phải GIỐNG HỆT NHAU
+            if (w1.w.length > layout[0].intersectIdx && 
+                w2.w.length > layout[1].intersectIdx && 
+                w1.w !== w2.w &&
+                w1.w[layout[0].intersectIdx] === w2.w[layout[1].intersectIdx]) {
+                found = true;
+            }
+            attempts++;
+        }
+
+        if (found) {
+            fixedLevels.push({
+                id: i,
+                size: templateObj.size,
+                words: [
+                    { d: 'a', r: layout[0].r, c: layout[0].c, w: w1.w, h: w1.h },
+                    { d: 'd', r: layout[1].r, c: layout[1].c, w: w2.w, h: w2.h }
+                ]
+            });
+        }
+    }
+}
+buildMoreLevels();
+    // 3. KHỞI TẠO TIẾN TRÌNH TỪ SERVER
+    async function init() {
+    try {
+        const res = await fetch('/api/user/progress');
+        const data = await res.json();
+        unlockedLevel = data.crosswordLevel || 1;
+        renderLevelList(); // Cập nhật danh sách nút bấm
+    } catch(e) { 
+        console.log("Lỗi tải tiến trình."); 
+        renderLevelList();
+    }
+}
+    function renderLevelList() {
+        const list = document.getElementById('level-list');
+        list.innerHTML = '';
+        for(let i=1; i<=100; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            btn.className = `lvl-btn ${i <= unlockedLevel ? 'unlocked' : ''} ${i === unlockedLevel ? 'current' : ''}`;
+            btn.disabled = i > unlockedLevel;
+            btn.onclick = () => startGame(i);
+            list.appendChild(btn);
+        }
+    }
+
+    // 4. BẮT ĐẦU CHƠI (ĐÃ SỬA LỖI LOGIC RETURN)
+    function startGame(lvl) {
+        currentLevel = lvl;
+        gameStartTime = Date.now();
+        let data = fixedLevels.find(l => l.id === lvl);
+        
+        // Nếu không có trong fixedLevels, tự tạo cấp độ ngẫu nhiên từ kho vocab
+        if(!data) {
+            const w1 = vocab[Math.floor(Math.random() * vocab.length)];
+            let w2 = vocab.find(v => v.w !== w1.w) || vocab[0];
+            data = {
+                id: lvl, size: 10,
+                words: [
+                    { d: 'a', r: 4, c: 2, w: w1.w, h: w1.h },
+                    { d: 'd', r: 3, c: 3, w: w2.w, h: w2.h }
+                ]
+            };
+        }
+
+        document.getElementById('level-select-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
+        document.getElementById('level-title').textContent = `Cấp độ ${lvl}`;
+        hints = 3; 
+        document.getElementById('hint-count').textContent = hints;
+
+        drawGrid(data);
+    }
+
+    // 5. VẼ LƯỚI Ô CHỮ VÀ KIỂM TRA ĐIỂM GIAO
+    function drawGrid(data) {
+        const table = document.getElementById('cw-grid');
+        const aList = document.getElementById('across-list');
+        const dList = document.getElementById('down-list');
+        table.innerHTML = ''; aList.innerHTML = ''; dList.innerHTML = '';
+
+        let grid = Array(data.size).fill(null).map(() => Array(data.size).fill(null));
+
+        data.words.forEach((word, idx) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${idx+1}.</strong> ${word.h}`;
+            if(word.d === 'a') aList.appendChild(li); else dList.appendChild(li);
+
+            for(let i=0; i<word.w.length; i++) {
+                let r = word.r + (word.d==='d' ? i : 0);
+                let c = word.c + (word.d==='a' ? i : 0);
+                
+                // Vá lỗi điểm giao: Nếu ô đã có chữ, kiểm tra xem có khớp không
+                if (!grid[r][c]) {
+                    grid[r][c] = { char: word.w[i], nums: [] };
+                } else if (grid[r][c].char !== word.w[i]) {
+                    console.error(`Lỗi giao nhau tại (${r},${c}): ${grid[r][c].char} != ${word.w[i]}`);
+                }
+                if (i === 0) grid[r][c].nums.push(idx + 1);
+            }
+        });
+
+        for(let r=0; r<data.size; r++) {
+            const tr = document.createElement('tr');
+            for(let c=0; c<data.size; c++) {
+                const td = document.createElement('td');
+                const cell = grid[r][c];
+                
+                if(cell) {
+                    td.className = 'cw-cell white';
+                    if(cell.nums.length > 0) td.innerHTML += `<span class="num">${cell.nums.join('/')}</span>`;
+                    const inp = document.createElement('input');
+                    inp.maxLength = 1;
+                    inp.dataset.ans = cell.char;
+                    inp.oninput = function() { 
+                        this.value = this.value.toUpperCase();
+                        if(this.value) focusNext(this); 
+                    };
+                    td.appendChild(inp);
+                } else {
+                    td.className = 'cw-cell black';
+                }
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+    }
+
+    // 6. VÁ LỖI ĐIỀU HƯỚNG Ô NHẬP (THÔNG MINH THEO HÀNG/CỘT)
+    function focusNext(currentInput) {
+        const table = document.getElementById('cw-grid');
+        const row = currentInput.parentElement.parentElement.rowIndex;
+        const col = currentInput.parentElement.cellIndex;
+
+        // Tìm ô tiếp theo bên phải (cho hàng ngang) hoặc bên dưới (cho hàng dọc)
+        let nextCell = table.rows[row]?.cells[col + 1]?.querySelector('input') || 
+                       table.rows[row + 1]?.cells[col]?.querySelector('input');
+        
+        if (nextCell) nextCell.focus();
+    }
+
+    // 7. HÀM GỢI Ý
+    function useHint() {
+        if(hints <= 0) return alert("Hết gợi ý rồi bé ơi!");
+        const inputs = Array.from(document.querySelectorAll('input')).filter(i => !i.value);
+        if(inputs.length === 0) return;
+        
+        const randomInput = inputs[Math.floor(Math.random() * inputs.length)];
+        randomInput.value = randomInput.dataset.ans;
+        randomInput.style.color = '#2980b9';
+        hints--;
+        document.getElementById('hint-count').textContent = hints;
+    }
+
+    // 8. KIỂM TRA THẮNG VÀ KẾT NỐI SERVER
+    async function checkWin() {
+        const inputs = document.querySelectorAll('input');
+        let correct = true;
+        inputs.forEach(i => {
+            if(i.value.toUpperCase() !== i.dataset.ans) {
+                i.style.color = 'red';
+                correct = false;
+            } else {
+                i.style.color = '#2ecc71';
+            }
+        });
+
+        if(correct) {
+            const timeSpent = Math.floor((Date.now() - gameStartTime) / 1000);
+            try {
+                const res = await fetch('/api/game/crossword-win', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ 
+                        level: currentLevel,
+                        timeTaken: timeSpent // Gửi thời gian chuẩn để Admin tính điểm phạt
+                    })
+                });
+                const d = await res.json();
+                if(d.newLevel) unlockedLevel = d.newLevel;
+                alert("🎉 GIỎI QUÁ! Bé đã vượt qua thử thách này!");
+                backToMenu();
+            } catch(e) {
+                alert("Bé đã thắng rồi! (Lỗi kết nối server)");
+                backToMenu();
+            }
+        } else {
+            alert("Hic, có ô bị sai rồi. Bé kiểm tra lại các ô màu đỏ nhé!");
+        }
+    }
+
+    function backToMenu() {
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('level-select-screen').style.display = 'block';
+        init(); // Tải lại danh sách level để cập nhật trạng thái mới
+    }
+
+    init();
+</script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

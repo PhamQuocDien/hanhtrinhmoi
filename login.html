@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập / Đăng Ký</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-container { width: min(680px, calc(100% - 32px)); margin: 40px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .auth-tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; border: none; background: none; font-family: 'Baloo 2', cursive; font-size: 1.2rem; cursor: pointer; color: #888; width: 50%; }
+        .tab-btn.active { border-bottom: 3px solid #ff6347; font-weight: bold; color: #333; }
+        .form-content { display: none; }
+        .form-content.active { display: block; }
+        .register-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+        .register-grid .full-width, .dob-grid { grid-column: 1 / -1; }
+        .dob-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-family: 'Baloo 2', cursive; font-size: 1rem; }
+        .input-group input:focus { outline: 3px solid rgba(49,95,233,.2); border-color: #315fe9; }
+        .input-group input[aria-invalid="true"] { border-color: #b42318; }
+        .field-error { min-height: 1.2em; margin: 4px 0 0; color: #b42318; font-size: .84rem; }
+        .form-help { font-size: .86rem; color: #65708a; }
+        .verification-panel { margin-top: 18px; padding: 16px; border: 1px solid #dce6f2; border-radius: 14px; background: #f8fbff; }
+        .verification-panel[hidden] { display: none; }
+        .verification-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+        .verification-actions .input-group { flex: 1 1 180px; margin-bottom: 0; }
+        .secondary-btn { padding: 10px 14px; border: 0; border-radius: 8px; background: #315fe9; color: white; cursor: pointer; }
+        .secondary-btn:disabled, .submit-btn:disabled { opacity: .65; cursor: wait; }
+        .submit-btn { width: 100%; padding: 12px; background: #ff6347; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; transition: background-color 0.3s; }
+        .submit-btn:hover { background-color: #e5533d; }
+        #message { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
+        .server-state{margin:0 0 18px;padding:10px 12px;border-radius:12px;background:#eef6ff;color:#244a75;font-weight:800;font-size:.9rem}.server-state.ok{background:#e8f8ef;color:#17663a}.server-state.warn{background:#fff4dd;color:#835d00}.server-state.error{background:#ffe9e5;color:#8f2e21}.server-state button{float:right;border:0;border-radius:8px;padding:4px 8px;cursor:pointer}
+        #message.success { background-color: #d4edda; color: #155724; display: block; }
+        #message.error { background-color: #f8d7da; color: #721c24; display: block; }
+        @media (max-width: 640px) {
+            .auth-container { margin: 20px auto; padding: 24px 18px; }
+            .register-grid { grid-template-columns: 1fr; gap: 0; }
+            .register-grid .full-width, .dob-grid { grid-column: auto; }
+            .dob-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .tab-btn { padding: 10px 8px; font-size: 1.05rem; }
+            .verification-actions { display: grid; grid-template-columns: 1fr 1fr; }
+            .verification-actions .input-group { min-width: 0; }
+            .verification-actions .input-group:first-child { grid-column: 1 / -1; }
+        }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+    <div class="auth-container"><div id="server-state" class="server-state">Đang kiểm tra máy chủ… <button type="button" id="retry-server">Thử lại</button></div><p style="margin:-8px 0 16px;text-align:center"><a href="status.html">Xem trạng thái và hướng xử lý lỗi</a></p>
+        <div class="auth-tabs">
+            <button class="tab-btn active" onclick="showForm(event, 'login')">Đăng Nhập</button>
+            <button class="tab-btn" onclick="showForm(event, 'register')">Đăng Ký</button>
+        </div>
+
+        <div id="login" class="form-content active">
+            <h2>Đăng Nhập</h2>
+            <form id="login-form">
+                <div class="input-group"><label for="login-username">Tên đăng nhập</label><input type="text" id="login-username" name="username" required autocomplete="username" maxlength="24"></div>
+                <div class="input-group"><label for="login-password">Mật khẩu</label><input type="password" id="login-password" name="password" required minlength="6" maxlength="72" autocomplete="current-password"></div>
+                <button type="submit" class="submit-btn">Vào Hành Tinh!</button>
+            </form>
+        </div>
+
+        <div id="register" class="form-content">
+            <h2>Đăng Ký</h2>
+            <form id="register-form">
+                <div class="register-grid">
+                    <div class="input-group full-width"><label for="reg-fullName">Họ và tên đầy đủ</label><input type="text" id="reg-fullName" name="fullName" required maxlength="100" autocomplete="name" aria-describedby="error-fullName"><p class="field-error" id="error-fullName" role="alert"></p></div>
+                    <div class="input-group"><label for="reg-username">Tên đăng nhập</label><input type="text" id="reg-username" name="username" required minlength="3" maxlength="24" autocomplete="username" pattern="[A-Za-z0-9_À-ỹ]+" aria-describedby="error-username"><p class="field-error" id="error-username" role="alert"></p></div>
+                    <div class="input-group"><label for="reg-password">Mật khẩu</label><input type="password" id="reg-password" name="password" required minlength="6" maxlength="72" autocomplete="new-password" aria-describedby="error-password"><p class="field-error" id="error-password" role="alert"></p></div>
+                    <div class="input-group"><label for="reg-email">Email / Gmail</label><input type="email" id="reg-email" name="email" required maxlength="254" autocomplete="email" aria-describedby="error-email"><p class="field-error" id="error-email" role="alert"></p></div>
+                    <div class="input-group"><label for="reg-phone">Số điện thoại</label><input type="tel" id="reg-phone" name="phone" required maxlength="20" autocomplete="tel" aria-describedby="error-phone"><p class="field-error" id="error-phone" role="alert"></p></div>
+                    <div class="input-group"><label for="reg-gameId">Game ID</label><input type="text" id="reg-gameId" name="gameId" required maxlength="24" autocomplete="off" aria-describedby="error-gameId"><p class="field-error" id="error-gameId" role="alert"></p></div>
+                    <fieldset class="dob-grid">
+                        <legend>Ngày sinh</legend>
+                        <div class="input-group"><label for="reg-dob-day">Ngày</label><input type="number" id="reg-dob-day" name="dobDay" min="1" max="31" required inputmode="numeric" aria-describedby="error-dob"><p class="field-error"></p></div>
+                        <div class="input-group"><label for="reg-dob-month">Tháng</label><input type="number" id="reg-dob-month" name="dobMonth" min="1" max="12" required inputmode="numeric" aria-describedby="error-dob"><p class="field-error"></p></div>
+                        <div class="input-group"><label for="reg-dob-year">Năm</label><input type="number" id="reg-dob-year" name="dobYear" min="1900" max="2100" required inputmode="numeric" aria-describedby="error-dob"><p class="field-error"></p></div>
+                        <p class="field-error" id="error-dob" role="alert"></p>
+                    </fieldset>
+                </div>
+                <p class="form-help">Sau khi đăng ký, tài khoản ở trạng thái <b>chưa xác minh</b>. Bạn có thể xác minh email hoặc số điện thoại bằng OTP.</p>
+                <button type="submit" class="submit-btn">Tạo Tài Khoản</button>
+            </form>
+            <section id="verification-panel" class="verification-panel" hidden aria-live="polite">
+                <h3>Xác minh tài khoản</h3>
+                <p id="verification-message" class="form-help">Tài khoản đã được tạo. Chọn kênh để yêu cầu mã OTP.</p>
+                <div class="verification-actions">
+                    <div class="input-group"><label for="verification-channel">Kênh xác minh</label><select id="verification-channel"><option value="email">Email</option><option value="phone">Số điện thoại</option></select></div>
+                    <button type="button" id="request-otp" class="secondary-btn">Gửi mã OTP</button>
+                    <div class="input-group"><label for="verification-code">Mã OTP</label><input type="text" id="verification-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+                    <button type="button" id="verify-otp" class="secondary-btn">Xác minh</button>
+                </div>
+                <p class="form-help">Tiếp theo, hệ thống khảo sát mục tiêu và trình độ rồi đề xuất bài kiểm tra đầu vào theo tuổi/lớp/mục tiêu.</p>
+                <button type="button" id="start-onboarding" class="secondary-btn" style="width:100%;margin-top:12px">Bắt đầu khảo sát và cá nhân hóa lộ trình</button>
+            </section>
+        </div>
+
+        <div id="message"></div>
+    </div>
+    <a href="index.html" class="back-button">Về Trang Chủ</a>
+
+    <script src="assets/js/api.js?v=39.0.0"></script>
+    <script>
+        const messageEl = document.getElementById('message');
+        const registerForm = document.getElementById('register-form');
+        const verificationPanel = document.getElementById('verification-panel');
+        const verificationMessage = document.getElementById('verification-message');
+        let verificationTicket = '';
+        let onboardingCredentials = null;
+        
+        // Chuyển tab
+        function showForm(event, formId) {
+            document.querySelectorAll('.form-content').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const targetForm = document.getElementById(formId);
+            if (targetForm) targetForm.classList.add('active');
+            if (event.currentTarget) event.currentTarget.classList.add('active');
+            if (formId === 'register' && registerForm) registerForm.hidden = false;
+            messageEl.className = '';
+            messageEl.textContent = '';
+        }
+        
+        // Hiển thị thông báo
+        function showMessage(text, isError = false) {
+            messageEl.textContent = text; 
+            messageEl.className = isError ? 'error' : 'success';
+        }
+
+        function setFieldError(field, message = '') {
+            const input = document.getElementById(`reg-${field}`) || document.getElementById(`reg-dob-${field}`);
+            const error = document.getElementById(`error-${field}`);
+            if (input) input.setAttribute('aria-invalid', message ? 'true' : 'false');
+            if (error) error.textContent = message;
+        }
+
+        function clearFieldErrors() {
+            ['fullName', 'username', 'password', 'email', 'phone', 'gameId', 'dob'].forEach(field => setFieldError(field));
+        }
+
+        function validateRegistrationForm(form) {
+            clearFieldErrors();
+            const raw = Object.fromEntries(new FormData(form).entries());
+            const body = {
+                fullName: String(raw.fullName || '').replace(/\s+/g, ' ').trim(),
+                username: String(raw.username || '').trim(),
+                password: String(raw.password || ''),
+                email: String(raw.email || '').trim().toLowerCase(),
+                phone: String(raw.phone || '').trim().replace(/[\s.\-()]/g, ''),
+                gameId: String(raw.gameId || '').trim(),
+                dobDay: Number(raw.dobDay),
+                dobMonth: Number(raw.dobMonth),
+                dobYear: Number(raw.dobYear)
+            };
+            const errors = {};
+            if (!body.fullName) errors.fullName = 'Họ và tên không được để trống.';
+            else if (body.fullName.length < 2 || body.fullName.length > 100 || /[<>]/.test(body.fullName) || /javascript:/i.test(body.fullName)) errors.fullName = 'Họ và tên không hợp lệ.';
+            if (!/^[A-Za-z0-9_À-ỹ]{3,24}$/u.test(body.username)) errors.username = 'Tên đăng nhập phải dài 3–24 ký tự và chỉ gồm chữ, số hoặc gạch dưới.';
+            if (body.password.length < 6 || body.password.length > 72) errors.password = 'Mật khẩu phải dài từ 6 đến 72 ký tự.';
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email) || body.email.length > 254) errors.email = 'Email không hợp lệ.';
+            if (/^\+84/.test(body.phone)) body.phone = `0${body.phone.slice(3)}`;
+            else if (/^84\d{9,10}$/.test(body.phone)) body.phone = `0${body.phone.slice(2)}`;
+            if (!/^0\d{9,10}$/.test(body.phone)) errors.phone = 'Số điện thoại không hợp lệ (VD: 0912345678).';
+            if (!/^[A-Za-z0-9_]{3,24}$/.test(body.gameId) || body.gameId.toLowerCase() === 'admin') errors.gameId = 'Game ID chỉ gồm chữ, số, gạch dưới và dài 3–24 ký tự.';
+            const date = new Date(body.dobYear, body.dobMonth - 1, body.dobDay);
+            const now = new Date();
+            if (!Number.isInteger(body.dobDay) || !Number.isInteger(body.dobMonth) || !Number.isInteger(body.dobYear) || body.dobYear < 1900 || body.dobYear > now.getFullYear() || date.getFullYear() !== body.dobYear || date.getMonth() !== body.dobMonth - 1 || date.getDate() !== body.dobDay || date > now) errors.dob = 'Ngày sinh không hợp lệ hoặc không được là ngày tương lai.';
+            Object.entries(errors).forEach(([field, message]) => setFieldError(field, message));
+            return Object.keys(errors).length ? null : body;
+        }
+
+        function displayApiError(error) {
+            const details = Array.isArray(error.details) ? error.details : [];
+            details.forEach(detail => setFieldError(detail.field === 'dob' ? 'dob' : detail.field, detail.message));
+            showMessage(error.message || 'Thông tin đăng ký chưa hợp lệ.', true);
+        }
+
+        // Login and registration each use one explicit handler; selectors stay scoped to the submitted form.
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const body = Object.fromEntries(new FormData(form).entries());
+            if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Đang đăng nhập...'; }
+            try {
+                const data = await window.HanhTrinhApi.login(body);
+                localStorage.setItem('currentUser', data.user.username);
+                const role = String(data.user.role || 'child').toLowerCase();
+                const destination = role === 'admin'
+                    ? '/admin/'
+                    : role === 'parent'
+                        ? '/phu-huynh.html'
+                        : '/index.html';
+                showMessage(role === 'admin'
+                    ? 'Đăng nhập Admin thành công! Đang mở Admin Application...'
+                    : 'Đăng nhập thành công! Đang chuyển tới ứng dụng của bạn...');
+                setTimeout(() => window.location.replace(destination), 700);
+
+            } catch (err) {
+                const message = err.name === 'AbortError' ? 'Máy chủ phản hồi quá lâu. Hãy thử lại.' : err instanceof TypeError ? 'Không thể kết nối máy chủ Render.' : err.message;
+                showMessage(message, true);
+            } finally {
+                 submitButton.disabled = false;
+                 submitButton.textContent = 'Vào Hành Tinh!';
+            }
+        }
+
+        async function handleRegisterSubmit(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const body = validateRegistrationForm(form);
+            if (!body) { showMessage('Vui lòng kiểm tra lại các trường đăng ký.', true); return; }
+            const submitButton = event.currentTarget?.querySelector('button[type="submit"]');
+            if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Đang đăng nhập...'; }
+            if (submitButton) submitButton.textContent = 'Đang tạo tài khoản...';
+            try {
+                const data = await window.HanhTrinhApi.register(body);
+                verificationTicket = data?.verificationTicket || '';
+                onboardingCredentials = { username: body.username, password: body.password };
+                // Tạo tài khoản xong đăng nhập ngay và bắt đầu khảo sát; OTP vẫn có thể xác minh sau trong hồ sơ.
+                try {
+                    const session = await window.HanhTrinhApi.login(onboardingCredentials);
+                    if (!session?.user?.username) throw new Error('Đã tạo tài khoản nhưng chưa khởi tạo được phiên đăng nhập.');
+                    localStorage.setItem('currentUser', session.user.username);
+                    onboardingCredentials = null;
+                    showMessage('Tạo tài khoản thành công! Đang mở khảo sát để cá nhân hóa bài kiểm tra và lộ trình…', false);
+                    window.location.replace('/survey.html?onboarding=1');
+                    return;
+                } catch (loginError) {
+                    if (form) form.hidden = false;
+                    if (verificationPanel) verificationPanel.hidden = false;
+                    if (verificationMessage) verificationMessage.textContent = 'Tài khoản đã được tạo. Đăng nhập tự động chưa thành công; bạn có thể thử đăng nhập hoặc xác minh OTP bên dưới.';
+                    showMessage(`Tài khoản đã tạo nhưng chưa thể tự đăng nhập: ${loginError.message || 'hãy đăng nhập lại để bắt đầu khảo sát.'}`, true);
+                }
+            } catch (error) {
+                displayApiError(error);
+            } finally {
+                if (submitButton) { submitButton.disabled = false; submitButton.textContent = 'Tạo Tài Khoản'; }
+            }
+        }
+
+
+        async function checkServer() {
+            const box = document.getElementById('server-state');
+            if (!box) return;
+            box.className = 'server-state';
+            box.firstChild.textContent = 'Đang kiểm tra máy chủ… ';
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 10000);
+                const response = await fetch('/api/health', { cache: 'no-store', signal: controller.signal });
+                clearTimeout(timer);
+                const data = await response.json();
+                if (data.database === 'connected') {
+                    box.className = 'server-state ok';
+                    box.firstChild.textContent = `Máy chủ hoạt động • phiên bản ${data.version || ''} `;
+                } else {
+                    box.className = 'server-state warn';
+                    box.firstChild.textContent = 'Máy chủ đang chạy nhưng cơ sở dữ liệu đang kết nối lại. ';
+                }
+            } catch (error) {
+                box.className = 'server-state error';
+                box.firstChild.textContent = 'Không thể liên hệ máy chủ Render. ';
+            }
+        }
+        document.getElementById('retry-server')?.addEventListener('click', checkServer);
+        document.getElementById('start-onboarding')?.addEventListener('click', async event => {
+            const button = event.currentTarget;
+            if (!onboardingCredentials) { showMessage('Vui lòng đăng ký tài khoản trước khi bắt đầu khảo sát.', true); return; }
+            button.disabled = true;
+            const label = button.textContent;
+            button.textContent = 'Đang mở khảo sát…';
+            try {
+                const data = await window.HanhTrinhApi.login(onboardingCredentials);
+                localStorage.setItem('currentUser', data.user.username);
+                onboardingCredentials = null;
+                window.location.replace('/survey.html?onboarding=1');
+            } catch (error) {
+                showMessage(error.message || 'Không thể mở khảo sát. Hãy xác minh tài khoản hoặc đăng nhập lại.', true);
+            } finally { button.disabled = false; button.textContent = label; }
+        });
+        checkServer();
+
+        document.getElementById('login-form')?.addEventListener('submit', handleLoginSubmit);
+        registerForm?.addEventListener('submit', handleRegisterSubmit);
+        document.getElementById('request-otp').addEventListener('click', async event => {
+            const button = event.currentTarget;
+            button.disabled = true;
+            try {
+                const channel = document.getElementById('verification-channel').value;
+                const result = await window.HanhTrinhApi.requestOtp({ channel, verificationTicket });
+                verificationMessage.textContent = result.message || 'Đã gửi mã OTP.';
+            } catch (error) {
+                verificationMessage.textContent = error.message || 'Không thể gửi mã OTP.';
+            } finally { button.disabled = false; }
+        });
+        document.getElementById('verify-otp').addEventListener('click', async event => {
+            const button = event.currentTarget;
+            const code = document.getElementById('verification-code').value.trim();
+            if (!/^\d{6}$/.test(code)) { verificationMessage.textContent = 'Mã OTP phải gồm 6 chữ số.'; return; }
+            button.disabled = true;
+            try {
+                const channel = document.getElementById('verification-channel').value;
+                const result = await window.HanhTrinhApi.verifyOtp({ channel, code, verificationTicket });
+                if (verificationMessage) verificationMessage.textContent = result.message || 'Xác minh thành công. Bạn có thể bắt đầu khảo sát.';
+                if (onboardingCredentials) {
+                    try {
+                        const session = await window.HanhTrinhApi.login(onboardingCredentials);
+                        localStorage.setItem('currentUser', session.user.username);
+                        onboardingCredentials = null;
+                        showMessage('Xác minh thành công. Đang mở khảo sát để xây dựng lộ trình học tập…', false);
+                        window.location.replace('/survey.html?onboarding=1');
+                        return;
+                    } catch (loginError) {
+                        showMessage('Đã xác minh thành công. Hãy đăng nhập hoặc bấm “Bắt đầu khảo sát” để tiếp tục.', false);
+                    }
+                } else {
+                    showMessage('Xác minh thành công. Hãy đăng nhập để bắt đầu hành trình.', false);
+                    document.querySelector('.auth-tabs button:first-child')?.click();
+                }
+            } catch (error) {
+                if (verificationMessage) verificationMessage.textContent = error.message || 'Không thể xác minh mã OTP.';
+            } finally { button.disabled = false; }
+        });
+
+        if (window.location.hash === '#register') {
+            document.querySelectorAll('.form-content').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('register')?.classList.add('active');
+            document.querySelector('.auth-tabs button:nth-child(2)')?.classList.add('active');
+        }
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

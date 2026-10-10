@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102a43"><meta name="description" content="Trung tâm học tập thông minh của Hành Trình Mới.">
+<title>Trung tâm học tập thông minh | Hành Trình Mới</title>
+<link rel="stylesheet" href="assets/platform/platform-shell.css">
+<link rel="stylesheet" href="assets/learning/learning-intelligence.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body data-platform-page="learning-intelligence">
+<div class="platform-app">
+<aside class="platform-sidebar">
+<a class="platform-brand" href="index.html"><span class="brand-mark">HT</span><span><b>Hành Trình Mới</b><small>Learning platform</small></span></a>
+<nav class="platform-nav">
+<a href="index.html">⌂ <span>Tổng quan</span></a>
+<a href="trung-tam-hoc-tap.html" class="is-active">🧠 <span>Trung tâm thông minh</span></a>
+<a href="lo-trinh-hoc-tap.html">◈ <span>Lộ trình học tập</span></a>
+<a href="survey.html">◎ <span>Khảo sát</span></a>
+<a href="placement.html">◉ <span>Kiểm tra đầu vào</span></a>
+<a href="lo-trinh-hoc-tap.html#curriculum">▦ <span>Chương trình học</span></a>
+<a href="university.html">⌘ <span>Đại học</span></a>
+<a href="english.html?exam=TOEIC">EN <span>TOEIC / IELTS</span></a>
+<a href="bai-kiem-tra.html">□ <span>Kỳ thi mô phỏng</span></a>
+<a href="thong-bao.html">♢ <span>Thông báo</span></a>
+<a href="profile.html">◯ <span>Hồ sơ</span></a>
+</nav>
+<div class="sidebar-footer"><a href="game-hub.html">🎮 Vui chơi</a><a href="giai-dau.html">🏆 Giải đấu</a></div>
+</aside>
+<main class="platform-main">
+<header class="platform-topbar">
+<div><span class="eyebrow">LEARNING INTELLIGENCE</span><h1>Trung tâm học tập thông minh</h1></div>
+<div class="topbar-actions"><select id="intel-grade" aria-label="Chọn lớp" style="border:1px solid #d5dee8;border-radius:10px;padding:9px 11px;background:#fff;color:#17324d;font-weight:800"><option value="1">Lớp 1</option><option value="2">Lớp 2</option><option value="3">Lớp 3</option><option value="4">Lớp 4</option><option value="5">Lớp 5</option><option value="6">Lớp 6</option><option value="7">Lớp 7</option><option value="8">Lớp 8</option><option value="9">Lớp 9</option><option value="10">Lớp 10</option><option value="11">Lớp 11</option><option value="12">Lớp 12</option></select><span class="status-chip" id="engine-status">Đang tải…</span><a class="avatar-link" href="profile.html">?</a></div>
+</header>
+<div id="intel-global-message" class="intel-global-message" hidden></div>
+<section class="intel-hero">
+<div><span class="eyebrow" style="color:#b7d4e8">AI COACH · ADAPTIVE LEARNING · ERROR BOOK</span><h2>Không chỉ nói bạn đang yếu — hệ thống chọn luôn bước học tiếp theo.</h2><p id="coach-summary">Đang phân tích lộ trình, mastery và lịch sử lỗi…</p><div class="intel-hero-stats"><span class="intel-chip">📅 <span id="coach-date">Hôm nay</span></span><span class="intel-chip">⏱️ <span id="coach-target">—</span></span><span class="intel-chip">⚠️ <span id="engine-errors">—</span></span></div></div>
+<div class="intel-ring"><strong id="coach-progress-text">0%</strong><small>mục tiêu ngày</small></div>
+</section>
+<section class="intel-grid">
+<article class="intel-card">
+<div class="intel-head"><div><div class="intel-kicker">① DAILY AI COACH</div><h2>Kế hoạch học hôm nay</h2></div><span class="status-chip" id="coach-date-copy">Tự động</span></div>
+<div class="intel-stat-grid"><div class="intel-stat"><strong id="coach-minutes">0 phút</strong><span>hôm nay</span></div><div class="intel-stat"><strong id="coach-week-minutes">0 phút</strong><span>7 ngày</span></div><div class="intel-stat"><strong id="coach-focus">—</strong><span>skill trọng tâm</span></div></div>
+<div class="intel-focus"><strong>Vùng cần tập trung</strong><span class="intel-muted" id="coach-focus-meta">Đang phân tích mastery…</span><div class="intel-progress"><span id="coach-progress"></span></div></div>
+<div class="intel-tasks" id="coach-tasks"><div class="intel-empty">Đang tải nhiệm vụ…</div></div>
+</article>
+<article class="intel-card">
+<div class="intel-head"><div><div class="intel-kicker">AI COACH</div><h2>Hỏi để được dẫn đường</h2></div><span class="status-chip">Không cần tự suy luận</span></div>
+<p class="intel-muted">Coach sử dụng mục tiêu, skill mastery và lỗi gần đây của bạn để trả lời. Khi Gemini chưa cấu hình, hệ thống vẫn có chế độ tư vấn theo luật.</p>
+<div class="intel-chat"><textarea id="coach-question" placeholder="Ví dụ: Hôm nay tôi chỉ có 25 phút, nên học gì trước?"></textarea><button class="intel-btn" id="ask-coach" type="button">🤖 Hỏi AI Coach</button><div id="coach-answer" class="intel-chat-output">Chưa có câu trả lời.</div></div>
+<div class="intel-links"><a href="placement.html">Làm placement</a><a href="survey.html">Cập nhật mục tiêu</a><a href="profile.html">Cập nhật hồ sơ</a></div>
+</article>
+<article class="intel-card full">
+<div class="intel-head"><div><div class="intel-kicker">② ERROR BOOK</div><h2>Sổ tay lỗi sai thông minh</h2></div><div class="intel-filter"><button class="active" data-error-filter="open">Đang mở</button><button data-error-filter="resolved">Đã xử lý</button><button data-error-filter="all">Tất cả</button></div></div>
+<p class="intel-muted">Lỗi được lưu server-side và gom theo câu hỏi. Khi bạn làm đúng liên tiếp trong adaptive practice, hệ thống tự chuyển lỗi sang trạng thái đã xử lý.</p>
+<div id="error-list" class="intel-errors"><div class="intel-empty">Đang tải sổ lỗi…</div></div>
+</article>
+<article class="intel-card full">
+<div class="intel-head"><div><div class="intel-kicker">③ ADAPTIVE PRACTICE</div><h2>Luyện 10 câu — độ khó thay đổi theo từng câu</h2></div><span class="status-chip">Tự tăng / giảm</span></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:14px">
+<label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#60758a">Môn
+<select id="practice-subject" style="min-width:220px;padding:10px;border:1px solid #d4dee8;border-radius:10px;background:#fff"><option value="">Tự chọn theo điểm yếu</option></select>
+</label>
+<label style="display:grid;gap:5px;font-size:12px;font-weight:800;color:#60758a">Skill (tùy chọn)
+<input id="practice-skill" type="text" placeholder="Ví dụ: tính toán" style="min-width:220px;padding:10px;border:1px solid #d4dee8;border-radius:10px">
+</label>
+<button class="intel-btn" id="start-practice" type="button">⚡ Bắt đầu 10 câu thích ứng</button>
+</div>
+<div id="practice-shell" class="intel-practice-shell"><div class="intel-empty">Chọn môn/skill rồi bắt đầu. Độ khó sẽ tự điều chỉnh sau từng câu trả lời.</div></div>
+</article>
+</section>
+</main></div>
+<script src="assets/js/api.js?v=39.0.0"></script><script src="assets/platform/platform-shell.js?v=39.0.0"></script><script src="assets/platform/account-menu.js"></script><script src="assets/js/learning-intelligence.js?v=39.0.0"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body></html>

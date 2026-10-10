@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thám Tử Tài Ba - 100 Cấp Độ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+/* --- CSS RESPONSIVE --- */
+body { 
+    background: #2c3e50; 
+    font-family: 'Baloo 2', cursive; 
+    color: white; 
+    text-align: center; 
+    margin: 0; 
+    padding-bottom: 20px; /* Thêm khoảng trống dưới cùng */
+    overflow-x: hidden; /* Chặn cuộn ngang */
+}
+
+.header { padding: 10px; background: rgba(0,0,0,0.2); }
+.info-bar { display: flex; justify-content: center; gap: 20px; font-size: 1.2rem; font-weight: bold; }
+
+/* Khu vực chơi game tự động xếp dọc/ngang */
+.game-area { 
+    display: flex; 
+    flex-wrap: wrap; /* Cho phép xuống dòng khi màn hình nhỏ */
+    justify-content: center; 
+    gap: 15px; 
+    padding: 10px; 
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.canvas-wrapper { 
+    position: relative; 
+    /* Max-width giúp canvas không bị tràn màn hình điện thoại */
+    max-width: 100%; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+canvas { 
+    background: white; 
+    display: block; /* Loại bỏ khoảng trắng thừa dưới canvas */
+    width: 100%; /* Co giãn theo khung cha */
+    height: auto; /* Giữ tỉ lệ khung hình */
+    touch-action: none; /* Chặn zoom/scroll khi chạm vào canvas */
+}
+
+/* Nút bấm to hơn trên mobile cho dễ bấm */
+.btn { 
+    padding: 12px 20px; 
+    border-radius: 25px; 
+    border: none; 
+    font-weight: bold; 
+    cursor: pointer; 
+    margin: 5px; 
+    font-size: 1rem; 
+    color: white; 
+    min-width: 100px; 
+}
+
+/* Nhãn 'ẢNH GỐC' / 'TÌM ĐIỂM KHÁC' */
+.label-tag {
+    position: absolute; top: 5px; left: 5px; 
+    color: #333; font-weight: bold; font-size: 0.8rem;
+    background: rgba(255,255,255,0.8); 
+    padding: 3px 8px; border-radius: 5px;
+    pointer-events: none;
+}
+
+/* Mobile Specific */
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.5rem; }
+    .info-bar { font-size: 1rem; }
+    .game-area { flex-direction: column; align-items: center; } /* Xếp dọc trên mobile */
+    .canvas-wrapper { width: 95vw; } /* Chiếm gần hết chiều ngang */
+}
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <div class="header">
+        <h1 style="margin:0 0 10px 0; text-shadow: 2px 2px 0 #000;">🕵️ THÁM TỬ TÀI BA</h1>
+        <div class="info-bar">
+            <span style="color:#f1c40f">Cấp độ: <span id="lvl">1</span></span>
+            <span style="color:#2ecc71">Tìm: <span id="found-count">0</span>/<span id="total-count">5</span></span>
+        </div>
+    </div>
+
+    <div class="game-area">
+        <div class="canvas-wrapper" id="box1">
+            <div style="position:absolute; top:5px; left:10px; color:#333; font-weight:bold; background:rgba(255,255,255,0.7); padding:2px 8px; border-radius:5px;">ẢNH GỐC</div>
+            <canvas id="c1" width="450" height="350"></canvas>
+        </div>
+        <div class="canvas-wrapper" id="box2">
+            <div style="position:absolute; top:5px; left:10px; color:#333; font-weight:bold; background:rgba(255,255,255,0.7); padding:2px 8px; border-radius:5px;">TÌM ĐIỂM KHÁC</div>
+            <canvas id="c2" width="450" height="350"></canvas>
+        </div>
+    </div>
+
+    <div>
+        <button class="btn" style="background:#3498db;" onclick="useHint()">💡 Gợi Ý (<span id="hints">3</span>)</button>
+        <button class="btn" style="background:#e74c3c;" onclick="window.location.href='index.html'">🚪 Thoát</button>
+    </div>
+
+    <script>
+        let level = 1;
+        let diffs = []; 
+        let found = [];
+        let items = []; // Lưu trữ toàn bộ vật thể để vẽ lại
+        let hintCount = 3;
+        let startTime;
+        
+        const canvas1 = document.getElementById('c1');
+        const canvas2 = document.getElementById('c2');
+        const ctx1 = canvas1.getContext('2d');
+        const ctx2 = canvas2.getContext('2d');
+
+        // Bộ sưu tập khó hơn (các hình giống nhau)
+        const assets = {
+            nature: ['🌲','🌳','🌴','🌵','🌿','☘️','🍀','🍁','🍂','🍄'],
+            animals: ['🐶','🐕','🐩','🐺','🦊','🐱','🐈','🦁','🐯','🐆'],
+            faces: ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇'],
+            food: ['🍎','🍏','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍒'],
+            symbols: ['❤️','🧡','💛','💚','💙','💜','🤎','🖤','🤍','💔']
+        };
+
+        let scaleRatio = 1; 
+    const baseWidth = 450;
+    const baseHeight = 350;
+
+    // Hàm set kích thước canvas responsive
+    function resizeCanvases() {
+        const wrappers = document.querySelectorAll('.canvas-wrapper');
+        const screenWidth = window.innerWidth;
+        
+        // Tính toán chiều rộng mới (Max 450px, Min theo màn hình)
+        let newWidth = Math.min(baseWidth, screenWidth - 20); 
+        let newHeight = newWidth * (baseHeight / baseWidth); // Giữ tỉ lệ
+
+        [canvas1, canvas2].forEach(c => {
+            // Set kích thước hiển thị (CSS)
+            c.style.width = newWidth + 'px';
+            c.style.height = newHeight + 'px';
+            // Set độ phân giải thực (Resolution) - Giữ nguyên để vẽ không bị mờ
+            c.width = baseWidth;
+            c.height = baseHeight;
+        });
+
+        // Tính tỉ lệ để xử lý click chuột chính xác
+        const rect = canvas2.getBoundingClientRect();
+        scaleRatio = baseWidth / rect.width; 
+
+        if (items.length > 0) drawGame(); // Vẽ lại nếu đang chơi
+    }
+
+    window.addEventListener('resize', resizeCanvases);
+
+    // Cập nhật hàm init
+    async function init() {
+        resizeCanvases(); // Gọi ngay khi vào trang
+        try {
+            const r = await fetch('/api/user/progress');
+            const d = await r.json();
+            level = d.detectiveLevel || 1;
+        } catch(e) {}
+        startLevel();
+    }
+        function startLevel() {
+            startTime = Date.now();
+            document.getElementById('lvl').textContent = level;
+            document.querySelectorAll('.marker').forEach(e => e.remove()); // Xóa marker cũ
+            
+            generateLevelData();
+            drawGame();
+        }
+
+        // --- 1. THUẬT TOÁN SINH MÀN CHƠI (NÂNG CAO) ---
+        function generateLevelData() {
+            items = [];
+            diffs = [];
+            found = [];
+
+            // Độ khó tăng dần
+            const itemCount = 20 + Math.floor(level * 1.5); // Càng cao càng nhiều đồ (rối mắt)
+            const diffCount = Math.min(3 + Math.floor(level / 10), 7); // Từ 3 đến 7 điểm khác biệt
+            
+            // Chọn chủ đề
+            const keys = Object.keys(assets);
+            const theme = assets[keys[Math.floor(Math.random() * keys.length)]];
+            const bgColors = ['#FFFAF0', '#F0FFF0', '#F0F8FF', '#FFF0F5', '#F5F5DC'];
+            const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+
+            // Sinh vật thể nền
+            for(let i=0; i<itemCount; i++) {
+                items.push({
+                    char: theme[Math.floor(Math.random() * theme.length)],
+                    x: 30 + Math.random() * (canvas1.width - 60),
+                    y: 40 + Math.random() * (canvas1.height - 60),
+                    size: 25 + Math.random() * 20, // Kích thước ngẫu nhiên
+                    rotation: (Math.random() - 0.5) * 1, // Xoay nhẹ
+                    isDiff: false
+                });
+            }
+
+            // Chọn ra các điểm khác biệt
+            let diffIndices = [];
+            while(diffIndices.length < diffCount) {
+                let idx = Math.floor(Math.random() * itemCount);
+                if(!diffIndices.includes(idx)) diffIndices.push(idx);
+            }
+
+            diffIndices.forEach(idx => {
+                let original = items[idx];
+                let type = 'missing'; // Mặc định
+
+                // Phân loại độ khó khác biệt
+                if (level < 10) type = 'missing'; // Dễ: Mất hình
+                else if (level < 30) type = Math.random() > 0.5 ? 'swap' : 'missing'; // Trung bình: Đổi hình
+                else if (level < 60) type = 'rotate'; // Khó: Xoay ngược
+                else if (level < 80) type = 'size'; // Rất khó: Bé đi / To lên
+                else type = 'opacity'; // Siêu khó: Mờ đi
+
+                // Tạo dữ liệu khác biệt
+                let diffData = { ...original, type: type };
+                
+                if (type === 'swap') {
+                    // Đổi thành hình khác trong cùng bộ (gây lú)
+                    diffData.char = theme[(theme.indexOf(original.char) + 1) % theme.length];
+                } else if (type === 'rotate') {
+                    diffData.rotation += Math.PI; // Xoay 180 độ
+                } else if (type === 'size') {
+                    diffData.size *= 0.6; // Nhỏ đi
+                } else if (type === 'opacity') {
+                    diffData.opacity = 0.3; // Mờ đi
+                }
+
+                original.isDiff = true;
+                original.diffData = diffData;
+                diffs.push({ 
+                    x: original.x, 
+                    y: original.y, 
+                    r: original.size, 
+                    index: idx 
+                });
+            });
+
+            document.getElementById('total-count').textContent = diffs.length;
+            document.getElementById('found-count').textContent = 0;
+            
+            // Vẽ nền
+            [ctx1, ctx2].forEach(ctx => {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, canvas1.width, canvas1.height);
+            });
+        }
+
+        // --- 2. HỆ THỐNG VẼ (RENDER) ---
+        function drawGame() {
+            // Vẽ lại toàn bộ item
+            items.forEach(item => {
+                // Vẽ bên trái (Luôn là gốc)
+                drawItem(ctx1, item);
+
+                // Vẽ bên phải
+                if (item.isDiff) {
+                    if (item.diffData.type !== 'missing') {
+                        drawItem(ctx2, item.diffData);
+                    }
+                    // Nếu missing thì không vẽ gì
+                } else {
+                    drawItem(ctx2, item); // Vẽ y hệt
+                }
+            });
+        }
+
+        function drawItem(ctx, item) {
+            ctx.save();
+            ctx.translate(item.x, item.y);
+            ctx.rotate(item.rotation || 0);
+            if (item.opacity) ctx.globalAlpha = item.opacity;
+            
+            ctx.font = `${item.size}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(item.char, 0, 0);
+            
+            ctx.restore();
+        }
+
+        // --- 3. XỬ LÝ TƯƠNG TÁC ---
+function handleInput(e) {
+        // Lấy tọa độ click trên màn hình
+        const rect = e.target.getBoundingClientRect();
+        
+        // Hỗ trợ cả Touch và Mouse
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        if(e.changedTouches && e.changedTouches.length > 0) {
+            clientX = e.changedTouches[0].clientX;
+            clientY = e.changedTouches[0].clientY;
+        }
+
+        // Tính toán vị trí tương đối trong Canvas chuẩn (450x350)
+        // Công thức: (Vị trí chuột - Lề trái canvas) * Tỉ lệ co giãn
+        const clickX = (clientX - rect.left) * (baseWidth / rect.width);
+        const clickY = (clientY - rect.top) * (baseHeight / rect.height);
+
+        let hit = false;
+        diffs.forEach((d, i) => {
+            if (!found.includes(i)) {
+                const dist = Math.sqrt((clickX - d.x)**2 + (clickY - d.y)**2);
+                if (dist < d.r * 1.5) { // Tăng vùng bấm lên 1.5 lần cho dễ trúng trên mobile
+                    hit = true;
+                    found.push(i);
+                    markDiff(d.x, d.y);
+                    updateProgress();
+                }
+            }
+        });
+
+        if (!hit) {
+            // Hiệu ứng sai
+            // Cần tính lại tọa độ hiển thị thực tế để đặt dấu X đỏ
+            const visualX = (clickX / baseWidth) * rect.width;
+            const visualY = (clickY / baseHeight) * rect.height;
+            showError(visualX, visualY, e.target.parentElement);
+        }
+    }
+
+    // Đăng ký sự kiện Touch cho điện thoại
+    canvas2.addEventListener('mousedown', handleInput);
+    canvas2.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Ngăn cuộn trang khi chạm vào game
+        handleInput(e);
+    }, {passive: false});
+                // Hỗ trợ cả chuột và chạm
+        canvas2.addEventListener('mousedown', handleInput);
+        // canvas2.addEventListener('touchstart', (e) => handleInput(e.touches[0])); // Mobile logic
+
+        function markDiff(x, y) {
+            // Quy đổi tọa độ Canvas -> CSS % để đặt marker chính xác
+            const leftPct = (x / canvas1.width) * 100 + '%';
+            const topPct = (y / canvas1.height) * 100 + '%';
+
+            ['box1', 'box2'].forEach(boxId => {
+                const m = document.createElement('div');
+                m.className = 'marker';
+                m.style.left = leftPct;
+                m.style.top = topPct;
+                document.getElementById(boxId).appendChild(m);
+            });
+        }
+
+        function showError(x, y, parent) {
+            const m = document.createElement('div');
+            m.className = 'error-marker';
+            m.style.left = x + 'px';
+            m.style.top = y + 'px';
+            parent.appendChild(m);
+            setTimeout(() => m.remove(), 500);
+        }
+
+        function updateProgress() {
+            document.getElementById('found-count').textContent = found.length;
+            if (found.length === diffs.length) {
+                setTimeout(doWin, 500);
+            }
+        }
+
+        function useHint() {
+            if (hintCount <= 0) return alert("Hết lượt gợi ý!");
+            const target = diffs.find((d, i) => !found.includes(i));
+            if (target) {
+                hintCount--;
+                document.getElementById('hints').textContent = hintCount;
+                markDiff(target.x, target.y);
+                found.push(diffs.indexOf(target));
+                updateProgress();
+            }
+        }
+
+        async function doWin() {
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+            
+            try {
+                const res = await fetch('/api/game/detective-win', { 
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ timeTaken: timeSpent }) 
+                });
+                const d = await res.json();
+                
+                setTimeout(() => {
+                    let msg = `🎉 XUẤT SẮC!\nBạn tìm ra hết trong ${timeSpent} giây.`;
+                    if(d.newLevel) {
+                        msg += `\n🆙 Lên cấp độ ${d.newLevel}!`;
+                        level = d.newLevel;
+                    } else {
+                        level++;
+                    }
+                    alert(msg);
+                    startLevel();
+                }, 1000);
+            } catch(e) {
+                level++;
+                setTimeout(startLevel, 2000);
+            }
+        }
+
+        init();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

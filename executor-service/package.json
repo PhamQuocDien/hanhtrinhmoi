@@ -1,0 +1,9 @@
+{
+  "name": "hanhtrinhmoi-isolated-code-executor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private Docker-isolated executor for student code submissions",
+  "main": "server.js",
+  "scripts": { "start": "node server.js", "check": "node --check server.js" },
+  "engines": { "node": ">=20" }
+}

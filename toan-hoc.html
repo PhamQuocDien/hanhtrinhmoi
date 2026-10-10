@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Đấu Toán Siêu Tốc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #74b9ff; }
+        .game-wrapper { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 0 rgba(0,0,0,0.1); }
+        
+        .grade-btn { width: 100%; padding: 15px; margin: 5px 0; background: #0984e3; color: white; border: none; border-radius: 10px; font-size: 1.2rem; cursor: pointer; transition: 0.2s; }
+        .grade-btn:hover { transform: scale(1.02); background: #74b9ff; }
+
+        #game-board { display: none; text-align: center; }
+        
+        .score-board { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.2rem; font-weight: bold; background: #eee; padding: 10px; border-radius: 10px; }
+        .score-p1 { color: #2ecc71; }
+        .score-p2 { color: #e74c3c; }
+
+        .question-box { font-size: 2.5rem; margin: 30px 0; font-weight: bold; color: #2c3e50; min-height: 60px; }
+        
+        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .ans-btn { padding: 20px; font-size: 1.5rem; border: 3px solid #eee; background: white; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .ans-btn:hover { background: #dff9fb; border-color: #0984e3; }
+        .ans-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .status-msg { margin-top: 20px; color: #636e72; font-style: italic; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <h1 class="page-header header-challenge">⚡ Đấu Toán Siêu Tốc ⚡</h1>
+
+    <div class="game-wrapper">
+        
+        <div id="lobby-screen">
+            <h3>Chọn Cấp Độ Để Tìm Đối Thủ:</h3>
+            <button class="grade-btn" onclick="findMatch(1)">Lớp 1 (Cộng trừ cơ bản)</button>
+            <button class="grade-btn" onclick="findMatch(2)">Lớp 2 (Nhân chia, đổi đơn vị)</button>
+            <button class="grade-btn" onclick="findMatch(3)">Lớp 3 (Tính nhanh, hình học)</button>
+            <button class="grade-btn" onclick="findMatch(4)">Lớp 4 (Phân số, số lớn)</button>
+            <button class="grade-btn" onclick="findMatch(5)">Lớp 5 (Số thập phân, %)</button>
+            <button class="grade-btn" onclick="findMatch(5)">Lớp 5 (Số thập phân, %)</button>
+            <button class="grade-btn" onclick="findMatch(6)" style="background: #6c5ce7;">Lớp 6 (Số nguyên, Tập hợp)</button>
+            <button class="grade-btn" onclick="findMatch(7)" style="background: #6c5ce7;">Lớp 7 (Số hữu tỉ, Tỷ lệ thức)</button>
+            <button class="grade-btn" onclick="findMatch(8)" style="background: #6c5ce7;">Lớp 8 (Đa thức, Hình học phẳng)</button>
+            <button class="grade-btn" onclick="findMatch(9)" style="background: #d63031;">Lớp 9 (Ôn thi vào 10)</button>
+            <div id="status-log" class="status-msg"></div>
+            <a href="game-hub.html" class="back-button" style="margin-top:20px; display:block;">Quay lại Vui chơi</a>
+        </div>
+
+        <div id="game-board">
+            <div class="score-board">
+                <span class="score-p1">Bạn: <span id="score-me">0</span></span>
+                <span>Vòng: <span id="round-num">1</span>/10</span>
+                <span class="score-p2">Đối thủ: <span id="score-op">0</span></span>
+            </div>
+
+            <div class="question-box" id="question-text">Đang tải...</div>
+
+            <div class="answers-grid" id="options-area">
+                </div>
+            
+            <div id="game-msg" class="status-msg"></div>
+        </div>
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        let currentRoom = null;
+
+        // 1. Tìm trận
+        function findMatch(grade) {
+            document.getElementById('status-log').textContent = `Đang tìm đối thủ lớp ${grade}...`;
+            // Tắt nút bấm để tránh spam
+            document.querySelectorAll('.grade-btn').forEach(b => b.disabled = true);
+            
+            socket.emit('findMathMatch', { grade: grade });
+        }
+
+        // 2. Khi tìm thấy trận
+ // 2. Khi tìm thấy trận và trừ điểm cược
+socket.on('matchFound', (data) => {
+    currentRoom = data.room;
+    
+    // Thông báo cho bé biết đã đặt cược thành công
+    alert("⚔️ Đã tìm thấy đối thủ! Bé đã bị trừ 100đ để đặt cược trận đấu này.");
+    
+    document.getElementById('lobby-screen').style.display = 'none';
+    document.getElementById('game-board').style.display = 'block';
+    
+    // Cập nhật điểm hiển thị ngay lập tức (điểm sau khi đã -100)
+    updateScores(data.players);
+});
+        socket.on('statusUpdate', (data) => {
+            document.getElementById('status-log').textContent = data.message;
+        });
+
+        // 3. Nhận câu hỏi mới
+        socket.on('newQuestion', (data) => {
+            document.getElementById('question-text').textContent = data.question;
+            document.getElementById('round-num').textContent = data.round;
+            document.getElementById('game-msg').textContent = "Hãy chọn đáp án đúng!";
+            
+            const optionsDiv = document.getElementById('options-area');
+            optionsDiv.innerHTML = ''; // Xóa nút cũ
+
+            data.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'ans-btn';
+                btn.textContent = opt;
+                btn.onclick = () => submitAnswer(opt, btn);
+                optionsDiv.appendChild(btn);
+            });
+        });
+
+        // 4. Gửi đáp án
+ // 4. Gửi đáp án và khóa nút
+function submitAnswer(ans, btnElement) {
+    // Tắt tất cả nút để không cho chọn lại
+    const allBtns = document.querySelectorAll('.ans-btn');
+    allBtns.forEach(b => b.disabled = true);
+    
+    // Đổi màu nút vừa chọn để bé biết mình đã chọn cái nào
+    btnElement.style.background = '#ffeaa7'; 
+    btnElement.style.borderColor = '#fdcb6e';
+    
+    // Gửi lên server
+    socket.emit('submitAnswer', { room: currentRoom, answer: ans });
+    
+    document.getElementById('game-msg').textContent = "🎯 Đã ghi nhận đáp án! Đang đợi đối thủ...";
+}
+        // 5. Kết quả vòng chơi
+        socket.on('roundResult', (data) => {
+            updateScores(data.players);
+        });
+
+        socket.on('answerResult', (data) => {
+            // Hiện đáp án đúng lên màn hình
+            const btns = document.querySelectorAll('.ans-btn');
+            btns.forEach(b => {
+                if (b.textContent == data.correctAnswer) {
+                    b.style.background = '#2ecc71'; // Màu xanh lá
+                    b.style.color = 'white';
+                }
+            });
+        });
+
+        // 6. Kết thúc game
+        socket.on('gameOver', (data) => {
+            updateScores(data.players);
+            
+            const myId = socket.id;
+            const opponentId = Object.keys(data.players).find(id => id !== myId);
+            
+            let msg = "Hòa nhau!";
+            if (data.players[myId].score > data.players[opponentId].score) msg = "🎉 BẠN THẮNG!";
+            else if (data.players[myId].score < data.players[opponentId].score) msg = "😭 BẠN THUA!";
+
+            setTimeout(() => {
+                alert(`KẾT THÚC!\n${msg}\nĐiểm của bạn: ${data.players[myId].score}`);
+                location.reload(); // Tải lại trang để về sảnh
+            }, 2000);
+        });
+
+        // 7. Đối thủ thoát
+        socket.on('opponentLeft', () => {
+            alert("Đối thủ đã thoát trận! Bạn thắng.");
+            location.reload();
+        });
+
+        function updateScores(players) {
+            const myId = socket.id;
+            const pIds = Object.keys(players);
+            const opId = pIds.find(id => id !== myId);
+
+            if (players[myId]) document.getElementById('score-me').textContent = players[myId].score;
+            if (opId && players[opId]) document.getElementById('score-op').textContent = players[opId].score;
+        }
+
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Lộ trình học tập cá nhân hóa từ lớp 1 đến lớp 12, Đại học, TOEIC và IELTS của Hành Trình Mới.">
+    <title>Lộ trình học tập | Hành Trình Mới</title>
+    <link rel="stylesheet" href="assets/platform/platform-shell.css">
+    <link rel="stylesheet" href="assets/platform/flow-pages.css">
+    <link rel="stylesheet" href="assets/css/learning/learning-catalog.css?v=39.0.0">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="flow-page" data-flow-page="learning" data-platform-page="learning">
+<main class="learning-app">
+    <header class="learning-hero">
+        <div>
+            <a href="index.html">← Học tập</a>
+            <div class="learning-kicker">HÀNH TRÌNH MỚI · LEARNING PLATFORM</div>
+            <h1>Lộ trình học tập cá nhân hóa</h1>
+            <p>Chương trình → cấp học/trình độ → lớp/biến thể → môn/kỹ năng → khóa học → Unit/Chủ đề → bài học → luyện tập → đánh giá.</p>
+        </div>
+        <div class="learning-hero-actions">
+            <a class="learning-btn secondary" href="survey.html">Khảo sát</a>
+            <a class="learning-btn secondary" href="placement.html">Placement</a>
+            <a class="learning-btn primary" href="profile.html">Hồ sơ</a>
+        </div>
+    </header>
+
+    <section class="learning-context" aria-label="Ngữ cảnh người học">
+        <div class="learning-context-card"><small>Tuổi</small><strong id="learner-age">—</strong></div>
+        <div class="learning-context-card"><small>Trạng thái học</small><strong id="learner-status">—</strong></div>
+        <div class="learning-context-card"><small>Cấp học / trình độ</small><strong id="learner-level">—</strong></div>
+        <div class="learning-context-card"><small>Lớp / chương trình</small><strong id="learner-grade">—</strong></div>
+        <div class="learning-context-card"><small>Mục tiêu</small><strong id="learner-goal">—</strong></div>
+    </section>
+
+    <section id="personalized-plan-panel" class="learning-panel personalized-plan-panel" aria-live="polite">
+        <div class="learning-course-head"><div><div class="learning-kicker">MY LEARNING PLAN</div><h2>Lộ trình được tạo từ hồ sơ và kết quả kiểm tra</h2><p>Khảo sát xác định mục tiêu; placement ước lượng kỹ năng; kết quả được ghép với khóa học và bài học có thật trong danh mục.</p></div><div id="personalized-plan-status" class="learning-source">Đang tải lộ trình…</div></div>
+        <div id="personalized-plan-content" class="personalized-plan-content"><div class="learning-loading">Đang đọc hồ sơ, kỹ năng và Learning Plan…</div></div>
+        <div class="personalized-plan-actions"><a class="learning-btn secondary" href="survey.html">Cập nhật khảo sát</a><a class="learning-btn primary" href="placement.html">Làm bài kiểm tra đầu vào</a><a class="learning-btn secondary" href="profile.html">Chỉnh sửa hồ sơ</a></div>
+    </section>
+
+    <nav class="learning-switcher" aria-label="Nhóm chương trình học">
+        <button class="learning-track is-active" type="button" data-learning-track="K12">Phổ thông 1–12</button>
+        <button class="learning-track" type="button" data-learning-track="UNIVERSITY">Đại học</button>
+        <button class="learning-track" type="button" data-learning-track="TOEIC">TOEIC</button>
+        <button class="learning-track" type="button" data-learning-track="IELTS">IELTS</button>
+    </nav>
+
+    <section class="learning-panel">
+        <div class="learning-course-head">
+            <div>
+                <div class="learning-kicker">CHƯƠNG TRÌNH ĐANG XEM</div>
+                <h2 id="track-title">Phổ thông 1–12</h2>
+                <p id="track-description">Chương trình phổ thông được phân tầng theo cấp học, lớp, môn, khóa học, Unit và bài học.</p>
+            </div>
+            <div id="learning-status" class="learning-source" role="status" aria-live="polite">Đang tải…</div>
+        </div>
+        <div class="learning-crumbs" aria-label="Đường dẫn lộ trình">
+            <span>Hành Trình Mới</span><b>›</b>
+            <strong id="crumb-level">Cấp học</strong><b>›</b>
+            <strong id="crumb-grade">Lớp / biến thể</strong><b>›</b>
+            <strong id="crumb-subject">Môn / kỹ năng</strong><b>›</b>
+            <strong id="crumb-course">Khóa học</strong>
+        </div>
+    </section>
+
+    <section class="learning-panel" data-track-panel="K12">
+        <div class="learning-filters">
+            <div class="learning-field"><label for="program-filter">Chương trình</label><select id="program-filter"><option value="VN-GDPT">Chương trình giáo dục phổ thông tham chiếu</option></select></div>
+            <div class="learning-field"><label for="level-filter">Cấp học</label><select id="level-filter"><option value="">Tất cả cấp học</option><option value="PRIMARY">Tiểu học · lớp 1–5</option><option value="SECONDARY_LOWER">THCS · lớp 6–9</option><option value="SECONDARY_UPPER">THPT · lớp 10–12</option></select></div>
+            <div class="learning-field"><label for="grade-filter">Lớp</label><select id="grade-filter"><option value="">Tất cả lớp</option></select></div>
+            <div class="learning-field"><label for="subject-filter">Môn học</label><select id="subject-filter"><option value="">Tất cả môn</option></select></div>
+            <div class="learning-field"><label for="search-filter">Tìm khóa học / bài học</label><input id="search-filter" type="search" autocomplete="off" placeholder="Ví dụ: phân số, đọc hiểu, đại số…"></div>
+        </div>
+        <div class="learning-note" style="margin-top:14px">Nội dung hiển thị trên web là nội dung của Hành Trình Mới được tổ chức theo curriculum adapter hiện có. Chỉ mục được gắn <b>official</b> khi source được xác minh; không tự nhận tên bài là văn bản chính thức của Bộ GDĐT.</div>
+    </section>
+
+    <section id="catalog-view" class="learning-panel" data-track-panel="K12">
+        <div class="learning-course-head">
+            <div><div class="learning-kicker">COURSE CATALOG</div><h2>Các khóa học theo lớp và môn</h2><p>Mỗi khóa học thuộc đúng một lớp + môn; bên trong tiếp tục phân theo Unit/Chủ đề và bài học.</p></div>
+        </div>
+        <div id="course-catalog" class="learning-loading">Đang nạp danh mục…</div>
+    </section>
+
+    <section id="course-detail-view" class="learning-panel learning-course-view" hidden data-track-panel="K12">
+        <div class="learning-course-head">
+            <div>
+                <button class="learning-btn secondary" id="back-to-catalog" type="button">← Danh mục</button>
+                <div class="learning-kicker" style="margin-top:12px">COURSE DETAIL</div>
+                <h2 id="course-detail-title">Khóa học</h2>
+                <p id="course-detail-description"></p>
+                <div id="course-detail-path" class="learning-course-path"></div>
+            </div>
+        </div>
+        <div id="course-units"></div>
+    </section>
+
+    <section id="lesson-detail-view" class="learning-panel learning-lesson-view" hidden data-track-panel="K12">
+        <div class="learning-course-head">
+            <div>
+                <button class="learning-btn secondary" id="back-to-course" type="button">← Danh sách bài</button>
+                <div class="learning-kicker" style="margin-top:12px">LESSON</div>
+                <h2 id="lesson-detail-title">Bài học</h2>
+                <div id="lesson-detail-meta" class="learning-course-path"></div>
+            </div>
+            <button class="learning-btn primary" id="next-lesson" type="button">Bài tiếp theo →</button>
+        </div>
+        <div class="learning-lesson-layout">
+            <article class="learning-content-card">
+                <h3>Nội dung bài học</h3>
+                <div id="lesson-theory"></div>
+                <div id="lesson-source" class="learning-source"></div>
+            </article>
+            <aside class="learning-side-stack">
+                <article class="learning-content-card">
+                    <h3>Các bước học</h3>
+                    <div id="lesson-steps"></div>
+                </article>
+                <article class="learning-content-card">
+                    <h3>Bài tập thực hành</h3>
+                    <div id="lesson-tasks"></div>
+                </article>
+                <article id="ai-lesson-view" class="learning-content-card learning-ai-view" hidden>
+                    <h3>Trợ giảng Gemini</h3>
+                    <label class="learning-field" for="ai-lesson-question"><span class="learning-field label">Bạn chưa hiểu chỗ nào?</span><textarea id="ai-lesson-question" rows="4" placeholder="Ví dụ: Vì sao phải quy đồng mẫu số?"></textarea></label>
+                    <button id="ai-lesson-help" class="learning-btn primary" type="button">Nhờ Gemini giải thích</button>
+                    <div id="ai-lesson-output" class="learning-ai-output" style="margin-top:10px"></div>
+                </article>
+            </aside>
+        </div>
+        <section class="learning-content-card" style="margin-top:16px">
+            <h3>Luyện tập bài học</h3>
+            <form id="lesson-practice-form">
+                <div id="lesson-questions"></div>
+                <button class="learning-btn primary" type="submit">Nộp bài</button>
+                <div id="lesson-practice-result" class="learning-result" hidden></div>
+            </form>
+        </section>
+    </section>
+
+    <section id="english-catalog" class="learning-panel learning-track-panel" data-track-panel="TOEIC" hidden></section>
+    <section id="ielts-catalog" class="learning-panel learning-track-panel" data-track-panel="IELTS" hidden></section>
+    <section id="university-catalog" class="learning-panel learning-track-panel" data-track-panel="UNIVERSITY" hidden></section>
+<section class="flow-card" id="adaptive-evidence-plan"><div class="section-heading"><div><p class="eyebrow">LỘ TRÌNH CÁ NHÂN HÓA</p><h2>Lộ trình theo kỹ năng và kết quả</h2></div><button type="button" class="button button-secondary" id="adaptive-plan-rebuild">Cập nhật lộ trình</button></div><p class="muted" id="adaptive-evidence-status">Đang chuẩn bị phân tích khảo sát, hồ sơ, bài kiểm tra và kỹ năng…</p><div id="adaptive-evidence-content" class="learning-catalog-grid"><div class="learning-loading">Đang tải lộ trình…</div></div></section></main>
+<script src="assets/js/api.js?v=39.0.0"></script>
+<script src="assets/js/learning/learning-catalog.js?v=39.0.0"></script>
+<script src="assets/platform/account-menu.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+<script src="assets/platform/learning-plan-view.js?v=39.0.0"></script>
+<script src="assets/js/learning/adaptive-evidence-plan.js?v=39.0.0"></script></body>
+</html>

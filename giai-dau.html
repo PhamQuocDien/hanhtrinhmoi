@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#1746a2">
+  <title>Trung tâm Giải đấu</title>
+  <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="tournament-v9.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+  <link rel="stylesheet" href="assets/platform/legacy-flow.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body data-legacy-flow="tournaments">
+<header class="top">
+  <a class="home" href="index.html">← Trang chủ</a>
+  <h1>🏆 Trung tâm Giải đấu</h1>
+  <div id="wallet" class="wallet" title="Không thể rút hoặc đổi tiền/Robux">🎟️ <span>–</span></div>
+  <button id="refresh" class="refresh" type="button">↻ Cập nhật</button>
+</header>
+<div id="offline" class="offline hidden">⚠ Mất kết nối mạng</div>
+<main class="page">
+  <aside class="safety"><span>🛡️</span><div><b>Giải cộng đồng dùng Điểm Đấu Trường không quy đổi.</b>Đây là phí tham gia kỹ năng, không phải tiền thật, không rút hoặc đổi Robux. Máy chủ giữ quỹ và tự hoàn điểm nếu giải bị hủy.</div></aside>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h2>Chọn giải đấu</h2>
+        <div class="filters" role="tablist" aria-label="Lọc giải đấu">
+          <button class="filter active" data-scope="active" type="button">Đang diễn ra</button>
+          <button class="filter" data-scope="mine" type="button">Của tôi</button>
+          <button class="filter" data-scope="history" type="button">Lịch sử</button>
+        </div>
+        <button id="open-create" class="create-btn" type="button">＋ Tự tạo giải đấu</button>
+        <div class="code-box"><input id="join-code" maxlength="8" placeholder="Mã giải riêng"><button id="join-code-btn" type="button">Vào</button></div>
+      </div>
+      <div id="tournament-list" class="tournament-list"><div class="empty">Đang tải danh sách…</div></div>
+    </aside>
+
+    <section class="main-card">
+      <div id="no-selection" class="empty" style="margin:18px">Chọn một giải đấu ở danh sách bên trái.</div>
+      <div id="detail" class="hidden">
+        <section class="hero">
+          <div class="hero-top">
+            <div>
+              <span id="status-badge" class="status-badge">Đang tải</span>
+              <h2 id="game-title">Giải đấu</h2>
+              <p id="organizer-text"></p>
+              <p id="status-text"></p>
+            </div>
+            <div class="hero-actions">
+              <button id="join" class="primary hidden" type="button">Đăng ký tham gia</button>
+              <button id="leave" class="secondary hidden" type="button">Rời giải</button>
+              <button id="start" class="primary hidden" type="button">Bắt đầu giải</button>
+              <button id="cancel" class="danger hidden" type="button">Hủy và hoàn điểm</button>
+            </div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><small>Người tham gia</small><b id="participants">0</b></div>
+            <div class="metric"><small>Phí tham gia</small><b id="entry-fee">0</b></div>
+            <div class="metric"><small>Quỹ thưởng</small><b id="prize-pool">0</b></div>
+            <div class="metric"><small>Thời lượng trận</small><b id="duration">–</b></div>
+            <div class="metric"><small>Giai đoạn</small><b id="phase">–</b></div>
+            <div class="metric"><small>Trận của bạn</small><b id="my-count">0</b></div>
+          </div>
+          <div id="next-match" class="next-match hidden"><div class="next-icon">🎯</div><div><small>Trận gần nhất của bạn</small><strong id="next-title">–</strong><span id="next-time"></span></div><button id="next-enter" type="button">Vào phòng</button></div>
+        </section>
+        <div class="tools"><label>🔎 Lọc người chơi <input id="player-filter" type="search" placeholder="Nhập tên..."></label><span id="live-clock">Đang đồng bộ giờ thi đấu</span></div>
+        <nav class="tabs" aria-label="Các khu vực giải đấu">
+          <button class="tab active" data-tab="mine" type="button">🎯 Lịch của tôi</button>
+          <button class="tab" data-tab="groups" type="button">📋 Vòng bảng</button>
+          <button class="tab" data-tab="knockout" type="button">🏁 Cây đấu</button>
+          <button class="tab" data-tab="history" type="button">🕘 Lịch sử</button>
+          <button class="tab" data-tab="podium" type="button">🏆 Vinh danh</button>
+        </nav>
+        <div id="mine" class="section active"></div><div id="groups" class="section"></div><div id="knockout" class="section"></div><div id="history" class="section"></div><div id="podium" class="section"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<dialog id="create-dialog">
+  <div class="dialog-head"><h2>🏗️ Tạo giải cộng đồng</h2><button class="close" type="button" data-close-create aria-label="Đóng">×</button></div>
+  <form id="create-form" class="form">
+    <div class="field full"><label for="title">Tên giải</label><input id="title" name="title" minlength="4" maxlength="80" required placeholder="Ví dụ: Cúp Caro Cuối Tuần"></div>
+    <div class="field full"><label for="description">Mô tả</label><textarea id="description" name="description" maxlength="500" placeholder="Thể lệ ngắn, đối tượng tham gia..."></textarea></div>
+    <div class="field"><label for="gameType">Môn thi</label><select id="gameType" name="gameType"><option value="caro">Cờ Caro</option><option value="chess">Cờ Vua</option><option value="othello">Othello</option><option value="go">Cờ Vây</option></select></div>
+    <div class="field"><label for="format">Thể thức</label><select id="format" name="format"><option value="auto">Tự động</option><option value="knockout">Loại trực tiếp</option><option value="group">Vòng bảng</option></select></div>
+    <div class="field"><label for="entryFee">Phí tham gia</label><input id="entryFee" name="entryFee" type="number" min="10" max="500" value="20" required><small>Điểm Đấu Trường không quy đổi.</small></div>
+    <div class="field"><label for="maxParticipants">Tối đa người chơi</label><select id="maxParticipants" name="maxParticipants"><option>4</option><option selected>8</option><option>16</option><option>32</option></select></div>
+    <div class="field"><label for="minParticipants">Tối thiểu</label><select id="minParticipants" name="minParticipants"><option>2</option><option selected>4</option><option>8</option></select></div>
+    <div class="field"><label for="registrationMinutes">Thời gian đăng ký</label><select id="registrationMinutes" name="registrationMinutes"><option value="30">30 phút</option><option value="60" selected>1 giờ</option><option value="180">3 giờ</option><option value="720">12 giờ</option><option value="1440">1 ngày</option></select></div>
+    <div class="field"><label for="matchDuration">Thời lượng trận</label><select id="matchDuration" name="matchDuration"><option value="10">10 phút</option><option value="15" selected>15 phút</option><option value="20">20 phút</option><option value="30">30 phút</option></select></div>
+    <div class="field"><label for="visibility">Quyền riêng tư</label><select id="visibility" name="visibility"><option value="public">Công khai</option><option value="private">Chỉ người có mã</option></select></div>
+    <div class="field"><label for="durationDays">Số ngày thi đấu</label><select id="durationDays" name="durationDays"><option value="1">1 ngày</option><option value="2" selected>2 ngày</option><option value="3">3 ngày</option><option value="7">7 ngày</option></select></div>
+    <div class="field full"><small>Quỹ thưởng: hạng nhất 70%, hạng nhì 20%, hạng ba 10% khi có trận tranh hạng ba. Máy chủ tự chia và chống trả thưởng trùng.</small></div>
+    <div class="dialog-actions"><button class="cancel" type="button" data-close-create>Đóng</button><button class="submit" type="submit">Tạo và tham gia</button></div>
+  </form>
+</dialog>
+
+<dialog id="confirm-dialog"><div class="confirm-box"><h2 id="confirm-title">Xác nhận</h2><p id="confirm-message"></p><div class="confirm-actions"><button id="confirm-no" class="no" type="button">Quay lại</button><button id="confirm-yes" class="yes" type="button">Xác nhận</button></div></div></dialog>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="tournament-v9.js"></script>
+<script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+  <script src="assets/js/api.js?v=39.0.0"></script>
+  <script src="assets/platform/legacy-flow.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

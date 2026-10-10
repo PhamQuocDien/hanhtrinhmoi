@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Kiến Trúc Sư Tốc Độ - 100 Cấp Độ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { background-color: #a29bfe; overflow-x: hidden; transition: 0.5s; }
+        
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 40px; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .timer-box {
+            font-size: 2rem; font-weight: bold; color: #e74c3c;
+            background: #ffeaa7; padding: 5px 20px; border-radius: 50px;
+            border: 3px solid #fab1a0; min-width: 120px;
+        }
+
+        .main-layout { display: flex; gap: 20px; padding: 20px; justify-content: center; align-items: flex-start; }
+
+        /* Cột trái: Mẫu và Công cụ */
+        .sidebar {
+            width: 260px; background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; gap: 15px;
+        }
+
+        /* Khung bản đồ mẫu nhỏ */
+        .model-container {
+            border: 4px solid #6c5ce7; border-radius: 10px; padding: 5px; background: #f0f0f0;
+        }
+        .model-grid {
+            display: grid; grid-template-columns: repeat(15, 12px); grid-template-rows: repeat(12, 12px);
+            gap: 1px; background: #ccc;
+        }
+        .model-cell { width: 12px; height: 12px; background: white; font-size: 8px; display: flex; align-items: center; justify-content: center; }
+
+        .toolbar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .tool-item {
+            width: 60px; height: 60px; border: 2px solid #dfe6e9; border-radius: 12px;
+            cursor: pointer; font-size: 2rem; display: flex; justify-content: center; align-items: center;
+            transition: 0.2s; background: #f9f9f9;
+        }
+        .tool-item.active { border-color: #6c5ce7; background: #efecff; transform: scale(1.1); box-shadow: 0 0 10px rgba(108, 92, 231, 0.5); }
+
+        /* Khu vực xây dựng chính */
+        .work-area { background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .city-grid {
+            display: grid; grid-template-columns: repeat(15, 45px); grid-template-rows: repeat(12, 45px);
+            gap: 2px; background: #bdc3c7; border: 8px solid #2d3436; border-radius: 5px;
+        }
+        .cell {
+            width: 45px; height: 45px; background: #ecf0f1; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 2rem;
+            user-select: none; transition: 0.1s;
+        }
+        .cell:hover { background: #dfe6e9; }
+        
+        .btn-action {
+            width: 100%; padding: 12px; border: none; border-radius: 10px;
+            font-weight: bold; font-family: 'Baloo 2'; cursor: pointer; color: white;
+        }
+        .btn-check { background: #2ecc71; box-shadow: 0 4px 0 #27ae60; font-size: 1.2rem; }
+        .btn-check:active { transform: translateY(2px); box-shadow: none; }
+
+        /* Chế độ ban đêm */
+        body.night-mode { background-color: #2d3436; }
+        .sidebar.night-mode { background: #636e72; color: white; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <div class="game-header">
+        <h1 style="color: #6c5ce7; margin:0;">🏗️ KIẾN TRÚC SƯ TỐC ĐỘ</h1>
+        <div class="timer-box">⏳ <span id="time-left">60</span>s</div>
+        <div>
+            <span style="font-weight:bold; margin-right:15px;">CẤP ĐỘ: <span id="lvl-num">1</span></span>
+            <button onclick="toggleTime()" class="btn-action" style="width: auto; background: #0984e3; padding: 5px 15px;">🌓</button>
+            <a href="thanh-pho-sang-tao.html" class="btn-action" style="width: auto; background: #636e72; text-decoration:none; padding: 5px 15px;">Thoát</a>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="sidebar" id="sidebar">
+            <h3 style="margin:0; text-align:center;">BẢN THIẾT KẾ MẪU</h3>
+            <div class="model-container">
+                <div id="model-grid" class="model-grid"></div>
+            </div>
+
+            <h3 style="margin-top:10px;">VẬT LIỆU</h3>
+            <div class="toolbar-grid" id="tools"></div>
+
+            <div style="margin-top: auto; display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-action btn-check" onclick="checkWin()">✅ HOÀN THÀNH</button>
+                <button class="btn-action" style="background:#e74c3c" onclick="clearGrid()">🗑️ Xóa hết</button>
+            </div>
+        </div>
+
+        <div class="work-area">
+            <div id="city-grid" class="city-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const COLS = 15; const ROWS = 12;
+        const items = {
+            'road': '⬛', 'house': '🏠', 'tree': '🌳', 'flower': '🌻',
+            'car': '🚗', 'water': '🟦', 'bridge': '🌉', 'building': '🏢', 'park': '⛲'
+        };
+
+        let currentTool = 'road';
+        let currentLevel = 1;
+        let timeLeft = 60;
+        let timerInterval;
+        let modelData = Array(COLS * ROWS).fill(null);
+        let userData = Array(COLS * ROWS).fill(null);
+
+        // --- 1. KHỞI TẠO GAME ---
+        async function initGame() {
+            try {
+                const res = await fetch('/api/user/progress');
+                if (res.ok) {
+                    const data = await res.json();
+                    currentLevel = data.buildLevel || 1;
+                }
+            } catch (e) { console.warn("Offline mode"); }
+
+            renderTools();
+            createGrids();
+            startNewLevel();
+        }
+
+        function renderTools() {
+            const container = document.getElementById('tools');
+            for (const [key, icon] of Object.entries(items)) {
+                const div = document.createElement('div');
+                div.className = `tool-item ${key === currentTool ? 'active' : ''}`;
+                div.innerHTML = icon;
+                div.onclick = () => {
+                    currentTool = key;
+                    document.querySelectorAll('.tool-item').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                container.appendChild(div);
+            }
+        }
+
+        function createGrids() {
+            const modelGrid = document.getElementById('model-grid');
+            const cityGrid = document.getElementById('city-grid');
+            
+            for (let i = 0; i < COLS * ROWS; i++) {
+                // Tạo ô cho bản đồ mẫu
+                const mCell = document.createElement('div');
+                mCell.className = 'model-cell';
+                mCell.id = `m-${i}`;
+                modelGrid.appendChild(mCell);
+
+                // Tạo ô cho bản đồ làm việc
+                const uCell = document.createElement('div');
+                uCell.className = 'cell';
+                uCell.onmousedown = () => build(i, uCell);
+                uCell.onmouseenter = (e) => { if(e.buttons === 1) build(i, uCell); };
+                cityGrid.appendChild(uCell);
+            }
+        }
+
+        // --- 2. LOGIC LEVEL & THỜI GIAN ---
+        function startNewLevel() {
+            clearInterval(timerInterval);
+            document.getElementById('lvl-num').textContent = currentLevel;
+            
+            // Tính thời gian: Cấp 1 có 60s, mỗi cấp giảm đi một chút, tối thiểu 20s
+            timeLeft = Math.max(20, 60 - Math.floor(currentLevel / 2));
+            document.getElementById('time-left').textContent = timeLeft;
+
+            // Tạo mẫu mới ngẫu nhiên dựa trên Level
+            generateModel(currentLevel);
+            clearGrid();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("⏰ Hết giờ rồi! Đừng buồn, hãy thử lại màn này nhé.");
+                    startNewLevel();
+                }
+            }, 1000);
+        }
+
+        function generateModel(level) {
+            modelData.fill(null);
+            // Số lượng vật thể tăng dần theo level (Level 1: 4 cái, Level 100: 40 cái)
+            const itemCount = 3 + Math.floor(level / 2.5);
+            const itemKeys = Object.keys(items);
+
+            for (let i = 0; i < itemCount; i++) {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * (COLS * ROWS));
+                } while (modelData[randomIndex] !== null);
+
+                const randomItem = itemKeys[Math.floor(Math.random() * itemKeys.length)];
+                modelData[randomIndex] = randomItem;
+            }
+
+            // Hiển thị lên bản đồ mẫu nhỏ
+            for (let i = 0; i < COLS * ROWS; i++) {
+                const cell = document.getElementById(`m-${i}`);
+                cell.innerHTML = modelData[i] ? items[modelData[i]] : '';
+                cell.style.background = modelData[i] ? '#fff' : '#f0f0f0';
+            }
+        }
+
+        // --- 3. LOGIC XÂY DỰNG ---
+        function build(index, cellDiv) {
+            userData[index] = currentTool;
+            cellDiv.innerHTML = items[currentTool];
+            cellDiv.animate([{ transform: 'scale(0.7)' }, { transform: 'scale(1)' }], { duration: 100 });
+        }
+
+        function clearGrid() {
+            userData.fill(null);
+            document.querySelectorAll('.cell').forEach(c => c.innerHTML = '');
+        }
+
+        async function checkWin() {
+            let isMatch = true;
+            for (let i = 0; i < COLS * ROWS; i++) {
+                if (userData[i] !== modelData[i]) {
+                    isMatch = false;
+                    break;
+                }
+            }
+
+            if (isMatch) {
+                clearInterval(timerInterval);
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+                try {
+                    const res = await fetch('/api/game/build-win', { method: 'POST' });
+                    const data = await res.json();
+                    
+                    setTimeout(() => {
+                        alert(`🎉 XUẤT SẮC! Bạn đã hoàn thành cấp độ ${currentLevel}!\nĐiểm cộng: +30`);
+                        currentLevel = data.newLevel;
+                        startNewLevel();
+                    }, 500);
+                } catch (e) {
+                    currentLevel++;
+                    startNewLevel();
+                }
+            } else {
+                alert("🚧 Công trình chưa giống mẫu rồi! Bé hãy kiểm tra kỹ từng ô nhé.");
+            }
+        }
+
+        // Chế độ sáng/tối
+        let isNight = false;
+        function toggleTime() {
+            isNight = !isNight;
+            document.body.classList.toggle('night-mode');
+            document.getElementById('sidebar').classList.toggle('night-mode');
+            document.querySelectorAll('.cell').forEach(c => {
+                c.style.background = isNight ? '#34495e' : '#ecf0f1';
+            });
+        }
+
+        initGame();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

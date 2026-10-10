@@ -1,0 +1,62 @@
+services:
+  - type: web
+    name: hanh-trinh-mo-uoc
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_SMART_MODEL
+        value: gemini-3.1-pro-preview
+      - key: GEMINI_AUDIO_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_FALLBACK_MODELS
+        value: gemini-3.1-pro-preview,gemini-3.8-flash,gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash,gemini-3.5-flash-lite,gemini-3.1-flash-lite
+      - key: GEMINI_RETRY_COUNT
+        value: '1'
+      - key: GEMINI_RETRY_BASE_MS
+        value: '6000'
+      - key: AI_MODE
+        value: SMART
+      - key: GEMINI_TIMEOUT_MS
+        value: '420000'
+      - key: GEMINI_FAILURE_COOLDOWN_MS
+        value: '300000'
+      - key: GEMINI_QUOTA_COOLDOWN_MS
+        value: '600000'
+      - key: GEMINI_MAX_FALLBACK_MODELS
+        value: '4'
+      - key: GEMINI_MIN_REQUEST_GAP_MS
+        value: '8000'
+      - key: AI_AUTOPILOT_GEMINI_MIN_INTERVAL_MS
+        value: '300000'
+      - key: GEMINI_TTS_MODEL
+        value: gemini-3.8-flash-tts
+      - key: AI_WORKER_INTERVAL_MS
+        value: '30000'
+      - key: AI_WORKER_MAX_ATTEMPTS
+        value: '3'
+      - key: AI_COURSE_MAX_AI_LESSONS
+        value: '24'
+      - key: GEMINI_JSON_REPAIR_REMOTE
+        value: 'false'
+      - key: CODE_RUNNER_ENABLED
+        value: 'false'
+      - key: CODE_EXECUTOR_URL
+        sync: false
+      - key: CODE_RUNNER_TIMEOUT_MS
+        value: '12000'

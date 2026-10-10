@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Speaking Master - 100 Levels</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            font-family: 'Baloo 2', cursive;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            margin: 0; padding: 20px; box-sizing: border-box;
+        }
+        h1 {
+            color: #fff; text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            font-size: 2.8rem; margin: 10px 0 20px; text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 30px; border-radius: 50px;
+        }
+        .container {
+            width: 100%; max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px; padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; border: 4px solid #fff;
+        }
+        .level-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 15px; max-height: 60vh; overflow-y: auto; padding: 10px;
+        }
+        .level-btn {
+            width: 100%; aspect-ratio: 1; border-radius: 20px; border: none; 
+            font-weight: 800; font-size: 1.2rem; cursor: pointer;
+            background: #dfe6e9; color: #b2bec3; 
+            box-shadow: 0 5px 0 #b2bec3; font-family: inherit;
+        }
+        .level-btn.unlocked { background: linear-gradient(to bottom, #74b9ff, #0984e3); color: white; box-shadow: 0 5px 0 #06528d; }
+        .level-btn.current { background: linear-gradient(to bottom, #ffeaa7, #fab1a0); color: #d35400; transform: scale(1.1); border: 3px solid #fff; }
+        #game-area { display: none; }
+        .sentence-card { background: #fff; border-radius: 25px; padding: 30px 20px; margin: 20px auto; box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15); }
+        .sentence-text { font-size: 2.5rem; color: #2d3436; margin: 0; font-weight: 800; }
+        .translation { font-size: 1.2rem; color: #636e72; background: #f1f2f6; display: inline-block; padding: 5px 15px; border-radius: 20px; margin-top: 10px;}
+        .mic-btn { width: 90px; height: 90px; border-radius: 50%; border: none; background: linear-gradient(135deg, #0984e3, #74b9ff); color: white; font-size: 2.5rem; cursor: pointer; margin: 20px auto; display: block; box-shadow: 0 10px 20px rgba(9, 132, 227, 0.3); transition: 0.3s; }
+        .mic-btn.recording { background: linear-gradient(135deg, #ff7675, #d63031); transform: scale(1.1); }
+        .result-box { min-height: 80px; padding: 15px; border-radius: 15px; margin-top: 10px; }
+        .score-text { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
+        .btn-action { padding: 12px 25px; border-radius: 30px; font-weight: bold; border: none; margin-top: 20px; cursor: pointer; color: white; font-family: inherit; }
+        .btn-home { background: #636e72; } .btn-back { background: #a29bfe; }
+        .speaker-btn {
+            background: #fab1a0; border: none; padding: 8px 20px; border-radius: 20px;
+            color: #2d3436; font-weight: bold; cursor: pointer; font-family: 'Baloo 2', cursive;
+            margin: 5px 0; box-shadow: 0 4px 0 #e17055; transition: 0.2s;
+        }
+        .speaker-btn:active { transform: translateY(4px); box-shadow: none; }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <h1>🇬🇧 English Master 🇬🇧</h1>
+
+    <div class="container">
+        <div id="level-selection-area">
+            <h2>🏆 Chọn Cấp Độ (Select Level)</h2>
+            <div class="level-grid" id="level-buttons"></div>
+            <a href="index.html" class="btn-action btn-home">🏠 Về Trang Chủ</a>
+        </div>
+
+        <div id="game-area">
+            <h3 id="level-title" style="color: #0984e3; margin-top: 0;">LEVEL 1</h3>
+            <div class="sentence-card">
+                <p id="text-to-read" class="sentence-text">Hello world</p> 
+                <button onclick="speakSample()" class="speaker-btn">🔊 Nghe mẫu</button>
+                <p id="text-translation" class="translation">Xin chào thế giới</p>
+            </div>
+            
+            <button id="record-btn" class="mic-btn">🎙️</button>
+            
+            <div class="result-box" id="result-container">
+                <p id="result-text" style="color: #636e72; font-style: italic;">Nhấn vào micro và đọc to nhé!</p>
+                <div id="score-display" class="score-text"></div>
+            </div>
+
+            <button id="back-to-levels-btn" class="btn-action btn-back">⬅️ Chọn bài khác</button>
+        </div>
+    </div>
+
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        let unlockedLevel = 1;
+        let currentLevel = 1;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+        }
+
+        // --- DỮ LIỆU LEVEL ---
+const levels = [
+    // --- CẤP 1-10: Từ vựng cơ bản ---
+    { id: 1, text: 'Cat', trans: 'Con mèo' },
+    { id: 2, text: 'Dog', trans: 'Con chó' },
+    { id: 3, text: 'Apple', trans: 'Quả táo' },
+    { id: 4, text: 'Hello', trans: 'Xin chào' },
+    { id: 5, text: 'Thank you', trans: 'Cảm ơn' },
+    { id: 6, text: 'Goodbye', trans: 'Tạm biệt' },
+    { id: 7, text: 'Water', trans: 'Nước' },
+    { id: 8, text: 'Happy', trans: 'Hạnh phúc' },
+    { id: 9, text: 'Family', trans: 'Gia đình' },
+    { id: 10, text: 'Friend', trans: 'Bạn bè' },
+
+    // --- CẤP 11-20: Cụm từ ngắn ---
+    { id: 11, text: 'Good morning', trans: 'Chào buổi sáng' },
+    { id: 12, text: 'Good night', trans: 'Chúc ngủ ngon' },
+    { id: 13, text: 'See you later', trans: 'Hẹn gặp lại sau' },
+    { id: 14, text: 'I am sorry', trans: 'Tôi xin lỗi' },
+    { id: 15, text: 'Excuse me', trans: 'Xin lỗi (làm phiền)' },
+    { id: 16, text: 'Come here', trans: 'Lại đây' },
+    { id: 17, text: 'Sit down', trans: 'Ngồi xuống' },
+    { id: 18, text: 'Stand up', trans: 'Đứng lên' },
+    { id: 19, text: 'Open the door', trans: 'Mở cửa ra' },
+    { id: 20, text: 'Close the book', trans: 'Đóng sách lại' },
+
+    // --- CẤP 21-30: Câu đơn giản (Hiện tại đơn) ---
+    { id: 21, text: 'I like ice cream', trans: 'Tôi thích kem' },
+    { id: 22, text: 'She runs fast', trans: 'Cô ấy chạy nhanh' },
+    { id: 23, text: 'He is my brother', trans: 'Anh ấy là anh trai tôi' },
+    { id: 24, text: 'This is my house', trans: 'Đây là nhà của tôi' },
+    { id: 25, text: 'The sky is blue', trans: 'Bầu trời màu xanh' },
+    { id: 26, text: 'I have a car', trans: 'Tôi có một chiếc xe hơi' },
+    { id: 27, text: 'We are students', trans: 'Chúng tôi là học sinh' },
+    { id: 28, text: 'It is raining', trans: 'Trời đang mưa' },
+    { id: 29, text: 'I love my mom', trans: 'Tôi yêu mẹ tôi' },
+    { id: 30, text: 'Do you speak English', trans: 'Bạn có nói tiếng Anh không?' },
+
+    // --- CẤP 31-40: Câu hỏi & Nhu cầu hàng ngày ---
+    { id: 31, text: 'What is your name', trans: 'Tên bạn là gì?' },
+    { id: 32, text: 'How are you', trans: 'Bạn khỏe không?' },
+    { id: 33, text: 'Where are you from', trans: 'Bạn đến từ đâu?' },
+    { id: 34, text: 'I am hungry', trans: 'Tôi đói bụng' },
+    { id: 35, text: 'Can you help me', trans: 'Bạn giúp tôi được không?' },
+    { id: 36, text: 'How much is this', trans: 'Cái này bao nhiêu tiền?' },
+    { id: 37, text: 'I need some water', trans: 'Tôi cần một ít nước' },
+    { id: 38, text: 'Where is the bathroom', trans: 'Nhà vệ sinh ở đâu?' },
+    { id: 39, text: 'What time is it', trans: 'Bây giờ là mấy giờ?' },
+    { id: 40, text: 'Nice to meet you', trans: 'Rất vui được gặp bạn' },
+
+    // --- CẤP 41-50: Thì quá khứ & Tương lai ---
+    { id: 41, text: 'I went to the park yesterday', trans: 'Hôm qua tôi đã đi công viên' },
+    { id: 42, text: 'She cooked dinner', trans: 'Cô ấy đã nấu bữa tối' },
+    { id: 43, text: 'We watched a movie', trans: 'Chúng tôi đã xem một bộ phim' },
+    { id: 44, text: 'I will call you tomorrow', trans: 'Tôi sẽ gọi bạn vào ngày mai' },
+    { id: 45, text: 'He will buy a new phone', trans: 'Anh ấy sẽ mua điện thoại mới' },
+    { id: 46, text: 'Did you sleep well', trans: 'Bạn ngủ có ngon không?' },
+    { id: 47, text: 'I was very tired', trans: 'Tôi đã rất mệt' },
+    { id: 48, text: 'They were playing football', trans: 'Họ đang chơi bóng đá (lúc đó)' },
+    { id: 49, text: 'I have never been there', trans: 'Tôi chưa từng đến đó' },
+    { id: 50, text: 'Have you seen this movie', trans: 'Bạn đã xem phim này chưa?' },
+
+    // --- CẤP 51-60: Câu ghép & Mệnh đề ---
+    { id: 51, text: 'I stayed home because it was raining', trans: 'Tôi ở nhà vì trời mưa' },
+    { id: 52, text: 'Although he is tired he keeps working', trans: 'Dù mệt anh ấy vẫn làm việc' },
+    { id: 53, text: 'If you study hard you will pass', trans: 'Nếu học chăm bạn sẽ đậu' },
+    { id: 54, text: 'I think that this idea is great', trans: 'Tôi nghĩ ý tưởng này rất tuyệt' },
+    { id: 55, text: 'The man who called you is my dad', trans: 'Người đàn ông gọi bạn là bố tôi' },
+    { id: 56, text: 'She speaks English very well', trans: 'Cô ấy nói tiếng Anh rất tốt' },
+    { id: 57, text: 'I prefer tea over coffee', trans: 'Tôi thích trà hơn cà phê' },
+    { id: 58, text: 'Would you like something to drink', trans: 'Bạn muốn uống gì không?' },
+    { id: 59, text: 'Let me know when you are ready', trans: 'Cho tôi biết khi nào bạn sẵn sàng' },
+    { id: 60, text: 'It is important to be healthy', trans: 'Sức khỏe là điều quan trọng' },
+
+    // --- CẤP 61-70: Chủ đề công việc & Cuộc sống ---
+    { id: 61, text: 'Can I have the menu please', trans: 'Cho tôi xem thực đơn được không?' },
+    { id: 62, text: 'I am looking for a job', trans: 'Tôi đang tìm việc làm' },
+    { id: 63, text: 'My hobby is reading books', trans: 'Sở thích của tôi là đọc sách' },
+    { id: 64, text: 'Technology changes the world', trans: 'Công nghệ thay đổi thế giới' },
+    { id: 65, text: 'We should protect the environment', trans: 'Chúng ta nên bảo vệ môi trường' },
+    { id: 66, text: 'Traffic is very heavy today', trans: 'Giao thông hôm nay rất đông đúc' },
+    { id: 67, text: 'This exercise is quite difficult', trans: 'Bài tập này khá khó' },
+    { id: 68, text: 'I totally agree with you', trans: 'Tôi hoàn toàn đồng ý với bạn' },
+    { id: 69, text: 'Could you please repeat that', trans: 'Bạn nhắc lại được không?' },
+    { id: 70, text: 'I am interested in music', trans: 'Tôi hứng thú với âm nhạc' },
+
+    // --- CẤP 71-80: Cấu trúc nâng cao ---
+    { id: 71, text: 'I would have called if I had known', trans: 'Tôi đã gọi nếu tôi biết' },
+    { id: 72, text: 'Neither John nor Mary went there', trans: 'Cả John và Mary đều không đến đó' },
+    { id: 73, text: 'Despite the rain we went out', trans: 'Mặc dù mưa chúng tôi vẫn đi chơi' },
+    { id: 74, text: 'He is used to waking up early', trans: 'Anh ấy quen với việc dậy sớm' },
+    { id: 75, text: 'I look forward to hearing from you', trans: 'Tôi mong nhận được tin từ bạn' },
+    { id: 76, text: 'It is likely that it will snow', trans: 'Có khả năng trời sẽ có tuyết' },
+    { id: 77, text: 'She suggested going to the cinema', trans: 'Cô ấy gợi ý đi xem phim' },
+    { id: 78, text: 'You should have told me earlier', trans: 'Lẽ ra bạn nên nói với tôi sớm hơn' },
+    { id: 79, text: 'The more you practice the better you get', trans: 'Càng luyện tập bạn càng giỏi' },
+    { id: 80, text: 'Do not give up on your dreams', trans: 'Đừng từ bỏ ước mơ của bạn' },
+
+    // --- CẤP 81-90: Thành ngữ & Triết lý ---
+    { id: 81, text: 'Better late than never', trans: 'Muộn còn hơn không' },
+    { id: 82, text: 'Actions speak louder than words', trans: 'Hành động quan trọng hơn lời nói' },
+    { id: 83, text: 'Practice makes perfect', trans: 'Có công mài sắt có ngày nên kim' },
+    { id: 84, text: 'Time waits for no one', trans: 'Thời gian không chờ đợi ai' },
+    { id: 85, text: 'Knowledge is power', trans: 'Kiến thức là sức mạnh' },
+    { id: 86, text: 'Honesty is the best policy', trans: 'Trung thực là thượng sách' },
+    { id: 87, text: 'Where there is a will there is a way', trans: 'Nơi nào có ý chí nơi đó có con đường' },
+    { id: 88, text: 'No pain no gain', trans: 'Không vấp ngã không thành công' },
+    { id: 89, text: 'A friend in need is a friend indeed', trans: 'Hoạn nạn mới biết bạn hiền' },
+    { id: 90, text: 'Experience is the best teacher', trans: 'Kinh nghiệm là người thầy tốt nhất' },
+
+    // --- CẤP 91-100: Thử thách Thành Thạo (Mastery) ---
+    { id: 91, text: 'Success comes to those who work hard', trans: 'Thành công đến với người chăm chỉ' },
+    { id: 92, text: 'Education is the most powerful weapon', trans: 'Giáo dục là vũ khí mạnh nhất' },
+    { id: 93, text: 'Artificial intelligence is developing rapidly', trans: 'Trí tuệ nhân tạo đang phát triển nhanh chóng' },
+    { id: 94, text: 'Climate change is a global challenge', trans: 'Biến đổi khí hậu là thách thức toàn cầu' },
+    { id: 95, text: 'Communication is key to relationships', trans: 'Giao tiếp là chìa khóa của các mối quan hệ' },
+    { id: 96, text: 'Creativity is intelligence having fun', trans: 'Sáng tạo là sự thông minh đang vui đùa' },
+    { id: 97, text: 'Financial independence requires discipline', trans: 'Tự do tài chính cần sự kỷ luật' },
+    { id: 98, text: 'Punctuality is the soul of business', trans: 'Đúng giờ là linh hồn của kinh doanh' },
+    { id: 99, text: 'A journey of a thousand miles begins with a single step', trans: 'Hành trình vạn dặm bắt đầu từ một bước chân' },
+    { id: 100, text: 'I have mastered English speaking', trans: 'Tôi đã làm chủ kỹ năng nói tiếng Anh' },
+    // --- CẤP 101-110: Môi trường & Phát triển (Environment) ---
+    { id: 101, text: 'Sustainable development is crucial', trans: 'Phát triển bền vững là cốt yếu' },
+    { id: 102, text: 'Renewable energy sources', trans: 'Các nguồn năng lượng tái tạo' },
+    { id: 103, text: 'We must reduce carbon footprint', trans: 'Chúng ta phải giảm dấu chân carbon' },
+    { id: 104, text: 'Biodiversity conservation', trans: 'Bảo tồn đa dạng sinh học' },
+    { id: 105, text: 'Global warming is a serious threat', trans: 'Sự nóng lên toàn cầu là mối đe dọa nghiêm trọng' },
+    { id: 106, text: 'Recycling helps save resources', trans: 'Tái chế giúp tiết kiệm tài nguyên' },
+    { id: 107, text: 'Protecting wildlife habitats', trans: 'Bảo vệ môi trường sống hoang dã' },
+    { id: 108, text: 'Pollution affects our health', trans: 'Ô nhiễm ảnh hưởng đến sức khỏe chúng ta' },
+    { id: 109, text: 'Eco friendly products', trans: 'Các sản phẩm thân thiện môi trường' },
+    { id: 110, text: 'Plant trees for a better future', trans: 'Trồng cây vì một tương lai tốt đẹp hơn' },
+
+    // --- CẤP 111-120: Kinh doanh & Khởi nghiệp (Business) ---
+    { id: 111, text: 'Entrepreneurial spirit', trans: 'Tinh thần khởi nghiệp' },
+    { id: 112, text: 'Supply chain management', trans: 'Quản lý chuỗi cung ứng' },
+    { id: 113, text: 'Negotiation skills are important', trans: 'Kỹ năng đàm phán rất quan trọng' },
+    { id: 114, text: 'Target audience analysis', trans: 'Phân tích khách hàng mục tiêu' },
+    { id: 115, text: 'Financial independence', trans: 'Tự do tài chính' },
+    { id: 116, text: 'Marketing strategy', trans: 'Chiến lược tiếp thị' },
+    { id: 117, text: 'Return on investment', trans: 'Tỷ suất hoàn vốn (Lợi nhuận)' },
+    { id: 118, text: 'Leadership and teamwork', trans: 'Lãnh đạo và làm việc nhóm' },
+    { id: 119, text: 'Customer satisfaction', trans: 'Sự hài lòng của khách hàng' },
+    { id: 120, text: 'Innovation drives success', trans: 'Đổi mới thúc đẩy thành công' },
+
+    // --- CẤP 121-130: Công nghệ & Tương lai (Technology) ---
+    { id: 121, text: 'Artificial intelligence revolution', trans: 'Cuộc cách mạng trí tuệ nhân tạo' },
+    { id: 122, text: 'Virtual reality experience', trans: 'Trải nghiệm thực tế ảo' },
+    { id: 123, text: 'Cybersecurity measures', trans: 'Các biện pháp an ninh mạng' },
+    { id: 124, text: 'Data privacy protection', trans: 'Bảo vệ quyền riêng tư dữ liệu' },
+    { id: 125, text: 'Automation in industry', trans: 'Tự động hóa trong công nghiệp' },
+    { id: 126, text: 'Blockchain technology', trans: 'Công nghệ chuỗi khối' },
+    { id: 127, text: 'Smart home devices', trans: 'Thiết bị nhà thông minh' },
+    { id: 128, text: 'Digital transformation', trans: 'Chuyển đổi số' },
+    { id: 129, text: 'Space exploration', trans: 'Thám hiểm vũ trụ' },
+    { id: 130, text: 'The internet of things', trans: 'Internet vạn vật (IoT)' },
+
+    // --- CẤP 131-140: Giáo dục & Tư duy (Education) ---
+    { id: 131, text: 'Lifelong learning journey', trans: 'Hành trình học tập suốt đời' },
+    { id: 132, text: 'Critical thinking skills', trans: 'Kỹ năng tư duy phản biện' },
+    { id: 133, text: 'Emotional intelligence', trans: 'Trí tuệ cảm xúc' },
+    { id: 134, text: 'Academic achievement', trans: 'Thành tích học tập' },
+    { id: 135, text: 'Broaden your horizons', trans: 'Mở rộng tầm nhìn của bạn' },
+    { id: 136, text: 'Knowledge is limitless', trans: 'Kiến thức là vô tận' },
+    { id: 137, text: 'Self discipline is key', trans: 'Kỷ luật bản thân là chìa khóa' },
+    { id: 138, text: 'Adaptability to change', trans: 'Khả năng thích nghi với thay đổi' },
+    { id: 139, text: 'Problem solving abilities', trans: 'Khả năng giải quyết vấn đề' },
+    { id: 140, text: 'Study with passion', trans: 'Học tập với niềm đam mê' },
+
+    // --- CẤP 141-150: Cấu trúc ngữ pháp phức tạp (Complex Grammar) ---
+    { id: 141, text: 'Never have I seen such beauty', trans: 'Chưa bao giờ tôi thấy vẻ đẹp như vậy' },
+    { id: 142, text: 'Had I known I would have helped', trans: 'Nếu tôi biết thì tôi đã giúp rồi' },
+    { id: 143, text: 'Not only is he smart but also kind', trans: 'Anh ấy không chỉ thông minh mà còn tốt bụng' },
+    { id: 144, text: 'Should you need help call me', trans: 'Nếu bạn cần giúp đỡ hãy gọi tôi' },
+    { id: 145, text: 'No sooner had I arrived than it rained', trans: 'Tôi vừa mới đến thì trời mưa' },
+    { id: 146, text: 'It is high time we started', trans: 'Đã đến lúc chúng ta bắt đầu' },
+    { id: 147, text: 'Were I you I would accept it', trans: 'Nếu tôi là bạn tôi sẽ chấp nhận nó' },
+    { id: 148, text: 'Under no circumstances should you panic', trans: 'Dù trong hoàn cảnh nào cũng không được hoảng loạn' },
+    { id: 149, text: 'Only by working hard can we succeed', trans: 'Chỉ có làm việc chăm chỉ chúng ta mới thành công' },
+    { id: 150, text: 'Little did he know the truth', trans: 'Anh ấy hầu như không biết sự thật' },
+
+    // --- CẤP 151-160: Thành ngữ nâng cao (Idioms) ---
+    { id: 151, text: 'Don not judge a book by its cover', trans: 'Đừng trông mặt mà bắt hình dong' },
+    { id: 152, text: 'Every cloud has a silver lining', trans: 'Trong cái rủi có cái may' },
+    { id: 153, text: 'Kill two birds with one stone', trans: 'Một mũi tên trúng hai đích' },
+    { id: 154, text: 'Break a leg', trans: 'Chúc may mắn (trước khi diễn)' },
+    { id: 155, text: 'Hit the nail on the head', trans: 'Nói trúng phóc' },
+    { id: 156, text: 'Piece of cake', trans: 'Dễ như ăn kẹo' },
+    { id: 157, text: 'Costs an arm and a leg', trans: 'Đắt cắt cổ' },
+    { id: 158, text: 'Let the cat out of the bag', trans: 'Để lộ bí mật' },
+    { id: 159, text: 'Once in a blue moon', trans: 'Hiếm khi xảy ra' },
+    { id: 160, text: 'When pigs fly', trans: 'Chuyện viển vông (không bao giờ xảy ra)' },
+
+    // --- CẤP 161-170: Sức khỏe & Y học (Health) ---
+    { id: 161, text: 'Mental health awareness', trans: 'Nhận thức về sức khỏe tâm thần' },
+    { id: 162, text: 'Balanced diet is essential', trans: 'Chế độ ăn cân bằng là thiết yếu' },
+    { id: 163, text: 'Regular exercise boosts immunity', trans: 'Tập thể dục thường xuyên tăng miễn dịch' },
+    { id: 164, text: 'Prevention is better than cure', trans: 'Phòng bệnh hơn chữa bệnh' },
+    { id: 165, text: 'Cardiovascular health', trans: 'Sức khỏe tim mạch' },
+    { id: 166, text: 'Stay hydrated every day', trans: 'Luôn giữ cơ thể đủ nước mỗi ngày' },
+    { id: 167, text: 'Medical advancements', trans: 'Những tiến bộ y học' },
+    { id: 168, text: 'Stress management techniques', trans: 'Các kỹ thuật quản lý căng thẳng' },
+    { id: 169, text: 'Get enough sleep', trans: 'Ngủ đủ giấc' },
+    { id: 170, text: 'Physical and mental well being', trans: 'Sự khỏe mạnh về thể chất và tinh thần' },
+
+    // --- CẤP 171-180: Xã hội & Văn hóa (Society) ---
+    { id: 171, text: 'Cultural diversity', trans: 'Sự đa dạng văn hóa' },
+    { id: 172, text: 'Gender equality', trans: 'Bình đẳng giới' },
+    { id: 173, text: 'Freedom of speech', trans: 'Tự do ngôn luận' },
+    { id: 174, text: 'Community service', trans: 'Dịch vụ cộng đồng' },
+    { id: 175, text: 'Social responsibility', trans: 'Trách nhiệm xã hội' },
+    { id: 176, text: 'Preserve traditions', trans: 'Gìn giữ các truyền thống' },
+    { id: 177, text: 'Respect differences', trans: 'Tôn trọng sự khác biệt' },
+    { id: 178, text: 'Global citizenship', trans: 'Công dân toàn cầu' },
+    { id: 179, text: 'Human rights protection', trans: 'Bảo vệ quyền con người' },
+    { id: 180, text: 'Unity is strength', trans: 'Đoàn kết là sức mạnh' },
+
+    // --- CẤP 181-190: Nghệ thuật & Cảm hứng (Art & Inspiration) ---
+    { id: 181, text: 'Art feeds the soul', trans: 'Nghệ thuật nuôi dưỡng tâm hồn' },
+    { id: 182, text: 'Masterpiece of architecture', trans: 'Kiệt tác kiến trúc' },
+    { id: 183, text: 'Music transcends borders', trans: 'Âm nhạc vượt qua mọi biên giới' },
+    { id: 184, text: 'Literature reflects life', trans: 'Văn học phản ánh cuộc sống' },
+    { id: 185, text: 'Creative expression', trans: 'Sự biểu đạt sáng tạo' },
+    { id: 186, text: 'The beauty of nature', trans: 'Vẻ đẹp của thiên nhiên' },
+    { id: 187, text: 'Inspiration comes from anywhere', trans: 'Cảm hứng đến từ bất cứ đâu' },
+    { id: 188, text: 'Imagination has no limits', trans: 'Trí tưởng tượng không có giới hạn' },
+    { id: 189, text: 'Capture the moment', trans: 'Nắm bắt khoảnh khắc' },
+    { id: 190, text: 'A picture paints a thousand words', trans: 'Một bức tranh đáng giá ngàn lời nói' },
+
+    // --- CẤP 191-200: Đỉnh cao & Triết lý (Mastery) ---
+    { id: 191, text: 'The pursuit of happiness', trans: 'Mưu cầu hạnh phúc' },
+    { id: 192, text: 'Time is the most valuable asset', trans: 'Thời gian là tài sản quý giá nhất' },
+    { id: 193, text: 'Change begins with you', trans: 'Sự thay đổi bắt đầu từ chính bạn' },
+    { id: 194, text: 'Gratitude turns what we have into enough', trans: 'Lòng biết ơn biến những gì ta có thành đủ đầy' },
+    { id: 195, text: 'Wisdom comes with experience', trans: 'Trí tuệ đến cùng với kinh nghiệm' },
+    { id: 196, text: 'Live life to the fullest', trans: 'Sống trọn vẹn từng khoảnh khắc' },
+    { id: 197, text: 'Leave a legacy behind', trans: 'Để lại di sản cho đời sau' },
+    { id: 198, text: 'Stay humble and kind', trans: 'Luôn khiêm tốn và tử tế' },
+    { id: 199, text: 'I am a fluent English speaker', trans: 'Tôi là người nói tiếng Anh trôi chảy' },
+    { id: 200, text: 'Legendary English Speaker', trans: 'Huyền thoại nói tiếng Anh' },
+    // --- CẤP 201-250: Thành ngữ & Cụm động từ nâng cao (Phrasal Verbs) ---
+    { id: 201, text: 'Run out of time', trans: 'Hết thời gian' },
+    { id: 202, text: 'Keep up with the latest news', trans: 'Cập nhật tin tức mới nhất' },
+    { id: 203, text: 'Look forward to seeing you', trans: 'Mong chờ được gặp bạn' },
+    { id: 204, text: 'Come up with an idea', trans: 'Nảy ra một ý tưởng' },
+    { id: 205, text: 'Get along well with others', trans: 'Hòa thuận với người khác' },
+    { id: 206, text: 'Cut down on sugar', trans: 'Cắt giảm lượng đường' },
+    { id: 207, text: 'Put off the meeting', trans: 'Hoãn cuộc họp' },
+    { id: 208, text: 'Turn down the offer', trans: 'Từ chối lời đề nghị' },
+    { id: 209, text: 'Call off the event', trans: 'Hủy sự kiện' },
+    { id: 210, text: 'Give up smoking', trans: 'Từ bỏ thuốc lá' },
+    { id: 211, text: 'Look up to someone', trans: 'Ngưỡng mộ ai đó' },
+    { id: 212, text: 'Run into a friend', trans: 'Tình cờ gặp một người bạn' },
+    { id: 213, text: 'Put up with stress', trans: 'Chịu đựng căng thẳng' },
+    { id: 214, text: 'Carry on working', trans: 'Tiếp tục làm việc' },
+    { id: 215, text: 'Check in at the hotel', trans: 'Làm thủ tục nhận phòng' },
+    { id: 216, text: 'Figure out the solution', trans: 'Tìm ra giải pháp' },
+    { id: 217, text: 'Hand in the assignment', trans: 'Nộp bài tập' },
+    { id: 218, text: 'Make up a story', trans: 'Bịa ra một câu chuyện' },
+    { id: 219, text: 'Pick up a language', trans: 'Học lỏm một ngôn ngữ' },
+    { id: 220, text: 'Set up a business', trans: 'Thành lập doanh nghiệp' },
+    { id: 221, text: 'Take off your shoes', trans: 'Cởi giày ra' },
+    { id: 222, text: 'Work out at the gym', trans: 'Tập thể dục tại phòng gym' },
+    { id: 223, text: 'Calm down please', trans: 'Hãy bình tĩnh lại' },
+    { id: 224, text: 'Catch up with old friends', trans: 'Hàn thuyên với bạn cũ' },
+    { id: 225, text: 'Drop by my house', trans: 'Ghé qua nhà tôi' },
+    { id: 226, text: 'End up in trouble', trans: 'Kết cục gặp rắc rối' },
+    { id: 227, text: 'Fall apart under pressure', trans: 'Suy sụp dưới áp lực' },
+    { id: 228, text: 'Get over the illness', trans: 'Khỏi bệnh' },
+    { id: 229, text: 'Hang out with friends', trans: 'Đi chơi với bạn bè' },
+    { id: 230, text: 'Hold on a second', trans: 'Chờ một chút' },
+    { id: 231, text: 'Let someone down', trans: 'Làm ai đó thất vọng' },
+    { id: 232, text: 'Look after the baby', trans: 'Chăm sóc em bé' },
+    { id: 233, text: 'Pass away peacefully', trans: 'Qua đời một cách thanh thản' },
+    { id: 234, text: 'Pay back the money', trans: 'Trả lại tiền' },
+    { id: 235, text: 'Point out the mistake', trans: 'Chỉ ra lỗi sai' },
+    { id: 236, text: 'Rely on family', trans: 'Dựa dẫm vào gia đình' },
+    { id: 237, text: 'Show off your skills', trans: 'Khoe kỹ năng của bạn' },
+    { id: 238, text: 'Stand for justice', trans: 'Đại diện cho công lý' },
+    { id: 239, text: 'Take after your father', trans: 'Giống bố của bạn' },
+    { id: 240, text: 'Throw away the trash', trans: 'Vứt rác đi' },
+    { id: 241, text: 'Try on this shirt', trans: 'Thử chiếc áo này' },
+    { id: 242, text: 'Turn into a butterfly', trans: 'Biến thành bướm' },
+    { id: 243, text: 'Wake up early', trans: 'Thức dậy sớm' },
+    { id: 244, text: 'Watch out for cars', trans: 'Cẩn thận xe cộ' },
+    { id: 245, text: 'Write down the notes', trans: 'Ghi chú lại' },
+    { id: 246, text: 'Break up with someone', trans: 'Chia tay ai đó' },
+    { id: 247, text: 'Bring up a topic', trans: 'Đề cập đến một chủ đề' },
+    { id: 248, text: 'Count on me', trans: 'Tin tưởng vào tôi' },
+    { id: 249, text: 'Make up for mistakes', trans: 'Bù đắp cho lỗi lầm' },
+    { id: 250, text: 'Break down barriers', trans: 'Phá bỏ rào cản' },
+
+    // --- CẤP 251-300: Tiếng Anh Thương Mại & Giao Tiếp (Business) ---
+    { id: 251, text: 'Let us get down to business', trans: 'Hãy bắt đầu vào việc nào' },
+    { id: 252, text: 'Think outside the box', trans: 'Tư duy đột phá (ngoài khuôn khổ)' },
+    { id: 253, text: 'We need to meet the deadline', trans: 'Chúng ta cần kịp thời hạn' },
+    { id: 254, text: 'Keep me in the loop', trans: 'Hãy cập nhật tình hình cho tôi' },
+    { id: 255, text: 'It is a win win situation', trans: 'Đó là tình huống đôi bên cùng có lợi' },
+    { id: 256, text: 'Back to the drawing board', trans: 'Làm lại từ đầu' },
+    { id: 257, text: 'Call it a day', trans: 'Kết thúc công việc hôm nay thôi' },
+    { id: 258, text: 'Get the ball rolling', trans: 'Bắt đầu tiến hành thôi' },
+    { id: 259, text: 'Stay on top of things', trans: 'Nắm bắt tình hình' },
+    { id: 260, text: 'The bottom line is profit', trans: 'Điểm mấu chốt là lợi nhuận' },
+    { id: 261, text: 'Competitive market analysis', trans: 'Phân tích thị trường cạnh tranh' },
+    { id: 262, text: 'Brand awareness campaign', trans: 'Chiến dịch nhận diện thương hiệu' },
+    { id: 263, text: 'Customer relationship management', trans: 'Quản trị quan hệ khách hàng' },
+    { id: 264, text: 'Human resources department', trans: 'Phòng nhân sự' },
+    { id: 265, text: 'Research and development', trans: 'Nghiên cứu và phát triển' },
+    { id: 266, text: 'Quality assurance process', trans: 'Quy trình đảm bảo chất lượng' },
+    { id: 267, text: 'Maximize operational efficiency', trans: 'Tối đa hóa hiệu quả vận hành' },
+    { id: 268, text: 'Strategic partnership agreement', trans: 'Thỏa thuận đối tác chiến lược' },
+    { id: 269, text: 'Quarterly financial report', trans: 'Báo cáo tài chính hàng quý' },
+    { id: 270, text: 'Supply and demand curve', trans: 'Biểu đồ cung và cầu' },
+    { id: 271, text: 'Investment portfolio diversification', trans: 'Đa dạng hóa danh mục đầu tư' },
+    { id: 272, text: 'Corporate social responsibility', trans: 'Trách nhiệm xã hội doanh nghiệp' },
+    { id: 273, text: 'Intellectual property rights', trans: 'Quyền sở hữu trí tuệ' },
+    { id: 274, text: 'Negotiate a contract', trans: 'Đàm phán hợp đồng' },
+    { id: 275, text: 'Close the deal', trans: 'Chốt đơn hàng' },
+    { id: 276, text: 'Launch a new product', trans: 'Ra mắt sản phẩm mới' },
+    { id: 277, text: 'Expand into new markets', trans: 'Mở rộng sang thị trường mới' },
+    { id: 278, text: 'Reduce overhead costs', trans: 'Giảm chi phí vận hành' },
+    { id: 279, text: 'Increase market share', trans: 'Tăng thị phần' },
+    { id: 280, text: 'Conduct a survey', trans: 'Thực hiện khảo sát' },
+    { id: 281, text: 'Analyze consumer behavior', trans: 'Phân tích hành vi người tiêu dùng' },
+    { id: 282, text: 'Implement a policy', trans: 'Thi hành một chính sách' },
+    { id: 283, text: 'Delegate tasks to others', trans: 'Giao nhiệm vụ cho người khác' },
+    { id: 284, text: 'Provide constructive feedback', trans: 'Đưa ra phản hồi mang tính xây dựng' },
+    { id: 285, text: 'Reach a consensus', trans: 'Đạt được sự đồng thuận' },
+    { id: 286, text: 'Set clear objectives', trans: 'Đặt ra mục tiêu rõ ràng' },
+    { id: 287, text: 'Monitor progress regularly', trans: 'Theo dõi tiến độ thường xuyên' },
+    { id: 288, text: 'Evaluate employee performance', trans: 'Đánh giá hiệu suất nhân viên' },
+    { id: 289, text: 'Organize a conference', trans: 'Tổ chức hội thảo' },
+    { id: 290, text: 'Network with professionals', trans: 'Kết nối với các chuyên gia' },
+    { id: 291, text: 'Identify potential risks', trans: 'Xác định rủi ro tiềm ẩn' },
+    { id: 292, text: 'Solve complex problems', trans: 'Giải quyết vấn đề phức tạp' },
+    { id: 293, text: 'Adopt new technologies', trans: 'Áp dụng công nghệ mới' },
+    { id: 294, text: 'Streamline the workflow', trans: 'Hợp lý hóa quy trình làm việc' },
+    { id: 295, text: 'Enhance brand reputation', trans: 'Nâng cao danh tiếng thương hiệu' },
+    { id: 296, text: 'Foster innovation culture', trans: 'Thúc đẩy văn hóa đổi mới' },
+    { id: 297, text: 'Comply with regulations', trans: 'Tuân thủ các quy định' },
+    { id: 298, text: 'Ensure data security', trans: 'Đảm bảo an ninh dữ liệu' },
+    { id: 299, text: 'Global economic trends', trans: 'Xu hướng kinh tế toàn cầu' },
+    { id: 300, text: 'Business expansion strategy', trans: 'Chiến lược mở rộng kinh doanh' },
+
+    // --- CẤP 301-350: Khoa học & Vũ trụ (Science) ---
+    { id: 301, text: 'The theory of relativity', trans: 'Thuyết tương đối' },
+    { id: 302, text: 'Quantum mechanics is complex', trans: 'Cơ học lượng tử rất phức tạp' },
+    { id: 303, text: 'Gravity keeps us grounded', trans: 'Trọng lực giữ chúng ta trên mặt đất' },
+    { id: 304, text: 'Photosynthesis in plants', trans: 'Sự quang hợp ở thực vật' },
+    { id: 305, text: 'The solar system planets', trans: 'Các hành tinh trong hệ mặt trời' },
+    { id: 306, text: 'Evolution of species', trans: 'Sự tiến hóa của các loài' },
+    { id: 307, text: 'Chemical reaction process', trans: 'Quá trình phản ứng hóa học' },
+    { id: 308, text: 'Genetically modified organisms', trans: 'Sinh vật biến đổi gen' },
+    { id: 309, text: 'Artificial intelligence ethics', trans: 'Đạo đức trong trí tuệ nhân tạo' },
+    { id: 310, text: 'Black holes in space', trans: 'Hố đen trong vũ trụ' },
+    { id: 311, text: 'The Milky Way galaxy', trans: 'Dải ngân hà' },
+    { id: 312, text: 'Satellite communication system', trans: 'Hệ thống liên lạc vệ tinh' },
+    { id: 313, text: 'Renewable energy technology', trans: 'Công nghệ năng lượng tái tạo' },
+    { id: 314, text: 'Nuclear fusion power', trans: 'Năng lượng nhiệt hạch' },
+    { id: 315, text: 'Nanotechnology applications', trans: 'Các ứng dụng công nghệ nano' },
+    { id: 316, text: 'Autonomous robotic vehicles', trans: 'Xe tự hành robot' },
+    { id: 317, text: 'Virtual reality simulation', trans: 'Mô phỏng thực tế ảo' },
+    { id: 318, text: 'Big data analytics', trans: 'Phân tích dữ liệu lớn' },
+    { id: 319, text: 'Cloud computing services', trans: 'Dịch vụ điện toán đám mây' },
+    { id: 320, text: 'The laws of thermodynamics', trans: 'Các định luật nhiệt động lực học' },
+    { id: 321, text: 'Electromagnetic spectrum', trans: 'Phổ điện từ' },
+    { id: 322, text: 'Velocity and acceleration', trans: 'Vận tốc và gia tốc' },
+    { id: 323, text: 'Microscopic organisms', trans: 'Các sinh vật hiển vi' },
+    { id: 324, text: 'The periodic table', trans: 'Bảng tuần hoàn hóa học' },
+    { id: 325, text: 'Atmospheric pressure', trans: 'Áp suất khí quyển' },
+    { id: 326, text: 'Volcanic eruption', trans: 'Sự phun trào núi lửa' },
+    { id: 327, text: 'Tectonic plate movement', trans: 'Sự dịch chuyển mảng kiến tạo' },
+    { id: 328, text: 'Space exploration missions', trans: 'Các sứ mệnh thám hiểm không gian' },
+    { id: 329, text: 'Astronaut training program', trans: 'Chương trình huấn luyện phi hành gia' },
+    { id: 330, text: 'International space station', trans: 'Trạm vũ trụ quốc tế' },
+    { id: 331, text: 'Discovering new planets', trans: 'Khám phá các hành tinh mới' },
+    { id: 332, text: 'Extraterrestrial life', trans: 'Sự sống ngoài trái đất' },
+    { id: 333, text: 'Rocket launch sequence', trans: 'Quy trình phóng tên lửa' },
+    { id: 334, text: 'Orbiting the earth', trans: 'Bay quanh quỹ đạo trái đất' },
+    { id: 335, text: 'Lunar landing module', trans: 'Mô-đun hạ cánh xuống mặt trăng' },
+    { id: 336, text: 'Scientific hypothesis', trans: 'Giả thuyết khoa học' },
+    { id: 337, text: 'Experimental verification', trans: 'Kiểm chứng thực nghiệm' },
+    { id: 338, text: 'Laboratory equipment', trans: 'Thiết bị phòng thí nghiệm' },
+    { id: 339, text: 'Molecular structure', trans: 'Cấu trúc phân tử' },
+    { id: 340, text: 'Genetic engineering', trans: 'Kỹ thuật di truyền' },
+    { id: 341, text: 'Biodegradable materials', trans: 'Vật liệu phân hủy sinh học' },
+    { id: 342, text: 'Environmental sustainability', trans: 'Sự bền vững môi trường' },
+    { id: 343, text: 'Conservation of energy', trans: 'Bảo toàn năng lượng' },
+    { id: 344, text: 'Refraction of light', trans: 'Sự khúc xạ ánh sáng' },
+    { id: 345, text: 'Sound wave propagation', trans: 'Sự lan truyền sóng âm' },
+    { id: 346, text: 'Magnetic field lines', trans: 'Các đường sức từ trường' },
+    { id: 347, text: 'Cybernetic enhancement', trans: 'Tăng cường điều khiển học' },
+    { id: 348, text: 'Algorithm optimization', trans: 'Tối ưu hóa thuật toán' },
+    { id: 349, text: 'Parallel universe theory', trans: 'Lý thuyết vũ trụ song song' },
+    { id: 350, text: 'Space time continuum', trans: 'Không thời gian liên tục' },
+
+    // --- CẤP 351-400: Hùng biện & Triết học (Debate & Philosophy) ---
+    { id: 351, text: 'Freedom involves responsibility', trans: 'Tự do đi kèm với trách nhiệm' },
+    { id: 352, text: 'The pen is mightier than the sword', trans: 'Ngòi bút mạnh hơn gươm giáo' },
+    { id: 353, text: 'Beauty lies in the eyes of the beholder', trans: 'Vẻ đẹp nằm trong đôi mắt kẻ si tình' },
+    { id: 354, text: 'History repeats itself', trans: 'Lịch sử lặp lại chính nó' },
+    { id: 355, text: 'To be or not to be', trans: 'Tồn tại hay không tồn tại' },
+    { id: 356, text: 'Knowledge speaks but wisdom listens', trans: 'Kiến thức nói nhưng trí tuệ lắng nghe' },
+    { id: 357, text: 'Fortune favors the bold', trans: 'Vận may ủng hộ người táo bạo' },
+    { id: 358, text: 'Every man is the architect of his own fortune', trans: 'Mỗi người là kiến trúc sư cho vận mệnh của mình' },
+    { id: 359, text: 'Silence is sometimes the best answer', trans: 'Im lặng đôi khi là câu trả lời tốt nhất' },
+    { id: 360, text: 'The unexamined life is not worth living', trans: 'Cuộc sống không kiểm chứng không đáng sống' },
+    { id: 361, text: 'Happiness depends upon ourselves', trans: 'Hạnh phúc phụ thuộc vào chính ta' },
+    { id: 362, text: 'I think therefore I am', trans: 'Tôi tư duy nên tôi tồn tại' },
+    { id: 363, text: 'Be the change you want to see', trans: 'Hãy là sự thay đổi bạn muốn thấy' },
+    { id: 364, text: 'In the middle of difficulty lies opportunity', trans: 'Trong khó khăn luôn có cơ hội' },
+    { id: 365, text: 'The only true wisdom is knowing you know nothing', trans: 'Trí tuệ thực sự là biết mình không biết gì' },
+    { id: 366, text: 'Life is what happens when you are busy making plans', trans: 'Cuộc sống là những gì xảy ra khi bạn bận rộn lập kế hoạch' },
+    { id: 367, text: 'Success is not final failure is not fatal', trans: 'Thành công không phải là cuối cùng, thất bại không phải là chết người' },
+    { id: 368, text: 'Believe you can and you are halfway there', trans: 'Tin rằng bạn có thể và bạn đã đi được nửa đường' },
+    { id: 369, text: 'Turn your wounds into wisdom', trans: 'Biến vết thương của bạn thành trí tuệ' },
+    { id: 370, text: 'Do what you can with what you have', trans: 'Làm những gì bạn có thể với những gì bạn có' },
+    { id: 371, text: 'The best way to predict the future is to create it', trans: 'Cách tốt nhất để dự đoán tương lai là tạo ra nó' },
+    { id: 372, text: 'It always seems impossible until it is done', trans: 'Mọi việc luôn có vẻ bất khả thi cho đến khi hoàn thành' },
+    { id: 373, text: 'Quality is not an act it is a habit', trans: 'Chất lượng không phải là hành động, nó là thói quen' },
+    { id: 374, text: 'Simplicity is the ultimate sophistication', trans: 'Đơn giản là đỉnh cao của sự tinh tế' },
+    { id: 375, text: 'Learning never exhausts the mind', trans: 'Việc học không bao giờ làm kiệt quệ tâm trí' },
+    { id: 376, text: 'Creativity is contagious pass it on', trans: 'Sự sáng tạo có tính lan truyền, hãy truyền nó đi' },
+    { id: 377, text: 'The mind is everything what you think you become', trans: 'Tâm trí là tất cả, bạn nghĩ gì bạn sẽ trở thành thế ấy' },
+    { id: 378, text: 'An investment in knowledge pays the best interest', trans: 'Đầu tư vào kiến thức mang lại lãi suất tốt nhất' },
+    { id: 379, text: 'Education is the key to unlock the golden door of freedom', trans: 'Giáo dục là chìa khóa mở cánh cửa vàng của tự do' },
+    { id: 380, text: 'Peace begins with a smile', trans: 'Hòa bình bắt đầu bằng một nụ cười' },
+    { id: 381, text: 'Love is the only force capable of transforming an enemy into a friend', trans: 'Tình yêu là lực lượng duy nhất biến kẻ thù thành bạn' },
+    { id: 382, text: 'Darkness cannot drive out darkness only light can do that', trans: 'Bóng tối không thể xua tan bóng tối, chỉ ánh sáng mới làm được' },
+    { id: 383, text: 'Justice delayed is justice denied', trans: 'Công lý chậm trễ là công lý bị từ chối' },
+    { id: 384, text: 'Democracy is the government of the people', trans: 'Dân chủ là chính quyền của nhân dân' },
+    { id: 385, text: 'Freedom of speech is a fundamental right', trans: 'Tự do ngôn luận là quyền cơ bản' },
+    { id: 386, text: 'Equality means equal rights for all', trans: 'Bình đẳng nghĩa là quyền bình đẳng cho tất cả' },
+    { id: 387, text: 'Diversity makes us stronger', trans: 'Sự đa dạng làm chúng ta mạnh mẽ hơn' },
+    { id: 388, text: 'Compassion is the basis of morality', trans: 'Lòng trắc ẩn là nền tảng của đạo đức' },
+    { id: 389, text: 'Integrity is doing the right thing when no one is watching', trans: 'Chính trực là làm điều đúng ngay cả khi không ai nhìn thấy' },
+    { id: 390, text: 'Humility is not thinking less of yourself but thinking of yourself less', trans: 'Khiêm tốn không phải là nghĩ thấp về mình mà là ít nghĩ về mình hơn' },
+    { id: 391, text: 'Perseverance is the secret of all triumphs', trans: 'Kiên trì là bí mật của mọi thắng lợi' },
+    { id: 392, text: 'Courage is grace under pressure', trans: 'Can đảm là sự duyên dáng dưới áp lực' },
+    { id: 393, text: 'Optimism is the faith that leads to achievement', trans: 'Lạc quan là niềm tin dẫn đến thành tựu' },
+    { id: 394, text: 'Patience is a virtue', trans: 'Kiên nhẫn là một đức tính' },
+    { id: 395, text: 'Gratitude is the memory of the heart', trans: 'Lòng biết ơn là ký ức của trái tim' },
+    { id: 396, text: 'Forgiveness is the fragrance that the violet sheds on the heel that has crushed it', trans: 'Tha thứ là hương thơm hoa violet lưu lại trên gót chân đã giẫm nát nó' },
+    { id: 397, text: 'Kindness is a language which the deaf can hear and the blind can see', trans: 'Tử tế là ngôn ngữ người điếc có thể nghe và người mù có thể thấy' },
+    { id: 398, text: 'Hope is a waking dream', trans: 'Hy vọng là giấc mơ khi tỉnh' },
+    { id: 399, text: 'The only constant is change', trans: 'Hằng số duy nhất là sự thay đổi' },
+    { id: 400, text: 'I am the Ultimate English Master', trans: 'Tôi là Bậc thầy Tiếng Anh Tối thượng' },
+    // --- CẤP 411-450: Du lịch & Trải nghiệm (Travel Continued) ---
+    { id: 411, text: 'Please fasten your seatbelt', trans: 'Vui lòng thắt dây an toàn' },
+    { id: 412, text: 'I need to declare these items', trans: 'Tôi cần khai báo những món đồ này' },
+    { id: 413, text: 'Where is the baggage claim area', trans: 'Khu vực nhận hành lý ở đâu?' },
+    { id: 414, text: 'Can I have a window seat', trans: 'Cho tôi ngồi ghế cạnh cửa sổ được không?' },
+    { id: 415, text: 'The flight has been delayed', trans: 'Chuyến bay đã bị hoãn' },
+    { id: 416, text: 'Do you have a map of the city', trans: 'Bạn có bản đồ thành phố không?' },
+    { id: 417, text: 'Take me to this address please', trans: 'Làm ơn đưa tôi đến địa chỉ này' },
+    { id: 418, text: 'Keep the change', trans: 'Cứ giữ lại tiền thừa nhé' },
+    { id: 419, text: 'I am here for vacation', trans: 'Tôi đến đây để đi nghỉ mát' },
+    { id: 420, text: 'Can you recommend a good restaurant', trans: 'Bạn có thể giới thiệu nhà hàng ngon không?' },
+    { id: 421, text: 'Is entrance to the museum free', trans: 'Vào cửa bảo tàng có miễn phí không?' },
+    { id: 422, text: 'I would like to rent a car', trans: 'Tôi muốn thuê một chiếc xe hơi' },
+    { id: 423, text: 'Where can I buy a sim card', trans: 'Tôi có thể mua sim điện thoại ở đâu?' },
+    { id: 424, text: 'This scenery is breathtaking', trans: 'Phong cảnh này đẹp đến nín thở' },
+    { id: 425, text: 'We need a guide for the tour', trans: 'Chúng tôi cần hướng dẫn viên cho chuyến đi' },
+    { id: 426, text: 'What time is the check-out', trans: 'Giờ trả phòng là mấy giờ?' },
+    { id: 427, text: 'Please clean my room', trans: 'Làm ơn dọn phòng giúp tôi' },
+    { id: 428, text: 'I want to change some money', trans: 'Tôi muốn đổi một ít tiền' },
+    { id: 429, text: 'Watch out for pickpockets', trans: 'Cẩn thận kẻ móc túi' },
+    { id: 430, text: 'Is it safe to walk here at night', trans: 'Đi bộ ở đây vào ban đêm có an toàn không?' },
+    { id: 431, text: 'I have travel insurance', trans: 'Tôi có bảo hiểm du lịch' },
+    { id: 432, text: 'Where is the nearest subway station', trans: 'Trạm tàu điện ngầm gần nhất ở đâu?' },
+    { id: 433, text: 'Can I have the bill please', trans: 'Cho tôi xin hóa đơn nhé' },
+    { id: 434, text: 'The food was delicious', trans: 'Đồ ăn rất ngon' },
+    { id: 435, text: 'I am allergic to peanuts', trans: 'Tôi bị dị ứng với đậu phộng' },
+    { id: 436, text: 'Do not forget your passport', trans: 'Đừng quên hộ chiếu của bạn' },
+    { id: 437, text: 'Have a safe journey home', trans: 'Chúc bạn thượng lộ bình an' },
+    { id: 438, text: 'This is a souvenir for you', trans: 'Đây là quà lưu niệm cho bạn' },
+    { id: 439, text: 'Let us take a group selfie', trans: 'Hãy cùng chụp ảnh tự sướng nhóm nào' },
+    { id: 440, text: 'I want to extend my stay', trans: 'Tôi muốn gia hạn thời gian lưu trú' },
+    { id: 441, text: 'Is there a pharmacy nearby', trans: 'Có hiệu thuốc nào gần đây không?' },
+    { id: 442, text: 'I feel a bit motion sickness', trans: 'Tôi cảm thấy hơi say xe' },
+    { id: 443, text: 'The view from the top is amazing', trans: 'Cảnh nhìn từ trên cao thật tuyệt vời' },
+    { id: 444, text: 'We are lost', trans: 'Chúng ta bị lạc rồi' },
+    { id: 445, text: 'Could you call a taxi for me', trans: 'Bạn gọi taxi giúp tôi được không?' },
+    { id: 446, text: 'Is breakfast included in the price', trans: 'Giá đã bao gồm bữa sáng chưa?' },
+    { id: 447, text: 'I would like a wake-up call', trans: 'Tôi muốn dịch vụ gọi báo thức' },
+    { id: 448, text: 'Do not leave your bags unattended', trans: 'Đừng để hành lý không có người trông coi' },
+    { id: 449, text: 'The customs officer checked my bag', trans: 'Nhân viên hải quan đã kiểm tra túi tôi' },
+    { id: 450, text: 'Traveling broadens the mind', trans: 'Đi một ngày đàng học một sàng khôn' },
+
+    // --- CẤP 451-500: Mua sắm & Tiêu dùng (Shopping) ---
+    { id: 451, text: 'Where is the fitting room', trans: 'Phòng thử đồ ở đâu?' },
+    { id: 452, text: 'Do you have this in size M', trans: 'Bạn có cái này size M không?' },
+    { id: 453, text: 'It is a little too tight', trans: 'Cái này hơi chật một chút' },
+    { id: 454, text: 'How much does it cost', trans: 'Cái này giá bao nhiêu?' },
+    { id: 455, text: 'That is too expensive', trans: 'Cái đó đắt quá' },
+    { id: 456, text: 'Can you give me a discount', trans: 'Bạn có thể giảm giá cho tôi không?' },
+    { id: 457, text: 'I am just looking thanks', trans: 'Tôi chỉ đang xem thôi, cảm ơn' },
+    { id: 458, text: 'Do you accept credit cards', trans: 'Bạn có chấp nhận thẻ tín dụng không?' },
+    { id: 459, text: 'I would like to return this', trans: 'Tôi muốn trả lại món hàng này' },
+    { id: 460, text: 'Can I have a receipt please', trans: 'Cho tôi xin biên lai được không?' },
+    { id: 461, text: 'This item is on sale', trans: 'Món này đang được giảm giá' },
+    { id: 462, text: 'Buy one get one free', trans: 'Mua một tặng một' },
+    { id: 463, text: 'What are your opening hours', trans: 'Giờ mở cửa của bạn là khi nào?' },
+    { id: 464, text: 'I am looking for a gift', trans: 'Tôi đang tìm một món quà' },
+    { id: 465, text: 'Does it come with a warranty', trans: 'Cái này có bảo hành không?' },
+    { id: 466, text: 'I prefer to pay in cash', trans: 'Tôi thích trả bằng tiền mặt hơn' },
+    { id: 467, text: 'This color suits you well', trans: 'Màu này rất hợp với bạn' },
+    { id: 468, text: 'It is out of stock', trans: 'Món này đã hết hàng' },
+    { id: 469, text: 'Do you deliver', trans: 'Bạn có giao hàng không?' },
+    { id: 470, text: 'I will take it', trans: 'Tôi sẽ lấy cái này' },
+    { id: 471, text: 'Where is the cashier', trans: 'Quầy thu ngân ở đâu?' },
+    { id: 472, text: 'Can I speak to the manager', trans: 'Tôi có thể gặp quản lý được không?' },
+    { id: 473, text: 'This product is faulty', trans: 'Sản phẩm này bị lỗi' },
+    { id: 474, text: 'I would like a refund', trans: 'Tôi muốn được hoàn tiền' },
+    { id: 475, text: 'Do you have a loyalty card', trans: 'Bạn có thẻ thành viên không?' },
+    { id: 476, text: 'Lets go window shopping', trans: 'Hãy đi ngắm đồ (không mua) nhé' },
+    { id: 477, text: 'Is this authentic', trans: 'Cái này là hàng chính hãng phải không?' },
+    { id: 478, text: 'Can you wrap it for me', trans: 'Bạn gói lại giúp tôi được không?' },
+    { id: 479, text: 'I need a shopping cart', trans: 'Tôi cần một cái xe đẩy hàng' },
+    { id: 480, text: 'The queue is so long', trans: 'Hàng xếp dài quá' },
+    { id: 481, text: 'I ordered this online', trans: 'Tôi đã đặt món này trên mạng' },
+    { id: 482, text: 'Shipping is free', trans: 'Vận chuyển miễn phí' },
+    { id: 483, text: 'Compare the prices before buying', trans: 'So sánh giá trước khi mua' },
+    { id: 484, text: 'This brand is very popular', trans: 'Thương hiệu này rất phổ biến' },
+    { id: 485, text: 'I got a great bargain', trans: 'Tôi đã mua được món hời' },
+    { id: 486, text: 'Check the expiration date', trans: 'Kiểm tra hạn sử dụng' },
+    { id: 487, text: 'Do you sell organic food', trans: 'Bạn có bán thực phẩm hữu cơ không?' },
+    { id: 488, text: 'I need to go to the grocery store', trans: 'Tôi cần đi cửa hàng tạp hóa' },
+    { id: 489, text: 'Keep the tag on', trans: 'Giữ nguyên mác giá nhé' },
+    { id: 490, text: 'Customer service is excellent', trans: 'Dịch vụ khách hàng rất tuyệt vời' },
+    { id: 491, text: 'I am a shopaholic', trans: 'Tôi là người nghiện mua sắm' },
+    { id: 492, text: 'Do not spend more than you earn', trans: 'Đừng tiêu nhiều hơn số tiền kiếm được' },
+    { id: 493, text: 'Save money for a rainy day', trans: 'Tiết kiệm tiền phòng khi túng thiếu' },
+    { id: 494, text: 'This is a limited edition', trans: 'Đây là phiên bản giới hạn' },
+    { id: 495, text: 'Can I exchange this item', trans: 'Tôi có thể đổi món này không?' },
+    { id: 496, text: 'The shop is closing soon', trans: 'Cửa hàng sắp đóng cửa rồi' },
+    { id: 497, text: 'Everything must go', trans: 'Xả hàng toàn bộ' },
+    { id: 498, text: 'Quality over quantity', trans: 'Chất lượng hơn số lượng' },
+    { id: 499, text: 'Happy shopping', trans: 'Mua sắm vui vẻ nhé' },
+    { id: 500, text: 'I have finished my shopping list', trans: 'Tôi đã mua xong danh sách đồ cần thiết' },
+
+    // --- CẤP 501-550: Giao tiếp Công sở (Office Basic) ---
+    { id: 501, text: 'Nice to meet you colleague', trans: 'Rất vui được gặp bạn, đồng nghiệp' },
+    { id: 502, text: 'Let us schedule a meeting', trans: 'Hãy lên lịch một cuộc họp' },
+    { id: 503, text: 'Please reply to my email', trans: 'Vui lòng trả lời email của tôi' },
+    { id: 504, text: 'The deadline is tomorrow', trans: 'Hạn chót là ngày mai' },
+    { id: 505, text: 'I am working on a project', trans: 'Tôi đang thực hiện một dự án' },
+    { id: 506, text: 'Can you send me the report', trans: 'Bạn gửi báo cáo cho tôi được không?' },
+    { id: 507, text: 'We need to work as a team', trans: 'Chúng ta cần làm việc nhóm' },
+    { id: 508, text: 'I have an appointment', trans: 'Tôi có một cuộc hẹn' },
+    { id: 509, text: 'The boss is in a meeting', trans: 'Sếp đang họp' },
+    { id: 510, text: 'Do not be late for work', trans: 'Đừng đi làm muộn' },
+    { id: 511, text: 'Please sign this document', trans: 'Vui lòng ký vào tài liệu này' },
+    { id: 512, text: 'I need to take a day off', trans: 'Tôi cần xin nghỉ một ngày' },
+    { id: 513, text: 'Let us brainstorm ideas', trans: 'Hãy cùng suy nghĩ ý tưởng nào' },
+    { id: 514, text: 'The presentation was successful', trans: 'Bài thuyết trình đã thành công' },
+    { id: 515, text: 'I am responsible for marketing', trans: 'Tôi chịu trách nhiệm mảng marketing' },
+    { id: 516, text: 'We have achieved our goal', trans: 'Chúng ta đã đạt được mục tiêu' },
+    { id: 517, text: 'This is my business card', trans: 'Đây là danh thiếp của tôi' },
+    { id: 518, text: 'Please print this file', trans: 'Làm ơn in tập tin này ra' },
+    { id: 519, text: 'The internet connection is slow', trans: 'Kết nối mạng chậm quá' },
+    { id: 520, text: 'I am busy right now', trans: 'Bây giờ tôi đang bận' },
+    { id: 521, text: 'Let us discuss the details', trans: 'Hãy thảo luận chi tiết nhé' },
+    { id: 522, text: 'We need to hire more staff', trans: 'Chúng ta cần tuyển thêm nhân viên' },
+    { id: 523, text: 'Who is in charge here', trans: 'Ai là người phụ trách ở đây?' },
+    { id: 524, text: 'I agree with your proposal', trans: 'Tôi đồng ý với đề xuất của bạn' },
+    { id: 525, text: 'We need to cut costs', trans: 'Chúng ta cần cắt giảm chi phí' },
+    { id: 526, text: 'Customer satisfaction is priority', trans: 'Sự hài lòng của khách là ưu tiên' },
+    { id: 527, text: 'I am waiting for approval', trans: 'Tôi đang chờ phê duyệt' },
+    { id: 528, text: 'Let us take a break', trans: 'Hãy nghỉ giải lao chút nhé' },
+    { id: 529, text: 'Can you cover for me', trans: 'Bạn làm thay tôi một chút được không?' },
+    { id: 530, text: 'The copier is broken', trans: 'Máy photocopy bị hỏng rồi' },
+    { id: 531, text: 'I appreciate your hard work', trans: 'Tôi đánh giá cao sự chăm chỉ của bạn' },
+    { id: 532, text: 'We need to improve efficiency', trans: 'Chúng ta cần cải thiện hiệu suất' },
+    { id: 533, text: 'Send me the invoice', trans: 'Gửi hóa đơn cho tôi' },
+    { id: 534, text: 'I am on a business trip', trans: 'Tôi đang đi công tác' },
+    { id: 535, text: 'Please turn off your phone', trans: 'Vui lòng tắt điện thoại' },
+    { id: 536, text: 'Prepare for the interview', trans: 'Chuẩn bị cho buổi phỏng vấn' },
+    { id: 537, text: 'Update your resume', trans: 'Cập nhật sơ yếu lý lịch của bạn' },
+    { id: 538, text: 'We are facing a challenge', trans: 'Chúng ta đang đối mặt thử thách' },
+    { id: 539, text: 'Let us find a solution', trans: 'Hãy tìm ra giải pháp' },
+    { id: 540, text: 'Keep up the good work', trans: 'Tiếp tục làm tốt nhé' },
+    { id: 541, text: 'I received a promotion', trans: 'Tôi đã được thăng chức' },
+    { id: 542, text: 'The salary is competitive', trans: 'Mức lương rất cạnh tranh' },
+    { id: 543, text: 'We offer health insurance', trans: 'Chúng tôi cung cấp bảo hiểm y tế' },
+    { id: 544, text: 'The office is closed on Sundays', trans: 'Văn phòng đóng cửa vào Chủ Nhật' },
+    { id: 545, text: 'Please summarize the main points', trans: 'Vui lòng tóm tắt các ý chính' },
+    { id: 546, text: 'I need feedback on this', trans: 'Tôi cần phản hồi về việc này' },
+    { id: 547, text: 'Networking is important', trans: 'Mạng lưới quan hệ rất quan trọng' },
+    { id: 548, text: 'Dress professionally', trans: 'Ăn mặc chuyên nghiệp nhé' },
+    { id: 549, text: 'Respect your coworkers', trans: 'Tôn trọng đồng nghiệp của bạn' },
+    { id: 550, text: 'Time management is key', trans: 'Quản lý thời gian là chìa khóa' },
+
+    // --- CẤP 551-600: Kinh doanh & Quản lý (Business Advanced) ---
+    { id: 551, text: 'We need a new strategy', trans: 'Chúng ta cần một chiến lược mới' },
+    { id: 552, text: 'Negotiation skills are essential', trans: 'Kỹ năng đàm phán là thiết yếu' },
+    { id: 553, text: 'The market is volatile', trans: 'Thị trường đang biến động' },
+    { id: 554, text: 'We must analyze the data', trans: 'Chúng ta phải phân tích dữ liệu' },
+    { id: 555, text: 'Profit margins are increasing', trans: 'Biên lợi nhuận đang tăng' },
+    { id: 556, text: 'We are launching a product', trans: 'Chúng tôi đang ra mắt sản phẩm' },
+    { id: 557, text: 'Brand reputation matters', trans: 'Uy tín thương hiệu rất quan trọng' },
+    { id: 558, text: 'Investment brings growth', trans: 'Đầu tư mang lại sự tăng trưởng' },
+    { id: 559, text: 'We signed the contract', trans: 'Chúng tôi đã ký hợp đồng' },
+    { id: 560, text: 'Leadership requires vision', trans: 'Lãnh đạo cần có tầm nhìn' },
+    { id: 561, text: 'Supply chain management', trans: 'Quản lý chuỗi cung ứng' },
+    { id: 562, text: 'Corporate social responsibility', trans: 'Trách nhiệm xã hội của doanh nghiệp' },
+    { id: 563, text: 'Identify the target audience', trans: 'Xác định khách hàng mục tiêu' },
+    { id: 564, text: 'We need to innovate', trans: 'Chúng ta cần đổi mới sáng tạo' },
+    { id: 565, text: 'Assess the risks involved', trans: 'Đánh giá các rủi ro liên quan' },
+    { id: 566, text: 'Quarterly financial report', trans: 'Báo cáo tài chính hàng quý' },
+    { id: 567, text: 'Expand into new markets', trans: 'Mở rộng sang các thị trường mới' },
+    { id: 568, text: 'Maintain a competitive edge', trans: 'Duy trì lợi thế cạnh tranh' },
+    { id: 569, text: 'Human resources development', trans: 'Phát triển nguồn nhân lực' },
+    { id: 570, text: 'Strategic partnership', trans: 'Đối tác chiến lược' },
+    { id: 571, text: 'Maximize shareholder value', trans: 'Tối đa hóa giá trị cổ đông' },
+    { id: 572, text: 'Conduct market research', trans: 'Tiến hành nghiên cứu thị trường' },
+    { id: 573, text: 'Implement a marketing campaign', trans: 'Triển khai chiến dịch tiếp thị' },
+    { id: 574, text: 'Optimize operational costs', trans: 'Tối ưu hóa chi phí vận hành' },
+    { id: 575, text: 'Ensure quality control', trans: 'Đảm bảo kiểm soát chất lượng' },
+    { id: 576, text: 'Adapt to change', trans: 'Thích nghi với sự thay đổi' },
+    { id: 577, text: 'Foster a positive culture', trans: 'Nuôi dưỡng văn hóa tích cực' },
+    { id: 578, text: 'Delegate tasks effectively', trans: 'Giao việc một cách hiệu quả' },
+    { id: 579, text: 'Resolve conflicts constructively', trans: 'Giải quyết xung đột mang tính xây dựng' },
+    { id: 580, text: 'Set measurable goals', trans: 'Đặt ra các mục tiêu đo lường được' },
+    { id: 581, text: 'The economy is recovering', trans: 'Nền kinh tế đang phục hồi' },
+    { id: 582, text: 'Inflation affects prices', trans: 'Lạm phát ảnh hưởng đến giá cả' },
+    { id: 583, text: 'Stocks and bonds', trans: 'Cổ phiếu và trái phiếu' },
+    { id: 584, text: 'Diversify your portfolio', trans: 'Đa dạng hóa danh mục đầu tư' },
+    { id: 585, text: 'Mergers and acquisitions', trans: 'Sáp nhập và mua lại (M&A)' },
+    { id: 586, text: 'Intellectual property rights', trans: 'Quyền sở hữu trí tuệ' },
+    { id: 587, text: 'Sustainable development', trans: 'Phát triển bền vững' },
+    { id: 588, text: 'Global business environment', trans: 'Môi trường kinh doanh toàn cầu' },
+    { id: 589, text: 'Entrepreneurship spirit', trans: 'Tinh thần khởi nghiệp' },
+    { id: 590, text: 'Return on investment', trans: 'Lợi tức đầu tư (ROI)' },
+    { id: 591, text: 'Cash flow management', trans: 'Quản lý dòng tiền' },
+    { id: 592, text: 'Bankruptcy protection', trans: 'Bảo hộ phá sản' },
+    { id: 593, text: 'Executive decision making', trans: 'Ra quyết định điều hành' },
+    { id: 594, text: 'Stakeholder engagement', trans: 'Sự tham gia của các bên liên quan' },
+    { id: 595, text: 'Logistics and distribution', trans: 'Hậu cần và phân phối' },
+    { id: 596, text: 'E-commerce trends', trans: 'Xu hướng thương mại điện tử' },
+    { id: 597, text: 'Digital transformation', trans: 'Chuyển đổi số' },
+    { id: 598, text: 'Create value for customers', trans: 'Tạo giá trị cho khách hàng' },
+    { id: 599, text: 'English is the language of business', trans: 'Tiếng Anh là ngôn ngữ kinh doanh' },
+    
+    // --- CẤP 600: Cột mốc vinh quang ---
+    { id: 600, text: 'I have conquered 600 levels of English', trans: 'Tôi đã chinh phục 600 cấp độ tiếng Anh' },
+    // --- CẤP 601-650: Khoa học & Môi trường (Science & Nature) ---
+    { id: 601, text: 'Water boils at one hundred degrees', trans: 'Nước sôi ở 100 độ' },
+    { id: 602, text: 'The sun rises in the east', trans: 'Mặt trời mọc ở hướng Đông' },
+    { id: 603, text: 'Gravity pulls objects down', trans: 'Trọng lực hút mọi vật xuống' },
+    { id: 604, text: 'We must protect wildlife', trans: 'Chúng ta phải bảo vệ động vật hoang dã' },
+    { id: 605, text: 'Plastic pollution is a big problem', trans: 'Ô nhiễm nhựa là vấn đề lớn' },
+    { id: 606, text: 'Trees provide oxygen for us', trans: 'Cây xanh cung cấp oxy cho chúng ta' },
+    { id: 607, text: 'The universe is expanding', trans: 'Vũ trụ đang giãn nở' },
+    { id: 608, text: 'Light travels faster than sound', trans: 'Ánh sáng truyền đi nhanh hơn âm thanh' },
+    { id: 609, text: 'Human body consists mostly of water', trans: 'Cơ thể người chủ yếu là nước' },
+    { id: 610, text: 'Recycling helps reduce waste', trans: 'Tái chế giúp giảm thiểu rác thải' },
+    { id: 611, text: 'The climate is changing rapidly', trans: 'Khí hậu đang thay đổi nhanh chóng' },
+    { id: 612, text: 'Solar energy is renewable', trans: 'Năng lượng mặt trời là năng lượng tái tạo' },
+    { id: 613, text: 'Earth orbits around the sun', trans: 'Trái đất quay quanh mặt trời' },
+    { id: 614, text: 'Volcanoes can be dangerous', trans: 'Núi lửa có thể rất nguy hiểm' },
+    { id: 615, text: 'The ocean is very deep', trans: 'Đại dương rất sâu' },
+    { id: 616, text: 'Bacteria can cause diseases', trans: 'Vi khuẩn có thể gây bệnh' },
+    { id: 617, text: 'Everything is made of atoms', trans: 'Mọi thứ đều được cấu tạo từ nguyên tử' },
+    { id: 618, text: 'Evolution is a slow process', trans: 'Tiến hóa là một quá trình chậm chạp' },
+    { id: 619, text: 'Save electricity to save the planet', trans: 'Tiết kiệm điện để cứu hành tinh' },
+    { id: 620, text: 'Nature is full of surprises', trans: 'Thiên nhiên đầy những điều bất ngờ' },
+    { id: 621, text: 'A dolphin is a mammal not a fish', trans: 'Cá heo là động vật có vú, không phải cá' },
+    { id: 622, text: 'Photosynthesis needs sunlight', trans: 'Quang hợp cần ánh sáng mặt trời' },
+    { id: 623, text: 'The moon controls the tides', trans: 'Mặt trăng điều khiển thủy triều' },
+    { id: 624, text: 'Natural resources are limited', trans: 'Tài nguyên thiên nhiên là có hạn' },
+    { id: 625, text: 'Science explains how things work', trans: 'Khoa học giải thích cách mọi vật hoạt động' },
+    { id: 626, text: 'We should plant more trees', trans: 'Chúng ta nên trồng nhiều cây hơn' },
+    { id: 627, text: 'Global warming is real', trans: 'Sự nóng lên toàn cầu là có thật' },
+    { id: 628, text: 'Protect the ozone layer', trans: 'Hãy bảo vệ tầng ozone' },
+    { id: 629, text: 'Animals have their own habitats', trans: 'Động vật có môi trường sống riêng' },
+    { id: 630, text: 'Biodiversity is important', trans: 'Đa dạng sinh học rất quan trọng' },
+    { id: 631, text: 'Water covers most of the Earth', trans: 'Nước bao phủ phần lớn Trái đất' },
+    { id: 632, text: 'The ecosystem is fragile', trans: 'Hệ sinh thái rất mong manh' },
+    { id: 633, text: 'Wind power is clean energy', trans: 'Điện gió là năng lượng sạch' },
+    { id: 634, text: 'Magnets attract iron', trans: 'Nam châm hút sắt' },
+    { id: 635, text: 'Sound travels in waves', trans: 'Âm thanh truyền đi theo dạng sóng' },
+    { id: 636, text: 'The brain controls the body', trans: 'Bộ não điều khiển cơ thể' },
+    { id: 637, text: 'DNA carries genetic information', trans: 'DNA mang thông tin di truyền' },
+    { id: 638, text: 'Space exploration is fascinating', trans: 'Thám hiểm vũ trụ thật hấp dẫn' },
+    { id: 639, text: 'Astronauts float in space', trans: 'Các phi hành gia trôi nổi trong không gian' },
+    { id: 640, text: 'Chemistry creates reactions', trans: 'Hóa học tạo ra các phản ứng' },
+    { id: 641, text: 'Physics studies matter and energy', trans: 'Vật lý nghiên cứu vật chất và năng lượng' },
+    { id: 642, text: 'Biology is the study of life', trans: 'Sinh học là nghiên cứu về sự sống' },
+    { id: 643, text: 'The desert is very dry', trans: 'Sa mạc rất khô hạn' },
+    { id: 644, text: 'Rainforests are vital', trans: 'Rừng nhiệt đới có vai trò sống còn' },
+    { id: 645, text: 'Ice melts when heated', trans: 'Băng tan chảy khi bị đun nóng' },
+    { id: 646, text: 'Metals conduct electricity', trans: 'Kim loại dẫn điện' },
+    { id: 647, text: 'The stars shine at night', trans: 'Những ngôi sao tỏa sáng vào ban đêm' },
+    { id: 648, text: 'Earthquakes shake the ground', trans: 'Động đất làm rung chuyển mặt đất' },
+    { id: 649, text: 'Tsunamis are giant waves', trans: 'Sóng thần là những con sóng khổng lồ' },
+    { id: 650, text: 'Nature provides everything we need', trans: 'Thiên nhiên cung cấp mọi thứ ta cần' },
+
+    // --- CẤP 651-700: Công nghệ & Kỹ thuật số (Technology) ---
+    { id: 651, text: 'Please connect to the wifi', trans: 'Vui lòng kết nối wifi' },
+    { id: 652, text: 'My battery is running low', trans: 'Pin của tôi sắp hết rồi' },
+    { id: 653, text: 'Did you save the file', trans: 'Bạn đã lưu tập tin chưa?' },
+    { id: 654, text: 'This app is very useful', trans: 'Ứng dụng này rất hữu ích' },
+    { id: 655, text: 'I need to charge my phone', trans: 'Tôi cần sạc điện thoại' },
+    { id: 656, text: 'Software needs an update', trans: 'Phần mềm cần được cập nhật' },
+    { id: 657, text: 'Artificial intelligence is smart', trans: 'Trí tuệ nhân tạo rất thông minh' },
+    { id: 658, text: 'Click the link to download', trans: 'Nhấp vào liên kết để tải xuống' },
+    { id: 659, text: 'The server is currently down', trans: 'Máy chủ hiện đang bị lỗi' },
+    { id: 660, text: 'Protect your password', trans: 'Hãy bảo vệ mật khẩu của bạn' },
+    { id: 661, text: 'Do not open suspicious emails', trans: 'Đừng mở các email đáng ngờ' },
+    { id: 662, text: 'Technology makes life easier', trans: 'Công nghệ làm cuộc sống dễ dàng hơn' },
+    { id: 663, text: 'Virtual reality is immersive', trans: 'Thực tế ảo rất sống động' },
+    { id: 664, text: 'I forgot my username', trans: 'Tôi quên tên đăng nhập rồi' },
+    { id: 665, text: 'Backup your data regularly', trans: 'Sao lưu dữ liệu của bạn thường xuyên' },
+    { id: 666, text: 'The internet connects people', trans: 'Internet kết nối mọi người' },
+    { id: 667, text: 'Social media influences opinions', trans: 'Mạng xã hội ảnh hưởng đến quan điểm' },
+    { id: 668, text: 'Coding is a valuable skill', trans: 'Lập trình là một kỹ năng giá trị' },
+    { id: 669, text: 'Robots can do heavy work', trans: 'Robot có thể làm việc nặng' },
+    { id: 670, text: 'Cybersecurity is essential', trans: 'An ninh mạng là thiết yếu' },
+    { id: 671, text: 'The screen is frozen', trans: 'Màn hình bị đơ rồi' },
+    { id: 672, text: 'Try restarting the device', trans: 'Thử khởi động lại thiết bị xem' },
+    { id: 673, text: 'Upload the photo to the cloud', trans: 'Tải ảnh lên đám mây' },
+    { id: 674, text: 'Digital marketing is trending', trans: 'Tiếp thị kỹ thuật số đang là xu hướng' },
+    { id: 675, text: 'Smartphones are addictive', trans: 'Điện thoại thông minh dễ gây nghiện' },
+    { id: 676, text: 'Check your internet connection', trans: 'Kiểm tra kết nối mạng của bạn' },
+    { id: 677, text: 'I subscribed to this channel', trans: 'Tôi đã đăng ký kênh này' },
+    { id: 678, text: 'Leave a comment below', trans: 'Để lại bình luận bên dưới nhé' },
+    { id: 679, text: 'Technology evolves every day', trans: 'Công nghệ tiến hóa mỗi ngày' },
+    { id: 680, text: 'Data privacy is a concern', trans: 'Quyền riêng tư dữ liệu là một mối lo' },
+    { id: 681, text: 'This device is user friendly', trans: 'Thiết bị này thân thiện với người dùng' },
+    { id: 682, text: 'Install the antivirus software', trans: 'Cài đặt phần mềm diệt virus' },
+    { id: 683, text: 'My laptop has a virus', trans: 'Laptop của tôi bị nhiễm virus' },
+    { id: 684, text: 'Scan the QR code', trans: 'Quét mã QR đi' },
+    { id: 685, text: 'Wireless headphones are convenient', trans: 'Tai nghe không dây rất tiện lợi' },
+    { id: 686, text: 'The resolution is very high', trans: 'Độ phân giải rất cao' },
+    { id: 687, text: 'Streaming movies is popular', trans: 'Xem phim trực tuyến rất phổ biến' },
+    { id: 688, text: 'Blockchain is a secure technology', trans: 'Blockchain là công nghệ bảo mật' },
+    { id: 689, text: 'Automated cars are the future', trans: 'Xe tự lái là tương lai' },
+    { id: 690, text: 'Innovation drives progress', trans: 'Sự đổi mới thúc đẩy sự tiến bộ' },
+    { id: 691, text: 'Delete unnecessary files', trans: 'Xóa các tập tin không cần thiết' },
+    { id: 692, text: 'The battery life is long', trans: 'Tuổi thọ pin rất dài' },
+    { id: 693, text: 'Touchscreen makes navigation easy', trans: 'Màn hình cảm ứng giúp điều hướng dễ dàng' },
+    { id: 694, text: 'Login failed try again', trans: 'Đăng nhập thất bại, hãy thử lại' },
+    { id: 695, text: 'Create a strong password', trans: 'Hãy tạo một mật khẩu mạnh' },
+    { id: 696, text: 'Enable notifications', trans: 'Bật thông báo lên' },
+    { id: 697, text: 'The system is updating', trans: 'Hệ thống đang cập nhật' },
+    { id: 698, text: 'Download complete', trans: 'Tải xuống hoàn tất' },
+    { id: 699, text: 'Access denied', trans: 'Truy cập bị từ chối' },
+    { id: 700, text: 'Technology connects the world', trans: 'Công nghệ kết nối thế giới' },
+
+    // --- CẤP 701-750: Sức khỏe & Thể thao (Health & Sports) ---
+    { id: 701, text: 'Health is wealth', trans: 'Sức khỏe là vàng' },
+    { id: 702, text: 'Prevention is better than cure', trans: 'Phòng bệnh hơn chữa bệnh' },
+    { id: 703, text: 'Drink plenty of water', trans: 'Hãy uống nhiều nước' },
+    { id: 704, text: 'Exercise regularly for good health', trans: 'Tập thể dục thường xuyên để khỏe mạnh' },
+    { id: 705, text: 'I have a headache', trans: 'Tôi bị đau đầu' },
+    { id: 706, text: 'You should see a doctor', trans: 'Bạn nên đi khám bác sĩ' },
+    { id: 707, text: 'Eat more vegetables', trans: 'Ăn nhiều rau củ hơn' },
+    { id: 708, text: 'Smoking is bad for your lungs', trans: 'Hút thuốc có hại cho phổi' },
+    { id: 709, text: 'Meditation helps reduce stress', trans: 'Thiền giúp giảm căng thẳng' },
+    { id: 710, text: 'A balanced diet is essential', trans: 'Chế độ ăn cân bằng là thiết yếu' },
+    { id: 711, text: 'I need to lose some weight', trans: 'Tôi cần giảm vài cân' },
+    { id: 712, text: 'Running builds stamina', trans: 'Chạy bộ giúp tăng sức bền' },
+    { id: 713, text: 'Yoga improves flexibility', trans: 'Yoga cải thiện độ dẻo dai' },
+    { id: 714, text: 'Do not skip breakfast', trans: 'Đừng bỏ bữa sáng' },
+    { id: 715, text: 'Sleep is important for recovery', trans: 'Giấc ngủ quan trọng cho sự phục hồi' },
+    { id: 716, text: 'Wash your hands frequently', trans: 'Rửa tay thường xuyên' },
+    { id: 717, text: 'I injured my knee', trans: 'Tôi bị chấn thương đầu gối' },
+    { id: 718, text: 'Soccer is the most popular sport', trans: 'Bóng đá là môn thể thao phổ biến nhất' },
+    { id: 719, text: 'The referee blew the whistle', trans: 'Trọng tài đã thổi còi' },
+    { id: 720, text: 'Our team won the championship', trans: 'Đội chúng tôi đã vô địch' },
+    { id: 721, text: 'Fair play is important', trans: 'Chơi đẹp là điều quan trọng' },
+    { id: 722, text: 'Swimming creates strong muscles', trans: 'Bơi lội tạo nên cơ bắp khỏe mạnh' },
+    { id: 723, text: 'Take a deep breath', trans: 'Hít một hơi thật sâu' },
+    { id: 724, text: 'Mental health matters', trans: 'Sức khỏe tinh thần rất quan trọng' },
+    { id: 725, text: 'Avoid junk food', trans: 'Tránh xa đồ ăn vặt' },
+    { id: 726, text: 'Sugar causes tooth decay', trans: 'Đường gây sâu răng' },
+    { id: 727, text: 'Vaccines save lives', trans: 'Vắc-xin cứu sống mạng người' },
+    { id: 728, text: 'The ambulance arrived quickly', trans: 'Xe cứu thương đã đến nhanh chóng' },
+    { id: 729, text: 'Check your blood pressure', trans: 'Kiểm tra huyết áp của bạn' },
+    { id: 730, text: 'Stay hydrated during workout', trans: 'Giữ đủ nước trong khi tập luyện' },
+    { id: 731, text: 'Tennis requires quick reflexes', trans: 'Quần vợt đòi hỏi phản xạ nhanh' },
+    { id: 732, text: 'Basketball is a team sport', trans: 'Bóng rổ là môn thể thao đồng đội' },
+    { id: 733, text: 'Never give up on your goals', trans: 'Đừng bao giờ từ bỏ mục tiêu' },
+    { id: 734, text: 'Warm up before exercise', trans: 'Khởi động trước khi tập' },
+    { id: 735, text: 'Cool down after running', trans: 'Thả lỏng sau khi chạy' },
+    { id: 736, text: 'Vitamins boost immunity', trans: 'Vitamin tăng cường miễn dịch' },
+    { id: 737, text: 'I feel dizzy', trans: 'Tôi cảm thấy chóng mặt' },
+    { id: 738, text: 'Call for an emergency', trans: 'Gọi cấp cứu đi' },
+    { id: 739, text: 'Gym membership is expensive', trans: 'Thẻ tập Gym đắt quá' },
+    { id: 740, text: 'Walking is good for the heart', trans: 'Đi bộ tốt cho tim mạch' },
+    { id: 741, text: 'Avoid sitting for too long', trans: 'Tránh ngồi quá lâu' },
+    { id: 742, text: 'Good hygiene prevents illness', trans: 'Vệ sinh tốt ngăn ngừa bệnh tật' },
+    { id: 743, text: 'Sunscreen protects your skin', trans: 'Kem chống nắng bảo vệ da bạn' },
+    { id: 744, text: 'My muscles are sore', trans: 'Cơ bắp tôi bị đau nhức' },
+    { id: 745, text: 'Rest is part of training', trans: 'Nghỉ ngơi là một phần của luyện tập' },
+    { id: 746, text: 'Badminton is fun to play', trans: 'Cầu lông chơi rất vui' },
+    { id: 747, text: 'Cycling is eco friendly', trans: 'Đạp xe thân thiện với môi trường' },
+    { id: 748, text: 'Maintain a healthy lifestyle', trans: 'Duy trì lối sống lành mạnh' },
+    { id: 749, text: 'Laughter is the best medicine', trans: 'Một nụ cười bằng mười thang thuốc bổ' },
+    { id: 750, text: 'A sound mind in a sound body', trans: 'Tinh thần minh mẫn trong cơ thể tráng kiện' },
+
+    // --- CẤP 751-800: Văn hóa, Nghệ thuật & Lịch sử (Culture & Arts) ---
+    { id: 751, text: 'Art feeds the soul', trans: 'Nghệ thuật nuôi dưỡng tâm hồn' },
+    { id: 752, text: 'Music is a universal language', trans: 'Âm nhạc là ngôn ngữ chung' },
+    { id: 753, text: 'This painting is a masterpiece', trans: 'Bức tranh này là một kiệt tác' },
+    { id: 754, text: 'History repeats itself', trans: 'Lịch sử lặp lại' },
+    { id: 755, text: 'Culture defines a nation', trans: 'Văn hóa định hình một quốc gia' },
+    { id: 756, text: 'I enjoy classical music', trans: 'Tôi thích nhạc cổ điển' },
+    { id: 757, text: 'The museum displays artifacts', trans: 'Bảo tàng trưng bày các hiện vật' },
+    { id: 758, text: 'Traditional costumes are beautiful', trans: 'Trang phục truyền thống rất đẹp' },
+    { id: 759, text: 'Reading books opens new worlds', trans: 'Đọc sách mở ra những thế giới mới' },
+    { id: 760, text: 'Respect other cultures', trans: 'Tôn trọng các nền văn hóa khác' },
+    { id: 761, text: 'The concert was amazing', trans: 'Buổi hòa nhạc thật tuyệt vời' },
+    { id: 762, text: 'Abstract art is open to interpretation', trans: 'Nghệ thuật trừu tượng tùy thuộc vào cách hiểu' },
+    { id: 763, text: 'Shakespeare was a famous writer', trans: 'Shakespeare là một nhà văn nổi tiếng' },
+    { id: 764, text: 'Festivals bring people together', trans: 'Lễ hội gắn kết mọi người lại với nhau' },
+    { id: 765, text: 'Architecture reflects history', trans: 'Kiến trúc phản ánh lịch sử' },
+    { id: 766, text: 'Dance is a form of expression', trans: 'Múa là một hình thức biểu đạt' },
+    { id: 767, text: 'Learn from the past', trans: 'Học hỏi từ quá khứ' },
+    { id: 768, text: 'The ancient civilization was advanced', trans: 'Nền văn minh cổ đại rất tiên tiến' },
+    { id: 769, text: 'Pottery is a traditional craft', trans: 'Gốm sứ là nghề thủ công truyền thống' },
+    { id: 770, text: 'Literature reflects society', trans: 'Văn học phản ánh xã hội' },
+    { id: 771, text: 'The sculpture is made of marble', trans: 'Bức tượng được làm bằng đá cẩm thạch' },
+    { id: 772, text: 'Folklore stories are interesting', trans: 'Truyện dân gian rất thú vị' },
+    { id: 773, text: 'Every country has unique traditions', trans: 'Mỗi nước có truyền thống độc đáo' },
+    { id: 774, text: 'Preserve cultural heritage', trans: 'Bảo tồn di sản văn hóa' },
+    { id: 775, text: 'The opera house is famous', trans: 'Nhà hát opera rất nổi tiếng' },
+    { id: 776, text: 'Movies entertain and educate', trans: 'Phim ảnh vừa giải trí vừa giáo dục' },
+    { id: 777, text: 'Photography captures moments', trans: 'Nhiếp ảnh lưu giữ khoảnh khắc' },
+    { id: 778, text: 'A picture creates a thousand words', trans: 'Một bức ảnh nói lên ngàn lời' },
+    { id: 779, text: 'Celebrate diversity', trans: 'Tôn vinh sự đa dạng' },
+    { id: 780, text: 'War brings destruction', trans: 'Chiến tranh mang lại sự hủy diệt' },
+    { id: 781, text: 'Peace is what we desire', trans: 'Hòa bình là điều chúng ta khao khát' },
+    { id: 782, text: 'Legends are born here', trans: 'Những huyền thoại được sinh ra tại đây' },
+    { id: 783, text: 'Fashion changes over time', trans: 'Thời trang thay đổi theo thời gian' },
+    { id: 784, text: 'Cuisine is part of culture', trans: 'Ẩm thực là một phần của văn hóa' },
+    { id: 785, text: 'The pyramids are mysterious', trans: 'Các kim tự tháp thật bí ẩn' },
+    { id: 786, text: 'Archaeologists dig for clues', trans: 'Các nhà khảo cổ đào tìm manh mối' },
+    { id: 787, text: 'Myths explain natural events', trans: 'Thần thoại giải thích các hiện tượng tự nhiên' },
+    { id: 788, text: 'Language preserves identity', trans: 'Ngôn ngữ gìn giữ bản sắc' },
+    { id: 789, text: 'Creativity has no limits', trans: 'Sự sáng tạo không có giới hạn' },
+    { id: 790, text: 'Local customs should be respected', trans: 'Phong tục địa phương cần được tôn trọng' },
+    { id: 791, text: 'Art exhibitions inspire people', trans: 'Triển lãm nghệ thuật truyền cảm hứng' },
+    { id: 792, text: 'Poetry expresses deep feelings', trans: 'Thơ ca diễn tả cảm xúc sâu sắc' },
+    { id: 793, text: 'Handmade items are unique', trans: 'Đồ thủ công là độc nhất' },
+    { id: 794, text: 'Historical sites attract tourists', trans: 'Di tích lịch sử thu hút du khách' },
+    { id: 795, text: 'The revolution changed everything', trans: 'Cuộc cách mạng đã thay đổi mọi thứ' },
+    { id: 796, text: 'Freedom of speech is a right', trans: 'Tự do ngôn luận là một quyền' },
+    { id: 797, text: 'Democracy is a system of government', trans: 'Dân chủ là một hệ thống chính quyền' },
+    { id: 798, text: 'Ancient ruins tell stories', trans: 'Tàn tích cổ đại kể những câu chuyện' },
+    { id: 799, text: 'Globalization affects culture', trans: 'Toàn cầu hóa ảnh hưởng đến văn hóa' },
+    { id: 800, text: 'Knowledge of history is wisdom', trans: 'Hiểu biết lịch sử là sự khôn ngoan' },
+    // --- CẤP 801-850: Cảm xúc & Tâm lý (Emotions & Psychology - Advanced) ---
+    { id: 801, text: 'Understanding your emotions is the first step to controlling them', trans: 'Hiểu cảm xúc của bản thân là bước đầu để kiểm soát chúng' },
+    { id: 802, text: 'She felt a sudden wave of happiness when she saw him', trans: 'Cô ấy cảm thấy một làn sóng hạnh phúc bất chợt khi nhìn thấy anh ấy' },
+    { id: 803, text: 'It is important to express your feelings honestly and respectfully', trans: 'Điều quan trọng là bày tỏ cảm xúc một cách trung thực và tôn trọng' },
+    { id: 804, text: 'Anxiety can sometimes prevent us from reaching our full potential', trans: 'Sự lo âu đôi khi ngăn cản chúng ta đạt được tiềm năng tối đa' },
+    { id: 805, text: 'Building self confidence takes time and patience', trans: 'Xây dựng sự tự tin cần thời gian và sự kiên nhẫn' },
+    { id: 806, text: 'He was overwhelmed with gratitude for their support', trans: 'Anh ấy tràn ngập lòng biết ơn vì sự ủng hộ của họ' },
+    { id: 807, text: 'Depression is a serious condition that requires professional help', trans: 'Trầm cảm là một tình trạng nghiêm trọng cần sự giúp đỡ chuyên nghiệp' },
+    { id: 808, text: 'Learning to forgive is essential for peace of mind', trans: 'Học cách tha thứ là thiết yếu cho sự bình yên trong tâm hồn' },
+    { id: 809, text: 'Stress management is crucial in todays busy world', trans: 'Quản lý căng thẳng là rất quan trọng trong thế giới bận rộn ngày nay' },
+    { id: 810, text: 'Empathy allows us to connect with others on a deeper level', trans: 'Sự thấu cảm cho phép ta kết nối với người khác ở mức độ sâu sắc hơn' },
+    { id: 811, text: 'Do not let the fear of failure stop you from trying', trans: 'Đừng để nỗi sợ thất bại ngăn cản bạn cố gắng' },
+    { id: 812, text: 'Happiness often comes from the simplest things in life', trans: 'Hạnh phúc thường đến từ những điều giản đơn nhất trong cuộc sống' },
+    { id: 813, text: 'Jealousy can destroy even the strongest relationships', trans: 'Sự ghen tuông có thể phá hủy cả những mối quan hệ bền chặt nhất' },
+    { id: 814, text: 'Curiosity is the fuel for discovery and learning', trans: 'Sự tò mò là nhiên liệu cho sự khám phá và học hỏi' },
+    { id: 815, text: 'Stay positive even when things do not go your way', trans: 'Hãy lạc quan ngay cả khi mọi việc không như ý bạn' },
+    { id: 816, text: 'Loneliness is not the same as being alone', trans: 'Sự cô đơn không giống với việc ở một mình' },
+    { id: 817, text: 'Developing emotional intelligence helps in leadership', trans: 'Phát triển trí tuệ cảm xúc giúp ích trong việc lãnh đạo' },
+    { id: 818, text: 'Grief is a natural response to losing someone you love', trans: 'Đau buồn là phản ứng tự nhiên khi mất đi người mình yêu thương' },
+    { id: 819, text: 'Optimism is the faith that leads to achievement', trans: 'Sự lạc quan là niềm tin dẫn đến thành tựu' },
+    { id: 820, text: 'Motivation gets you started habit keeps you going', trans: 'Động lực giúp bạn bắt đầu, thói quen giúp bạn tiếp tục' },
+    { id: 821, text: 'Do not make permanent decisions on temporary emotions', trans: 'Đừng đưa ra quyết định dài hạn dựa trên cảm xúc nhất thời' },
+    { id: 822, text: 'Regret is a waste of time and energy', trans: 'Hối tiếc là sự lãng phí thời gian và năng lượng' },
+    { id: 823, text: 'Patience is not simply the ability to wait', trans: 'Kiên nhẫn không chỉ đơn giản là khả năng chờ đợi' },
+    { id: 824, text: 'Trust takes years to build but seconds to break', trans: 'Niềm tin mất nhiều năm để xây dựng nhưng chỉ vài giây để phá vỡ' },
+    { id: 825, text: 'Kindness makes you the most beautiful person in the world', trans: 'Sự tử tế khiến bạn trở thành người đẹp nhất thế giới' },
+    { id: 826, text: 'Anger is one letter short of danger', trans: 'Giận dữ (Anger) chỉ kém Nguy hiểm (Danger) một chữ cái' },
+    { id: 827, text: 'Gratitude turns what we have into enough', trans: 'Lòng biết ơn biến những gì ta có trở nên đủ đầy' },
+    { id: 828, text: 'Insecurity kills all that is beautiful', trans: 'Sự bất an giết chết tất cả những gì tươi đẹp' },
+    { id: 829, text: 'Nostalgia is a longing for the past', trans: 'Hoài niệm là sự khao khát về quá khứ' },
+    { id: 830, text: 'True courage is being afraid but going on anyhow', trans: 'Can đảm thực sự là sợ hãi nhưng vẫn tiếp tục bước đi' },
+    { id: 831, text: 'Disappointment happens when expectations are not met', trans: 'Sự thất vọng xảy ra khi kỳ vọng không được đáp ứng' },
+    { id: 832, text: 'Resilience is the ability to bounce back from adversity', trans: 'Kiên cường là khả năng vực dậy sau nghịch cảnh' },
+    { id: 833, text: 'A calm mind brings inner strength and self confidence', trans: 'Một tâm trí bình thản mang lại sức mạnh nội tại và sự tự tin' },
+    { id: 834, text: 'Never apologize for having high standards', trans: 'Đừng bao giờ xin lỗi vì có tiêu chuẩn cao' },
+    { id: 835, text: 'Your attitude determines your direction', trans: 'Thái độ của bạn quyết định hướng đi của bạn' },
+    { id: 836, text: 'Forgiveness sets you free from the past', trans: 'Sự tha thứ giải phóng bạn khỏi quá khứ' },
+    { id: 837, text: 'Love is not about possession it is about appreciation', trans: 'Tình yêu không phải là sở hữu, nó là sự trân trọng' },
+    { id: 838, text: 'Sometimes silence is the best answer', trans: 'Đôi khi im lặng là câu trả lời tốt nhất' },
+    { id: 839, text: 'Be proud of who you are and what you have achieved', trans: 'Hãy tự hào về việc bạn là ai và những gì bạn đã đạt được' },
+    { id: 840, text: 'Comparison is the thief of joy', trans: 'Sự so sánh là kẻ đánh cắp niềm vui' },
+    { id: 841, text: 'Listen to understand not just to reply', trans: 'Hãy lắng nghe để thấu hiểu, không chỉ để đáp trả' },
+    { id: 842, text: 'Vulnerability is the birthplace of innovation and change', trans: 'Sự tổn thương là nơi khởi nguồn của đổi mới và thay đổi' },
+    { id: 843, text: 'Mindfulness helps you stay in the present moment', trans: 'Chánh niệm giúp bạn ở lại với giây phút hiện tại' },
+    { id: 844, text: 'Passion is the energy that keeps us going', trans: 'Đam mê là năng lượng giúp chúng ta tiếp bước' },
+    { id: 845, text: 'Inspiration exists but it has to find you working', trans: 'Cảm hứng có tồn tại, nhưng nó phải tìm thấy bạn đang làm việc' },
+    { id: 846, text: 'Doubt kills more dreams than failure ever will', trans: 'Sự nghi ngờ giết chết nhiều ước mơ hơn là thất bại' },
+    { id: 847, text: 'Self discipline is the bridge between goals and accomplishment', trans: 'Kỷ luật bản thân là cầu nối giữa mục tiêu và thành tựu' },
+    { id: 848, text: 'Do not let yesterday take up too much of today', trans: 'Đừng để ngày hôm qua chiếm quá nhiều của ngày hôm nay' },
+    { id: 849, text: 'You are stronger than you think', trans: 'Bạn mạnh mẽ hơn bạn nghĩ đấy' },
+    { id: 850, text: 'The only way to do great work is to love what you do', trans: 'Cách duy nhất để làm việc tuyệt vời là yêu những gì bạn làm' },
+
+    // --- CẤP 851-900: Xã hội & Vấn đề toàn cầu (Social Issues - Complex Sentences) ---
+    { id: 851, text: 'Education is the key to breaking the cycle of poverty', trans: 'Giáo dục là chìa khóa để phá vỡ vòng luẩn quẩn của đói nghèo' },
+    { id: 852, text: 'We need to promote gender equality in the workplace', trans: 'Chúng ta cần thúc đẩy bình đẳng giới tại nơi làm việc' },
+    { id: 853, text: 'Climate change is the biggest threat facing humanity today', trans: 'Biến đổi khí hậu là mối đe dọa lớn nhất nhân loại đang đối mặt' },
+    { id: 854, text: 'Freedom of speech is a fundamental human right', trans: 'Tự do ngôn luận là quyền cơ bản của con người' },
+    { id: 855, text: 'Social media has changed the way we communicate forever', trans: 'Mạng xã hội đã thay đổi cách chúng ta giao tiếp mãi mãi' },
+    { id: 856, text: 'Access to clean water should be a universal right', trans: 'Tiếp cận nước sạch nên là một quyền phổ quát' },
+    { id: 857, text: 'Unemployment rate has decreased significantly this year', trans: 'Tỷ lệ thất nghiệp đã giảm đáng kể trong năm nay' },
+    { id: 858, text: 'Sustainable development meets the needs of the present', trans: 'Phát triển bền vững đáp ứng các nhu cầu của hiện tại' },
+    { id: 859, text: 'Globalization has connected economies around the world', trans: 'Toàn cầu hóa đã kết nối các nền kinh tế trên khắp thế giới' },
+    { id: 860, text: 'We must fight against discrimination and racism', trans: 'Chúng ta phải đấu tranh chống lại sự phân biệt đối xử và phân biệt chủng tộc' },
+    { id: 861, text: 'Volunteering creates a sense of community and purpose', trans: 'Tình nguyện tạo ra ý thức cộng đồng và mục đích sống' },
+    { id: 862, text: 'The gap between the rich and the poor is widening', trans: 'Khoảng cách giữa người giàu và người nghèo đang nới rộng' },
+    { id: 863, text: 'Healthcare should be affordable for everyone', trans: 'Chăm sóc sức khỏe nên có giá cả phải chăng cho mọi người' },
+    { id: 864, text: 'Cultural diversity enriches our society', trans: 'Đa dạng văn hóa làm phong phú xã hội của chúng ta' },
+    { id: 865, text: 'Renewable energy sources are the future of power', trans: 'Các nguồn năng lượng tái tạo là tương lai của năng lượng' },
+    { id: 866, text: 'Overpopulation puts pressure on natural resources', trans: 'Bùng nổ dân số gây áp lực lên tài nguyên thiên nhiên' },
+    { id: 867, text: 'Cyberbullying is a growing problem among teenagers', trans: 'Bắt nạt qua mạng là vấn đề ngày càng tăng ở thanh thiếu niên' },
+    { id: 868, text: 'Food security is a major concern for developing countries', trans: 'An ninh lương thực là mối lo lớn cho các nước đang phát triển' },
+    { id: 869, text: 'Preserving wildlife is crucial for the ecosystem', trans: 'Bảo tồn động vật hoang dã là cốt yếu cho hệ sinh thái' },
+    { id: 870, text: 'Digital literacy is necessary in the modern world', trans: 'Hiểu biết về kỹ thuật số là cần thiết trong thế giới hiện đại' },
+    { id: 871, text: 'Immigration policies are being debated by the government', trans: 'Các chính sách nhập cư đang được chính phủ tranh luận' },
+    { id: 872, text: 'Homelessness requires long term solutions not just temporary aid', trans: 'Vô gia cư cần giải pháp dài hạn chứ không chỉ viện trợ tạm thời' },
+    { id: 873, text: 'Consumerism has a significant impact on the environment', trans: 'Chủ nghĩa tiêu dùng có tác động đáng kể lên môi trường' },
+    { id: 874, text: 'Public transportation helps reduce traffic congestion', trans: 'Giao thông công cộng giúp giảm thiểu tắc nghẽn giao thông' },
+    { id: 875, text: 'Urbanization leads to the expansion of cities', trans: 'Đô thị hóa dẫn đến sự mở rộng của các thành phố' },
+    { id: 876, text: 'Human rights must be respected and protected', trans: 'Nhân quyền phải được tôn trọng và bảo vệ' },
+    { id: 877, text: 'Corruption hinders economic growth and development', trans: 'Tham nhũng cản trở sự tăng trưởng và phát triển kinh tế' },
+    { id: 878, text: 'Mental health awareness is increasing globally', trans: 'Nhận thức về sức khỏe tâm thần đang tăng lên trên toàn cầu' },
+    { id: 879, text: 'We have a responsibility to leave a better planet', trans: 'Chúng ta có trách nhiệm để lại một hành tinh tốt đẹp hơn' },
+    { id: 880, text: 'Technology can be a double edged sword', trans: 'Công nghệ có thể là con dao hai lưỡi' },
+    { id: 881, text: 'Recycling helps reduce the amount of waste in landfills', trans: 'Tái chế giúp giảm lượng rác thải tại các bãi chôn lấp' },
+    { id: 882, text: 'Freedom of the press ensures a transparent society', trans: 'Tự do báo chí đảm bảo một xã hội minh bạch' },
+    { id: 883, text: 'Child labor is a violation of human rights', trans: 'Lao động trẻ em là sự vi phạm nhân quyền' },
+    { id: 884, text: 'Peacekeeping missions help maintain stability', trans: 'Các sứ mệnh gìn giữ hòa bình giúp duy trì sự ổn định' },
+    { id: 885, text: 'International cooperation is needed to solve global issues', trans: 'Hợp tác quốc tế là cần thiết để giải quyết các vấn đề toàn cầu' },
+    { id: 886, text: 'Minimum wage should cover the basic cost of living', trans: 'Mức lương tối thiểu nên chi trả được chi phí sống cơ bản' },
+    { id: 887, text: 'Plastic waste threatens marine life significantly', trans: 'Rác thải nhựa đe dọa sinh vật biển một cách đáng kể' },
+    { id: 888, text: 'We need to invest more in scientific research', trans: 'Chúng ta cần đầu tư nhiều hơn vào nghiên cứu khoa học' },
+    { id: 889, text: 'Democracy allows people to choose their leaders', trans: 'Dân chủ cho phép người dân chọn ra lãnh đạo của họ' },
+    { id: 890, text: 'Equality means everyone has the same opportunities', trans: 'Bình đẳng nghĩa là mọi người có cơ hội như nhau' },
+    { id: 891, text: 'Inflation reduces the purchasing power of money', trans: 'Lạm phát làm giảm sức mua của đồng tiền' },
+    { id: 892, text: 'Diplomacy is better than conflict resolution by force', trans: 'Ngoại giao tốt hơn giải quyết xung đột bằng vũ lực' },
+    { id: 893, text: 'Every citizen has the duty to obey the law', trans: 'Mọi công dân có nghĩa vụ tuân thủ pháp luật' },
+    { id: 894, text: 'Deforestation causes loss of habitat for animals', trans: 'Nạn phá rừng gây mất môi trường sống cho động vật' },
+    { id: 895, text: 'We must encourage ethical business practices', trans: 'Chúng ta phải khuyến khích các thực hành kinh doanh đạo đức' },
+    { id: 896, text: 'Censorship can limit freedom of expression', trans: 'Kiểm duyệt có thể hạn chế quyền tự do biểu đạt' },
+    { id: 897, text: 'Community service teaches empathy and responsibility', trans: 'Phục vụ cộng đồng dạy sự thấu cảm và trách nhiệm' },
+    { id: 898, text: 'Tax revenue funds public services and infrastructure', trans: 'Doanh thu thuế tài trợ cho dịch vụ công và cơ sở hạ tầng' },
+    { id: 899, text: 'Social welfare supports those in need', trans: 'Phúc lợi xã hội hỗ trợ những người gặp khó khăn' },
+    { id: 900, text: 'A just society values every human life equally', trans: 'Một xã hội công bằng trân trọng mọi sinh mạng con người như nhau' },
+
+    // --- CẤP 901-950: Thành ngữ & Cấu trúc (Idioms & Advanced Grammar) ---
+    { id: 901, text: 'If I were you I would take that opportunity immediately', trans: 'Nếu tôi là bạn, tôi sẽ nắm lấy cơ hội đó ngay lập tức' },
+    { id: 902, text: 'She has been working here for more than ten years', trans: 'Cô ấy đã làm việc ở đây được hơn mười năm rồi' },
+    { id: 903, text: 'By the time you arrive I will have finished dinner', trans: 'Vào lúc bạn đến, tôi sẽ đã ăn tối xong rồi' },
+    { id: 904, text: 'Do not judge a book by its cover', trans: 'Đừng đánh giá một cuốn sách qua bìa của nó' },
+    { id: 905, text: 'It is raining cats and dogs outside right now', trans: 'Bên ngoài trời đang mưa như trút nước ngay lúc này' },
+    { id: 906, text: 'He managed to kill two birds with one stone', trans: 'Anh ấy đã xoay sở để một mũi tên trúng hai đích' },
+    { id: 907, text: 'Break a leg in your performance tonight', trans: 'Chúc may mắn trong buổi biểu diễn tối nay nhé' },
+    { id: 908, text: 'To make a long story short I missed the bus', trans: 'Nói tóm lại là tôi đã bị lỡ xe buýt' },
+    { id: 909, text: 'Had I known the truth I would have acted differently', trans: 'Nếu tôi biết sự thật, tôi đã hành động khác đi' },
+    { id: 910, text: 'This is the best movie that I have ever seen', trans: 'Đây là bộ phim hay nhất mà tôi từng xem' },
+    { id: 911, text: 'She accused him of stealing her ideas', trans: 'Cô ấy buộc tội anh ta đã đánh cắp ý tưởng của mình' },
+    { id: 912, text: 'I am looking forward to hearing from you soon', trans: 'Tôi rất mong sớm nhận được tin từ bạn' },
+    { id: 913, text: 'It goes without saying that health is important', trans: 'Khỏi phải nói cũng biết sức khỏe là quan trọng' },
+    { id: 914, text: 'Once in a blue moon I go to the cinema', trans: 'Hiếm hoi lắm tôi mới đi xem phim' },
+    { id: 915, text: 'You can not have your cake and eat it too', trans: 'Bạn không thể muốn được cả hai thứ cùng lúc' },
+    { id: 916, text: 'Let the cat out of the bag', trans: 'Vô tình để lộ bí mật' },
+    { id: 917, text: 'I am feeling under the weather today', trans: 'Hôm nay tôi cảm thấy không được khỏe' },
+    { id: 918, text: 'Actions speak louder than words', trans: 'Hành động quan trọng hơn lời nói' },
+    { id: 919, text: 'We see eye to eye on most issues', trans: 'Chúng tôi đồng quan điểm về hầu hết các vấn đề' },
+    { id: 920, text: 'Do not put all your eggs in one basket', trans: 'Đừng bỏ tất cả trứng vào một giỏ' },
+    { id: 921, text: 'I used to play soccer when I was a child', trans: 'Tôi đã từng chơi bóng đá khi tôi còn nhỏ' },
+    { id: 922, text: 'Despite the rain we enjoyed the festival', trans: 'Mặc dù trời mưa, chúng tôi vẫn tận hưởng lễ hội' },
+    { id: 923, text: 'It is high time we started taking action', trans: 'Đã đến lúc chúng ta bắt đầu hành động rồi' },
+    { id: 924, text: 'I would rather stay home than go out tonight', trans: 'Tôi thà ở nhà còn hơn là đi ra ngoài tối nay' },
+    { id: 925, text: 'Neither the teacher nor the students were happy', trans: 'Cả giáo viên và học sinh đều không vui' },
+    { id: 926, text: 'Not only is she beautiful but she is also intelligent', trans: 'Cô ấy không những xinh đẹp mà còn thông minh' },
+    { id: 927, text: 'Hardly had I arrived when the phone rang', trans: 'Tôi vừa mới đến thì điện thoại reo' },
+    { id: 928, text: 'The more you practice the better you will become', trans: 'Bạn càng luyện tập, bạn sẽ càng trở nên giỏi hơn' },
+    { id: 929, text: 'There is no use crying over spilled milk', trans: 'Có khóc lóc về chuyện đã rồi cũng vô ích' },
+    { id: 930, text: 'Every cloud has a silver lining', trans: 'Trong cái rủi có cái may' },
+    { id: 931, text: 'Rome was not built in a day', trans: 'Thành Rome không được xây trong một ngày' },
+    { id: 932, text: 'When in Rome do as the Romans do', trans: 'Nhập gia tùy tục' },
+    { id: 933, text: 'A penny saved is a penny earned', trans: 'Một xu tiết kiệm là một xu kiếm được' },
+    { id: 934, text: 'Bite the bullet and finish the job', trans: 'Hãy cắn răng chịu đựng và hoàn thành công việc đi' },
+    { id: 935, text: 'I am on the fence about the decision', trans: 'Tôi đang lưỡng lự về quyết định này' },
+    { id: 936, text: 'He let me off the hook this time', trans: 'Anh ấy đã tha cho tôi lần này' },
+    { id: 937, text: 'We need to go back to the drawing board', trans: 'Chúng ta cần làm lại từ đầu' },
+    { id: 938, text: 'The ball is in your court now', trans: 'Bây giờ quyền quyết định thuộc về bạn' },
+    { id: 939, text: 'It cost an arm and a leg', trans: 'Nó đắt cắt cổ (tốn cả tay lẫn chân)' },
+    { id: 940, text: 'Do not count your chickens before they hatch', trans: 'Đừng đếm gà trước khi trứng nở (đừng vội mừng)' },
+    { id: 941, text: 'I am all ears tell me everything', trans: 'Tôi đang lắng nghe đây, kể hết cho tôi đi' },
+    { id: 942, text: 'Better late than never', trans: 'Muộn còn hơn không' },
+    { id: 943, text: 'Curiosity killed the cat', trans: 'Sự tò mò giết chết con mèo (Đừng tò mò quá)' },
+    { id: 944, text: 'Ignorance is bliss', trans: 'Không biết lại là hạnh phúc' },
+    { id: 945, text: 'It takes two to tango', trans: 'Phải có hai người mới nhảy tango được (Cả 2 cùng có lỗi)' },
+    { id: 946, text: 'Leave no stone unturned', trans: 'Lật tung mọi viên đá lên (Làm mọi cách có thể)' },
+    { id: 947, text: 'Steal someone thunder', trans: 'Cướp công lao/sự chú ý của người khác' },
+    { id: 948, text: 'Through thick and thin', trans: 'Bất chấp mọi khó khăn gian khổ' },
+    { id: 949, text: 'Time flies when you are having fun', trans: 'Thời gian trôi nhanh khi bạn đang vui vẻ' },
+    { id: 950, text: 'You can lead a horse to water but you cannot make it drink', trans: 'Bạn có thể dẫn ngựa đến chỗ nước nhưng không thể bắt nó uống' },
+
+    // --- CẤP 951-1000: Triết lý & Thành tựu trọn đời (Philosophy & Mastery) ---
+    { id: 951, text: 'Life is what happens when you are busy making other plans', trans: 'Cuộc sống là những gì xảy ra khi bạn bận rộn với các kế hoạch khác' },
+    { id: 952, text: 'The only way to do great work is to love what you do', trans: 'Cách duy nhất để làm việc vĩ đại là yêu những gì bạn làm' },
+    { id: 953, text: 'Success is not final failure is not fatal', trans: 'Thành công không phải là cuối cùng, thất bại không phải là chết người' },
+    { id: 954, text: 'In the end we only regret the chances we did not take', trans: 'Cuối cùng, ta chỉ hối tiếc những cơ hội mình đã không nắm lấy' },
+    { id: 955, text: 'Happiness depends upon ourselves', trans: 'Hạnh phúc phụ thuộc vào chính bản thân chúng ta' },
+    { id: 956, text: 'Be the change that you wish to see in the world', trans: 'Hãy là sự thay đổi mà bạn muốn nhìn thấy trên thế giới' },
+    { id: 957, text: 'It always seems impossible until it is done', trans: 'Mọi việc luôn có vẻ bất khả thi cho đến khi nó được hoàn thành' },
+    { id: 958, text: 'Keep your face always toward the sunshine and shadows will fall behind you', trans: 'Hãy luôn hướng về phía mặt trời và bóng tối sẽ ngả sau lưng bạn' },
+    { id: 959, text: 'Believe you can and you are halfway there', trans: 'Tin rằng bạn có thể và bạn đã đi được một nửa chặng đường' },
+    { id: 960, text: 'The journey of a thousand miles begins with a single step', trans: 'Hành trình vạn dặm bắt đầu từ một bước chân' },
+    { id: 961, text: 'What lies behind us and what lies before us are tiny matters', trans: 'Những gì nằm sau và trước ta chỉ là những chuyện nhỏ nhặt' },
+    { id: 962, text: 'Do not dwell on the past do not dream of the future focus on now', trans: 'Đừng chìm đắm quá khứ, đừng mơ mộng tương lai, hãy tập trung vào hiện tại' },
+    { id: 963, text: 'Success usually comes to those who are too busy to be looking for it', trans: 'Thành công thường đến với những người quá bận rộn để tìm kiếm nó' },
+    { id: 964, text: 'Don not watch the clock do what it does keep going', trans: 'Đừng nhìn đồng hồ, hãy làm như nó: tiếp tục trôi đi' },
+    { id: 965, text: 'You miss one hundred percent of the shots you do not take', trans: 'Bạn bỏ lỡ 100% những cú ném mà bạn không thực hiện' },
+    { id: 966, text: 'Whether you think you can or you think you cannot you are right', trans: 'Dù bạn nghĩ bạn có thể hay không thể, bạn đều đúng' },
+    { id: 967, text: 'I have not failed I have just found ten thousand ways that will not work', trans: 'Tôi không thất bại, tôi chỉ tìm ra 10 ngàn cách không hiệu quả' },
+    { id: 968, text: 'Tell me and I forget teach me and I may remember involve me and I learn', trans: 'Nói tôi nghe tôi sẽ quên, dạy tôi thì tôi nhớ, cho tôi tham gia tôi sẽ hiểu' },
+    { id: 969, text: 'The best way to predict the future is to invent it', trans: 'Cách tốt nhất để dự đoán tương lai là kiến tạo ra nó' },
+    { id: 970, text: 'It does not matter how slowly you go as long as you do not stop', trans: 'Không quan trọng bạn đi chậm thế nào, miễn là đừng dừng lại' },
+    { id: 971, text: 'Our greatest glory is not in never falling but in rising every time we fall', trans: 'Vinh quang lớn nhất không phải là không bao giờ ngã, mà là đứng dậy sau mỗi lần ngã' },
+    { id: 972, text: 'Everything has beauty but not everyone sees it', trans: 'Mọi thứ đều có vẻ đẹp nhưng không phải ai cũng nhìn thấy' },
+    { id: 973, text: 'Education is the most powerful weapon which you can use to change the world', trans: 'Giáo dục là vũ khí mạnh nhất bạn có thể dùng để thay đổi thế giới' },
+    { id: 974, text: 'We are what we repeatedly do excellence then is not an act but a habit', trans: 'Chúng ta là những gì mình làm lặp lại. Xuất sắc không phải hành động mà là thói quen' },
+    { id: 975, text: 'The only true wisdom is in knowing you know nothing', trans: 'Sự khôn ngoan đích thực duy nhất là biết rằng mình không biết gì cả' },
+    { id: 976, text: 'Change your thoughts and you change your world', trans: 'Thay đổi suy nghĩ và bạn sẽ thay đổi thế giới của mình' },
+    { id: 977, text: 'Dream big and dare to fail', trans: 'Hãy mơ lớn và dám thất bại' },
+    { id: 978, text: 'Knowledge speaks but wisdom listens', trans: 'Hiểu biết thì lên tiếng, nhưng khôn ngoan thì lắng nghe' },
+    { id: 979, text: 'Try to be a rainbow in someone else cloud', trans: 'Hãy cố gắng trở thành cầu vồng trong đám mây của người khác' },
+    { id: 980, text: 'There is no elevator to success you have to take the stairs', trans: 'Không có thang máy tới thành công, bạn phải đi thang bộ' },
+    { id: 981, text: 'Love is the only force capable of transforming an enemy into a friend', trans: 'Tình yêu là lực duy nhất có thể biến kẻ thù thành bạn' },
+    { id: 982, text: 'Do what you can with what you have where you are', trans: 'Làm những gì bạn có thể, với những gì bạn có, tại nơi bạn đang đứng' },
+    { id: 983, text: 'Be yourself everyone else is already taken', trans: 'Hãy là chính mình, những người khác đã có người làm rồi' },
+    { id: 984, text: 'This too shall pass', trans: 'Mọi chuyện rồi cũng sẽ qua thôi' },
+    { id: 985, text: 'Peace begins with a smile', trans: 'Hòa bình bắt đầu bằng một nụ cười' },
+    { id: 986, text: 'A winner is a dreamer who never gives up', trans: 'Người chiến thắng là kẻ mộng mơ không bao giờ bỏ cuộc' },
+    { id: 987, text: 'Your time is limited so do not waste it living someone else life', trans: 'Thời gian là hữu hạn, đừng lãng phí nó để sống cuộc đời người khác' },
+    { id: 988, text: 'Creativity is intelligence having fun', trans: 'Sáng tạo là khi trí thông minh đang vui đùa' },
+    { id: 989, text: 'Simplicity is the ultimate sophistication', trans: 'Đơn giản là đỉnh cao của sự tinh tế' },
+    { id: 990, text: 'The purpose of our lives is to be happy', trans: 'Mục đích cuộc đời chúng ta là hạnh phúc' },
+    { id: 991, text: 'Life is 10 percent what happens to me and 90 percent how I react to it', trans: 'Cuộc sống là 10% những gì xảy ra và 90% cách tôi phản ứng với nó' },
+    { id: 992, text: 'If you want to lift yourself up lift up someone else', trans: 'Nếu muốn nâng mình lên, hãy nâng đỡ người khác' },
+    { id: 993, text: 'I have mastered the art of English speaking through perseverance', trans: 'Tôi đã làm chủ nghệ thuật nói tiếng Anh thông qua sự kiên trì' },
+    { id: 994, text: 'Language is the road map of a culture', trans: 'Ngôn ngữ là bản đồ của một nền văn hóa' },
+    { id: 995, text: 'To have another language is to possess a second soul', trans: 'Biết thêm một ngôn ngữ là sở hữu thêm một tâm hồn thứ hai' },
+    { id: 996, text: 'Learning is a treasure that will follow its owner everywhere', trans: 'Học tập là kho báu sẽ đi theo chủ nhân của nó khắp mọi nơi' },
+    { id: 997, text: 'You live a new life for every new language you speak', trans: 'Bạn sống một cuộc đời mới với mỗi ngôn ngữ mới bạn nói' },
+    { id: 998, text: 'Limits exist only in the mind', trans: 'Giới hạn chỉ tồn tại trong tâm trí' },
+    { id: 999, text: 'I am ready to conquer the world with my voice', trans: 'Tôi đã sẵn sàng chinh phục thế giới bằng giọng nói của mình' },
+    { id: 1000, text: 'Congratulations You are now the Ultimate English Grandmaster', trans: 'Chúc mừng! Bạn giờ đây là Đại kiện tướng Tiếng Anh Tối thượng' }
+];
+
+        async function init() {
+            try {
+                const res = await fetch('/api/user/progress');
+                if (res.ok) {
+                    const data = await res.json();
+                    unlockedLevel = data.englishSpeechLevel || 1;
+                }
+            } catch(e) {}
+            renderLevels();
+        }
+
+        function renderLevels() {
+            const list = document.getElementById('level-buttons');
+            list.innerHTML = '';
+            levels.forEach(lvl => {
+                const btn = document.createElement('button');
+                const icon = lvl.id <= unlockedLevel ? lvl.id : '🔒';
+                btn.innerHTML = `<span>${icon}</span>`;
+                btn.className = `level-btn ${lvl.id <= unlockedLevel ? 'unlocked' : ''} ${lvl.id === unlockedLevel ? 'current' : ''}`;
+                
+                if (lvl.id <= unlockedLevel) {
+                    btn.onclick = () => startGame(lvl.id);
+                } else {
+                    btn.disabled = true;
+                }
+                list.appendChild(btn);
+
+                if (lvl.id === unlockedLevel) {
+                    setTimeout(() => {
+                        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 500);
+                }
+            });
+        }
+
+        function speakSample() {
+            const text = document.getElementById('text-to-read').textContent;
+            const btnRecord = document.getElementById('record-btn');
+
+            if (btnRecord.classList.contains('recording') && recognition) {
+                recognition.abort();
+                btnRecord.classList.remove('recording');
+            }
+
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+
+            utterance.onstart = () => {
+                btnRecord.disabled = true; 
+                btnRecord.style.opacity = "0.3";
+                btnRecord.style.cursor = "not-allowed";
+                document.getElementById('score-display').textContent = "";
+                document.getElementById('result-text').textContent = "🤫 Trật tự nghe máy đọc nhé...";
+            };
+
+            utterance.onend = () => {
+                btnRecord.disabled = false;
+                btnRecord.style.opacity = "1";
+                btnRecord.style.cursor = "pointer";
+                document.getElementById('result-text').textContent = "Giờ đến lượt bé đọc nào!";
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function startGame(id) {
+            currentLevel = id;
+            const data = levels.find(l => l.id === id);
+            window.speechSynthesis.cancel(); 
+
+            document.getElementById('level-selection-area').style.display = 'none';
+            document.getElementById('game-area').style.display = 'block';
+            
+            document.getElementById('level-title').textContent = `LEVEL ${id}`;
+            document.getElementById('text-to-read').textContent = data.text;
+            document.getElementById('text-translation').textContent = data.trans;
+
+            resetGameUI();
+            setTimeout(speakSample, 600); 
+        }
+
+        function resetGameUI() {
+            document.getElementById('result-text').textContent = "Nhấn vào micro và đọc to nhé!";
+            document.getElementById('score-display').textContent = "";
+            document.getElementById('record-btn').classList.remove('recording');
+            document.getElementById('result-container').style.background = "transparent";
+        }
+
+        // --- THUẬT TOÁN SO SÁNH ---
+        function editDistance(s1, s2) {
+            s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
+            let costs = new Array();
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i == 0) costs[j] = j;
+                    else {
+                        if (j > 0) {
+                            let newValue = costs[j - 1];
+                            if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                                newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                            costs[j - 1] = lastValue;
+                            lastValue = newValue;
+                        }
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        function similarity(s1, s2) {
+            let longer = s1, shorter = s2;
+            if (s1.length < s2.length) { longer = s2; shorter = s1; }
+            let longerLength = longer.length;
+            if (longerLength === 0) return 1.0;
+            return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+        }
+
+        function checkResult(spoken) {
+            const targetObj = levels.find(l => l.id === currentLevel);
+            if (!targetObj) return; 
+            const target = targetObj.text;
+
+            const normalize = (str) => {
+                return str.toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+            };
+
+            const cleanSpoken = normalize(spoken);
+            const cleanTarget = normalize(target);
+
+            const accuracy = similarity(cleanSpoken, cleanTarget);
+            const percent = Math.round(accuracy * 100);
+            
+            const scoreDisplay = document.getElementById('score-display');
+            const resultContainer = document.getElementById('result-container');
+
+            if (percent >= 87) {
+                scoreDisplay.innerHTML = `🎉 CHÍNH XÁC! (${percent}%) 🎉`;
+                scoreDisplay.style.color = "#27ae60";
+                resultContainer.style.background = "#dff9fb";
+                saveWin(); 
+            } else {
+                scoreDisplay.innerHTML = `Chưa đạt (${percent}%). Cần 87% để qua màn! 😅`;
+                scoreDisplay.style.color = "#d63031";
+                resultContainer.style.background = "#ffeaa7";
+            }
+        }
+
+        async function saveWin() {
+            if (currentLevel === unlockedLevel && unlockedLevel < 1000) unlockedLevel++;
+            try {
+                const res = await fetch('/api/game/english-speech-win', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ level: currentLevel })
+                });
+                const d = await res.json();
+                if(d.newLevel) unlockedLevel = d.newLevel;
+                setTimeout(() => document.getElementById('back-to-levels-btn').click(), 2000);
+            } catch(e) {}
+        }
+
+        // --- XỬ LÝ SỰ KIỆN GHI ÂM ---
+        const recordBtn = document.getElementById('record-btn');
+        recordBtn.addEventListener('click', () => {
+            if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                window.speechSynthesis.cancel();
+            }
+
+            if (!recognition) return alert("Trình duyệt không hỗ trợ!");
+
+            if (recordBtn.classList.contains('recording')) {
+                recognition.stop();
+                recordBtn.classList.remove('recording');
+            } else {
+                document.getElementById('score-display').textContent = "";
+                document.getElementById('result-container').style.background = "transparent";
+                document.getElementById('result-text').textContent = "Đang nghe... Bé đọc đi nào!";
+
+                try {
+                    recognition.start();
+                    recordBtn.classList.add('recording');
+                } catch (e) {
+                    console.error("Lỗi khởi động Recognition:", e);
+                    recordBtn.classList.remove('recording');
+                }
+            }
+        });
+
+        if (recognition) {
+            recognition.onresult = (event) => {
+                recordBtn.classList.remove('recording');
+                const spoken = event.results[0][0].transcript;
+                document.getElementById('result-text').textContent = `Bé đã nói: "${spoken}"`;
+                checkResult(spoken);
+            };
+
+            recognition.onerror = (event) => {
+                recordBtn.classList.remove('recording');
+                if (event.error !== 'no-speech') {
+                    document.getElementById('result-text').textContent = "Không nghe rõ, bé thử lại nhé!";
+                }
+            };
+
+            recognition.onspeechend = () => {
+                recognition.stop();
+                recordBtn.classList.remove('recording');
+            };
+        }
+
+        document.getElementById('back-to-levels-btn').addEventListener('click', () => {
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('level-selection-area').style.display = 'block';
+            renderLevels();
+        });
+
+        init();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Ngôi Nhà Của Bé - Thành Tích & Xếp Hạng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/platform/legacy-flow.css">
+    <style>
+        .profile-container {
+            max-width: 1200px; margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .header-info { text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 20px; margin-bottom: 30px; }
+        .avatar { font-size: 5rem; display: block; margin-bottom: 10px; animation: bounce 2s infinite; }
+        .username { color: #e67e22; margin: 0; font-size: 2.5rem; text-shadow: 2px 2px 0 #f1c40f; }
+        .score-tag { background: #2ecc71; color: white; padding: 5px 20px; border-radius: 20px; font-weight: bold; font-size: 1.2rem; display: inline-block; margin-top: 10px; box-shadow: 0 3px 0 #27ae60; }
+
+        /* Style cho từng tủ cúp */
+        .trophy-section { margin-bottom: 40px; background: #fdfdfd; padding: 15px; border-radius: 15px; border: 1px solid #eee; }
+        .trophy-header { 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .trophy-header h2 { margin: 0; color: #2c3e50; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .current-level-tag { background: #3498db; color: white; padding: 2px 10px; border-radius: 10px; font-size: 0.9rem; }
+
+        .trophy-shelf {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .trophy-item {
+            background: #f1f2f6; border: 2px solid #bdc3c7;
+            border-radius: 8px; padding: 8px; text-align: center;
+            opacity: 0.4; filter: grayscale(100%); transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        
+        .trophy-item.unlocked {
+            opacity: 1; filter: grayscale(0%);
+            background: linear-gradient(135deg, #ffffff 0%, #fff9c4 100%); 
+            border-color: #f1c40f; transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(241, 196, 15, 0.3);
+        }
+
+        .trophy-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
+        .trophy-title { font-weight: bold; color: #333; font-size: 0.8rem; line-height: 1.2; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .trophy-req { font-size: 0.7rem; color: #7f8c8d; margin-top: 5px; }
+        .trophy-item.unlocked .trophy-req { color: #27ae60; font-weight: bold; }
+
+        /* Bảng xếp hạng */
+        .leaderboard-section { background: #fffbe6; padding: 25px; border-radius: 15px; border: 3px solid #f1c40f; margin-top: 50px; }
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
+        .leaderboard-table th { background: #f1c40f; color: #333; padding: 12px; }
+        .leaderboard-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-weight: bold; }
+        .top-1 { color: #d35400; background: #fff4d1; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+/* --- STYLE CHO THÔNG BÁO (Mới thêm) --- */
+    .match-notification {
+        position: fixed; top: 20px; right: 20px; width: 320px;
+        background: white; border-left: 10px solid #f1c40f;
+        padding: 20px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        z-index: 10001; animation: slideIn 0.5s ease-out forwards; color: #333; font-family: 'Baloo 2', cursive;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .notif-btn { width: 100%; margin-top: 10px; background: #2ecc71; color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+    </style>
+<script src="/socket.io/socket.io.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="my-home-bg">
+
+    <h1 class="page-header header-home">🏰 Ngôi Nhà Của Bé 🏰</h1>
+
+    <div class="profile-container">
+        <div class="header-info">
+            <div class="avatar">🤴</div>
+            <h2 class="username" id="display-name">Đang tải...</h2>
+            <div class="score-tag">Tổng điểm tích lũy: <span id="display-score">0</span></div>
+        </div>
+
+        <div id="all-trophies-container">
+            </div>
+
+        <div class="leaderboard-section">
+            <h2 style="text-align: center; color: #d35400; margin: 0;">🏆 BẢNG VÀNG CỦA HÀNH TINH 🏆</h2>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr><th>Hạng</th><th>Tên Bé</th><th>Điểm Số</th><th>Danh Hiệu Cao Nhất</th></tr>
+                </thead>
+                <tbody id="leaderboard-body"><tr><td colspan="4">Đang tải...</td></tr></tbody>
+            </table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="back-button" style="padding: 15px 40px; font-size: 1.2rem;">Về Trang Chủ</a>
+        </div>
+    </div>
+
+    <script>
+// --- KHỞI TẠO SOCKET NHẬN THÔNG BÁO ---
+    const socket = io();
+
+    // 1. Nhắc lịch thi đấu (Hiện 30s)
+    socket.on('matchNotice', (data) => {
+        const notif = document.createElement('div');
+        notif.className = 'match-notification';
+        notif.innerHTML = `
+            <h3 style="margin:0; color:#e67e22;">${data.title}</h3>
+            <p style="margin:10px 0; font-size:0.9rem;">${data.message}</p>
+            <button class="notif-btn" onclick="window.location.href='giai-dau.html'">🏟️ ĐẾN SÂN VẬN ĐỘNG</button>
+        `;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 300000);
+    });
+
+    // 2. Thông báo từ Admin (Hiện 15s)
+    socket.on('adminNotification', (data) => {
+        const notif = document.createElement('div');
+        notif.className = 'match-notification';
+        notif.style.borderLeftColor = '#8e44ad';
+        notif.innerHTML = `
+            <h3 style="margin:0; color:#8e44ad;">📢 ${data.title}</h3>
+            <p style="margin:10px 0; font-weight: bold;">${data.message}</p>
+            <button class="notif-btn" style="background:#8e44ad" onclick="this.parentElement.remove()">ĐÃ HIỂU</button>
+        `;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 300000);
+    });
+        // --- CẤU HÌNH DANH HIỆU (10 Cấp/Danh hiệu) ---
+        const GAME_TITLES = {
+            music: { 
+                name: "Giai Điệu Vui", key: "musicLevel", icon: "🎵",
+                titles: ["Tập Học Đàn", "Biết Nốt Nhạc", "Cảm Âm Tốt", "Nhạc Công Nhí", "Đôi Tai Vàng", "Nghệ Sĩ Đàn", "Nhạc Sĩ Tài Ba", "Bậc Thầy Giai Điệu", "Thiên Tài Âm Nhạc", "Thần Âm Nhạc"] 
+            },
+            xuongVe: { 
+                name: "Xưởng Vẽ", key: "paintingLevel", icon: "🎨",
+                titles: ["Họa Sĩ Nhí", "Bút Chì Màu", "Pha Màu", "Họa Sĩ Tài Ba", "Nghệ Sĩ", "Sắc Màu", "Tranh Sơn Dầu", "Picasso Nhí", "Đại Danh Họa", "Thần Vẽ"] 
+            },
+            ghepHinh: { 
+                name: "Ghép Hình", key: "memoryLevel", icon: "🧩",
+                titles: ["Tập Ghép", "Trí Nhớ Tốt", "Mắt Tinh", "Ghép Nhanh", "Siêu Trí Nhớ", "Bậc Thầy Ghép", "Vua Ghép Hình", "Mắt Thần", "Trí Tuệ Siêu Việt", "Thần Đồng"] 
+            },
+            taoHinh: { 
+                name: "Tạo Hình Vui", key: "shapeLevel", icon: "🔺",
+                titles: ["Nhận Biết", "Xếp Hình", "Sáng Tạo", "Khéo Tay", "Nghệ Nhân", "Điêu Khắc", "Kiến Tạo", "Biến Hóa", "Phù Thủy Hình", "Đấng Sáng Tạo"] 
+            },
+            xayDung: { 
+                name: "Xây Dựng", key: "buildLevel", icon: "🏗️",
+                titles: ["Thợ Phụ", "Thợ Nề", "Thợ Cả", "Kỹ Sư", "Kiến Trúc Sư", "Nhà Thầu", "Quy Hoạch", "Xây Thành Phố", "Trùm Bất Động Sản", "Tổ Sư Nghề"] 
+            },
+            oChu: { 
+                name: "Ô Chữ", key: "crosswordLevel", icon: "🔠",
+                titles: ["Biết Chữ", "Đánh Vần", "Ghép Từ", "Vốn Từ Rộng", "Thông Thái", "Nhà Ngôn Ngữ", "Từ Điển Sống", "Bác Học", "Vua Tiếng Việt", "Thần Chữ"] 
+            },
+            timDiem: { 
+                name: "Thám Tử", key: "detectiveLevel", icon: "🕵️",
+                titles: ["Tập Sự", "Tinh Mắt", "Trinh Sát", "Thám Tử", "Thám Tử Tài Ba", "Thám Tử Lừng Danh", "Sherlock", "Nhìn Xuyên Thấu", "Siêu Thám Tử", "Thần Thám"] 
+            },
+            sangTac: { 
+                name: "Sáng Tác", key: "storyLevel", icon: "✍️",
+                titles: ["Kể Chuyện", "Viết Văn", "Nhà Văn Nhí", "Tiểu Thuyết Gia", "Biên Kịch", "Nhà Thơ", "Văn Hào", "Bút Thần", "Đại Văn Hào", "Thần Văn"] 
+            },
+            luyenNoi: { 
+                name: "Luyện Nói Việt", key: "vietSpeechLevel", icon: "🗣️",
+                titles: ["Bi bô", "Nói Sõi", "Lưu Loát", "MC Nhí", "Thuyết Trình", "Hùng Biện", "Nhà Ngoại Giao", "Miệng Vàng", "Khéo Ăn Nói", "Thần Ngôn Ngữ"] 
+            },
+            luyenNoiAnh: { 
+                name: "Tiếng Anh", key: "englishSpeechLevel", icon: "🇬🇧",
+                titles: [
+                    // --- Giai đoạn Căn bản (10-100) ---
+                    "Hello", "Starter", "Junior 1", "Junior 2", "Junior Master",
+                    "Elementary", "Pre-Inter", "Intermediate", "Upper-Inter", "Advanced",
+                    
+                    // --- Giai đoạn Giao tiếp & Thuyết trình (110-200) ---
+                    "Talker", "Speaker", "Communicator", "Dialogist", "Fluent 1",
+                    "Fluent 2", "Storyteller", "Pro Speaker", "Negotiator", "Scholar",
+                    
+                    // --- Giai đoạn Chuyên gia Ngôn ngữ (210-300) ---
+                    "Academic", "Researcher", "Lecturer", "Specialist", "Linguist",
+                    "Silver Tongue", "Word Smith", "Debater", "Influencer", "Ambassador",
+                    
+                    // --- Giai đoạn Diễn giả Xuất chúng (310-400) ---
+                    "Visionary", "Orator", "Professor", "Philosopher", "Sage",
+                    "Ancient", "Eternal", "Celestial", "Ultimate", "Legendary Master",
+                    
+                    // --- Giai đoạn Hiệp sĩ & Thần thoại Tiếng Anh (410-500) ---
+                    "Word Knight", "Grammar Lord", "Vocab Baron", "Syntax Duke", "Accent Prince",
+                    "Speech King", "Vocal Emperor", "Language Titan", "Fluency Hero", "Mythic Speaker",
+                    
+                    // --- Giai đoạn Chinh phục Đỉnh cao Khoa học & Vũ trụ (510-600) ---
+                    "Astral Voice", "Cosmic Talker", "Galaxy Speaker", "Universal Bard", "Infinity Voice",
+                    "Quantum Orator", "Nebula Guide", "Star Whisperer", "Solar Dictator", "Zenith Speaker",
+                    
+                    // --- Giai đoạn Bậc thầy Triết lý & Cảm xúc (610-700) ---
+                    "Empathy Voice", "Soul Reader", "Heart Toucher", "Mind Healer", "Wisdom Keeper",
+                    "Truth Seeker", "Peace Bringer", "Light Speaker", "Aura Caster", "Spirit Guide",
+                    
+                    // --- Giai đoạn Nghệ sĩ & Bậc thầy Sáng tạo (710-800) ---
+                    "Rhyme Weaver", "Poem Creator", "Lyric Master", "Verse Lord", "Sonnet King",
+                    "Prose Emperor", "Epic Narrator", "Legend Teller", "Myth Weaver", "Story God",
+                    
+                    // --- Giai đoạn Tối cao & Siêu việt (810-900) ---
+                    "Voice of Reason", "Echo of Wisdom", "Sound of Magic", "Breath of Life", "Tone of Power",
+                    "Frequency Master", "Resonance Lord", "Harmonic Sage", "Vibrational King", "Acoustic God",
+                    
+                    // --- Giai đoạn Thần thánh & Kẻ kiến tạo Thế giới Ngôn ngữ (910-1000) ---
+                    "Word Originator", "Speech Creator", "Language Architect", "Dialect Builder", "Tongue Forger",
+                    "Syllable Shaper", "Vowel Crafter", "Consonant Master", "The Omniscient", "English Grandmaster"
+                ] 
+            },
+            coVua: { 
+                name: "Cờ Vua", key: "chessLevel", icon: "♟️",
+                titles: ["Tốt Đen", "Mã Sắt", "Tượng Gỗ", "Xe Pháo", "Hậu Vệ", "Kiện Tướng", "Đại Kiện Tướng", "Siêu Đại Kiện Tướng", "Vua Cờ", "Thần Cờ"] 
+            },
+            caro: { 
+                name: "Cờ Caro", key: "caroLevel", icon: "⭕",
+                titles: ["Tập Chơi", "Biết Đánh", "Cao Thủ Lớp", "Cao Thủ Trường", "Bất Bại", "Độc Cô Cầu Bại", "Thánh Caro", "Vua Caro", "Huyền Thoại", "Caro God"] 
+            },
+            coVay: { 
+                name: "Cờ Vây", key: "goLevel", icon: "⚫",
+                titles: ["Nhập Môn", "9 Kyu", "5 Kyu", "1 Kyu", "1 Dan", "3 Dan", "5 Dan", "9 Dan", "Kỳ Thánh", "Thần Cờ Vây"] 
+            },
+            tyPhu: { 
+                name: "Cờ Tỷ Phú", key: "monopolyLevel", icon: "💰",
+                titles: ["Khởi Nghiệp", "Tiểu Thương", "Chủ Shop", "Doanh Nhân", "Triệu Phú", "Đại Gia", "Tỷ Phú", "Trùm Tài Chính", "Vua Tiền Tệ", "Chủ Tịch"] 
+            },
+            othello: { 
+                name: "Othello", key: "othelloLevel", icon: "⚪",
+                titles: ["Tập Lật", "Biết Lật", "Lật Hay", "Chiến Thuật", "Cao Thủ", "Bậc Thầy", "Đại Sư", "Vô Địch", "Huyền Thoại", "Thần Othello"] 
+            }
+        };
+
+        async function loadAllData() {
+            try {
+                // 1. Tải thông tin người dùng
+                const res = await fetch('/api/user/progress');
+                if (res.status === 401) {
+                    document.getElementById('display-name').textContent = "Khách (Chưa đăng nhập)";
+                    return;
+                }
+                const userData = await res.json();
+                
+                // Hiển thị tên
+                const role = localStorage.getItem('role');
+                const childrenRaw = localStorage.getItem('children');
+                let displayName = userData.username;
+                if (role === 'parent' && childrenRaw) {
+                    try {
+                        const children = JSON.parse(childrenRaw);
+                        if (children.length > 0) displayName = `${userData.username} (PH của: ${children.join(', ')})`;
+                    } catch (e) {}
+                }
+                document.getElementById('display-name').textContent = displayName;
+                document.getElementById('display-score').textContent = (userData.score || 0).toLocaleString();
+
+                // 2. Render tất cả tủ cúp
+                const container = document.getElementById('all-trophies-container');
+                container.innerHTML = ''; // Xóa cũ
+
+                for (const [gameKey, config] of Object.entries(GAME_TITLES)) {
+                    const currentLvl = userData[config.key] || 1;
+                    
+                    // Tạo khung tủ cúp cho game này
+                    const section = document.createElement('div');
+                    section.className = 'trophy-section';
+                    section.innerHTML = `
+                        <div class="trophy-header">
+                            <h2>${config.icon} ${config.name}</h2>
+                            <div class="current-level-tag">Hiện tại: Cấp ${currentLvl}</div>
+                        </div>
+                        <div class="trophy-shelf" id="shelf-${gameKey}"></div>
+                    `;
+                    container.appendChild(section);
+
+                    // Điền 10 cúp vào tủ
+                    const shelf = section.querySelector(`#shelf-${gameKey}`);
+                    config.titles.forEach((title, index) => {
+                        const reqLevel = (index + 1) * 10; // Cấp 10, 20, 30... 100
+                        const isUnlocked = currentLvl >= reqLevel;
+                        
+                        const item = document.createElement('div');
+                        item.className = `trophy-item ${isUnlocked ? 'unlocked' : ''}`;
+                        item.innerHTML = `
+                            <span class="trophy-icon">${isUnlocked ? '🏆' : '🔒'}</span>
+                            <div class="trophy-title">${title}</div>
+                            <div class="trophy-req">${isUnlocked ? 'Đã đạt!' : `Cần cấp ${reqLevel}`}</div>
+                        `;
+                        shelf.appendChild(item);
+                    });
+                }
+
+                // 3. Tải bảng xếp hạng
+                const resLb = await fetch('/api/leaderboard');
+                const topUsers = await resLb.json();
+                renderLeaderboard(topUsers);
+
+            } catch (err) { console.error(err); }
+        }
+
+        function renderLeaderboard(users) {
+            const body = document.getElementById('leaderboard-body');
+            body.innerHTML = '';
+            users.forEach((user, index) => {
+                const row = document.createElement('tr');
+                if (index === 0) row.className = 'top-1';
+                
+                let rank = index + 1;
+                if (index === 0) rank = '🥇'; else if (index === 1) rank = '🥈'; else if (index === 2) rank = '🥉';
+
+                row.innerHTML = `
+                    <td>${rank}</td>
+                    <td>${user.username}</td>
+                    <td style="color: #27ae60;">${user.score.toLocaleString()}</td>
+                    <td>Cấp ${user.chessLevel || 1}</td>
+                `;
+                body.appendChild(row);
+            });
+        }
+
+        loadAllData();
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+  <script src="assets/js/api.js?v=39.0.0"></script>
+  <script src="assets/platform/legacy-flow.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

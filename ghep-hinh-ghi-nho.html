@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghép Hình Ghi Nhớ - Thử Thách 60 Cấp Độ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .memory-game-container { max-width: 900px; margin: 20px auto; background-color: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .level-selection { margin-bottom: 20px; }
+        .level-btn {
+            padding: 10px 15px; font-size: 1rem; margin: 5px; cursor: pointer; border: 2px solid #ccc;
+            background-color: #f1f1f1; border-radius: 8px; font-family: 'Baloo 2', cursive;
+        }
+        .level-btn.unlocked { border-color: #2ecc71; background-color: #e8f8ef; }
+        .level-btn.unlocked:hover { background-color: #d1f0e0; }
+        .level-btn:disabled { background-color: #e9e9e9; color: #aaa; cursor: not-allowed; border-color: #ddd; }
+        
+        #game-area { display: none; }
+        .memory-grid {
+            display: grid;
+            gap: 10px;
+            perspective: 1000px;
+            margin: 0 auto;
+            width: fit-content;
+        }
+        .memory-card {
+            width: 100px; height: 100px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer;
+        }
+        .memory-card.flip { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center; font-size: 3.5rem;
+        }
+        .card-front { background: #ffc107; color: white; }
+        .card-back { background: #ffffff; border: 3px solid #ffc107; transform: rotateY(180deg); }
+        
+        .game-info {
+            display: flex; justify-content: space-around; align-items: center;
+            font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;
+            background: #f9f9f9; padding: 15px; border-radius: 10px;
+        }
+        #timer { color: #e74c3c; }
+        
+        @media (max-width: 600px) {
+            .memory-card { width: 70px; height: 70px; }
+            .card-face { font-size: 2.5rem; }
+            .game-info { flex-direction: column; gap: 10px; }
+        }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="creative-city-bg">
+    <h1 class="page-header header-creative">🧠 Ghép Hình Ghi Nhớ 🧠</h1>
+    
+    <div class="memory-game-container">
+        <div id="level-selection-area">
+            <h2>Chọn Cấp Độ</h2>
+            <div id="level-buttons">
+                <p>Đang tải cấp độ...</p>
+            </div>
+            <div id="login-warning" style="display: none; color: red; font-weight: bold; margin-top: 15px; text-align: center;">
+                Bạn phải <a href="/login.html">Đăng Nhập</a> để chơi và lưu cấp độ.
+            </div>
+        </div>
+
+        <div id="game-area">
+            <div class="game-info">
+                <div id="current-level-display">Cấp độ: 1</div>
+                <div id="moves-counter">Số lần lật: 0</div>
+                <div id="timer">Thời gian: 00:00</div>
+            </div>
+            <div class="memory-grid" id="memory-grid"></div>
+            <button id="back-to-levels-btn" class="back-button" style="margin-top: 20px;">Quay lại chọn Cấp độ</button>
+        </div>
+    </div>
+
+    <a href="thanh-pho-sang-tao.html" class="back-button">Về Thành Phố Sáng Tạo</a>
+
+    <script>
+        const levelSelectionArea = document.getElementById('level-selection-area');
+        const levelButtonsContainer = document.getElementById('level-buttons');
+        const gameArea = document.getElementById('game-area');
+        const grid = document.getElementById('memory-grid');
+        const movesCounterEl = document.getElementById('moves-counter');
+        const timerEl = document.getElementById('timer');
+        const levelDisplayEl = document.getElementById('current-level-display');
+        const backToLevelsBtn = document.getElementById('back-to-levels-btn');
+        const loginWarning = document.getElementById('login-warning');
+
+        const allEmojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐞', '🐜', '🦟', '🦗', '🕷️'];
+
+        // Cấu hình 60 cấp độ
+        const levels = Array.from({ length: 60 }, (_, i) => {
+            const level = i + 1;
+            const pairs = Math.min(allEmojis.length, 4 + Math.floor(level / 2) * 2);
+            const columns = pairs <= 8 ? 4 : (pairs <= 18 ? 6 : 8);
+            const timeLimit = Math.max(30, Math.floor(pairs * 8 - level * 1));
+            return { level, pairs, columns, timeLimit };
+        });
+
+        let flippedCards = [], matchedPairs = 0, moves = 0, currentLevel = 1, timeLeft = 0, unlockedLevel = 1;
+        let lockBoard = false, timerInterval;
+
+        // --- THAY ĐỔI: Gỡ bỏ addScore() không an toàn ---
+        // async function addScore(points, activity) { ... } // <-- ĐÃ XÓA
+
+        // --- THAY ĐỔI: Thêm hàm báo cáo an toàn ---
+        async function reportGameWin(level, time) {
+    try {
+        const response = await fetch('/api/game/memory-win', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ level, timeTaken: time })       
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            unlockedLevel = data.newLevel; // Cập nhật biến mở khóa ngay lập tức
+            alert(`🎉 Chúc mừng! Bé đã lên Cấp ${data.newLevel}!`);
+            showLevelSelection(); // Vẽ lại các nút chọn cấp độ
+        }
+    } catch (error) { console.error('Lỗi lưu điểm:', error); }
+}        
+        // --- THAY ĐỔI: Thêm hàm lấy cấp độ từ server ---
+        async function fetchProgress() {
+            try {
+                const response = await fetch('/api/user/progress');
+                if (!response.ok) {
+                    if(response.status === 401) {
+                        loginWarning.style.display = 'block';
+                    }
+                    return; 
+                }
+                const progress = await response.json();
+                unlockedLevel = progress.memoryLevel || 1;
+                loginWarning.style.display = 'none';
+                createLevelButtons(); 
+            } catch (error) {
+                console.error('Lỗi khi tải tiến độ:', error);
+                levelButtonsContainer.innerHTML = '<p style="color: red;">Lỗi khi tải tiến độ.</p>';
+            }
+        }
+
+        function createLevelButtons() {
+            levelButtonsContainer.innerHTML = '';
+            levels.forEach(levelConfig => {
+                const button = document.createElement('button');
+                button.textContent = `Cấp ${levelConfig.level}`;
+                button.className = 'level-btn';
+                button.dataset.level = levelConfig.level;
+                button.disabled = levelConfig.level > unlockedLevel;
+                if (!button.disabled) button.classList.add('unlocked');
+                button.onclick = () => startGame(levelConfig.level);
+                levelButtonsContainer.appendChild(button);
+            });
+        }
+
+        function startGame(level) {
+            currentLevel = level;
+            const config = levels[level - 1];
+            levelSelectionArea.style.display = 'none';
+            gameArea.style.display = 'block';
+            levelDisplayEl.textContent = `Cấp độ: ${currentLevel}`;
+            
+            let emojisForLevel = allEmojis.slice(0, config.pairs);
+            let cards = [...emojisForLevel, ...emojisForLevel].sort(() => Math.random() - 0.5);
+            
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = `repeat(${config.columns}, 1fr)`;
+            matchedPairs = 0;
+            moves = 0;
+            movesCounterEl.textContent = `Số lần lật: ${moves}`;
+            lockBoard = false;
+
+            cards.forEach(emoji => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.emoji = emoji;
+                card.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${emoji}</div>`;
+                card.onclick = flipCard;
+                grid.appendChild(card);
+            });
+
+            timeLeft = config.timeLimit;
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+             const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+             const seconds = (timeLeft % 60).toString().padStart(2, '0');
+             timerEl.textContent = `Thời gian: ${minutes}:${seconds}`;
+        }
+
+        function flipCard() {
+            if (lockBoard || this.classList.contains('flip') || flippedCards.length >= 2) return;
+            this.classList.add('flip');
+            flippedCards.push(this);
+            if (flippedCards.length === 2) {
+                moves++;
+                movesCounterEl.textContent = `Số lần lật: ${moves}`;
+                lockBoard = true;
+                setTimeout(checkForMatch, 700);
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.emoji === card2.dataset.emoji) {
+                card1.onclick = null;
+                card2.onclick = null;
+                matchedPairs++;
+                if (matchedPairs === levels[currentLevel - 1].pairs) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => endGame(true), 500);
+                }
+            } else {
+                card1.classList.remove('flip');
+                card2.classList.remove('flip');
+            }
+            flippedCards = [];
+            lockBoard = false;
+        }
+        
+        function endGame(isWin) {
+    if (isWin) {
+        // TÍNH THỜI GIAN ĐÃ CHƠI (Time Taken)
+        // Lấy tổng thời gian của cấp độ đó (config.timeLimit) trừ đi số giây còn dư (timeLeft)
+        const totalLimit = levels[currentLevel - 1].timeLimit;
+        const timeSpent = totalLimit - timeLeft; 
+
+        // Gửi "thời gian đã chơi" lên server thay vì "thời gian còn lại"
+        reportGameWin(currentLevel, timeSpent);
+
+        alert(`🎉 Chúc mừng! Bạn đã hoàn thành cấp độ ${currentLevel}!`);
+        
+        if (currentLevel === unlockedLevel && unlockedLevel < 60) {
+            unlockedLevel++; 
+        }
+        showLevelSelection();
+    } else {
+        alert(`😭 Hết giờ rồi! Hãy thử lại nhé!`);
+        showLevelSelection();
+    }
+}        
+        function showLevelSelection() {
+            gameArea.style.display = 'none';
+            levelSelectionArea.style.display = 'block';
+            createLevelButtons();
+        }
+
+        backToLevelsBtn.addEventListener('click', () => {
+             clearInterval(timerInterval);
+             showLevelSelection();
+        });
+
+        // --- THAY ĐỔI: Tải cấp độ từ server khi bắt đầu ---
+        createLevelButtons(); // Vẽ nút Cấp 1 ngay
+        fetchProgress(); // Hỏi server xem có cấp cao hơn không
+    </script>
+<script src="/socket.io/socket.io.js"></script>
+    <script src="global-client.js"></script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

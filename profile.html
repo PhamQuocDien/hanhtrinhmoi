@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Hồ sơ học tập và mục tiêu cá nhân hóa của Hành Trình Mới.">
+<title>Hồ sơ học tập | Hành Trình Mới</title>
+<link rel="stylesheet" href="assets/platform/platform-shell.css">
+<link rel="stylesheet" href="assets/platform/flow-pages.css">
+<link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="flow-page" data-flow-page="profile">
+<main class="flow-shell">
+<header class="flow-top"><div><a href="index.html">← Learning Hub</a><h1>Hồ sơ học tập</h1></div><nav><a href="essay-history.html">Lịch sử bài tự luận</a> · <a href="lo-trinh-hoc-tap.html">Mở lộ trình →</a></nav></header>
+<div class="flow-grid">
+<aside class="flow-card"><span class="eyebrow">ACCOUNT</span><h2 id="profile-name">Đang tải…</h2><div class="data-list"><div class="data-item"><small>Username</small><strong id="profile-username">—</strong></div><div class="data-item"><small>Email</small><strong id="profile-email">—</strong></div><div class="data-item"><small>Số điện thoại</small><strong id="profile-phone">—</strong></div><div class="data-item"><small>Game ID</small><strong id="profile-game-id">—</strong></div><div class="data-item"><small>Verification</small><strong id="profile-verification">—</strong></div></div></aside>
+<section class="flow-card">
+<div class="tab-row"><button class="active" type="button">PROFILE</button><button type="button">EDUCATION</button><button type="button">LEARNING</button><button type="button">UNIVERSITY</button></div>
+<h2>Cập nhật hồ sơ và mục tiêu học</h2><p class="flow-status">Thông tin khảo sát được đồng bộ tại đây. Dữ liệu bạn tự khai báo được lưu riêng với suy luận của AI.</p>
+<form id="profile-form" class="flow-form">
+<h3>1. Trình độ hiện tại</h3>
+<label>Họ và tên<input id="fullName" name="fullName" maxlength="100" autocomplete="name"></label>
+<div class="flow-grid-two"><label>Ngày sinh (không bắt buộc)<input id="birthDate" name="birthDate" type="date" autocomplete="bday"></label><label>Tuổi hiện tại (tự tính)<input id="calculatedAge" type="number" readonly aria-readonly="true" placeholder="Chọn ngày sinh để tính tuổi"></label></div><small id="age-personalization-note" class="flow-help-text">Ngày sinh giúp điều chỉnh trải nghiệm theo độ tuổi nhưng không bắt buộc. Nếu bỏ trống, hãy khai báo cấp học hoặc giai đoạn học tập.</small>
+<label>Trạng thái học tập<select id="educationStatus" name="educationStatus"><option value="">Chưa chọn</option><option value="studying">Đang học phổ thông</option><option value="university">Sinh viên cao đẳng/đại học</option><option value="graduated">Đã tốt nghiệp</option><option value="retake_supplement">Ôn thi / học bổ sung</option><option value="working_adult">Người đi làm</option><option value="other">Khác</option></select></label>
+<label id="grade-field">Lớp phổ thông<input id="educationGrade" name="educationGrade" type="number" min="1" max="12" inputmode="numeric" placeholder="1–12"></label>
+<label>Cấp học / track<select id="educationLevel" name="educationLevel"><option value="">Chưa xác định</option><option value="PRIMARY">Tiểu học (lớp 1–5)</option><option value="SECONDARY_LOWER">THCS (lớp 6–9)</option><option value="SECONDARY_UPPER">THPT (lớp 10–12)</option><option value="HIGHER_EDUCATION">Cao đẳng / Đại học</option><option value="ENGLISH_CERTIFICATION">Chứng chỉ / ngoại ngữ / MOS</option><option value="SELF_STUDY">Tự học / đi làm / đã tốt nghiệp</option></select></label>
+<label>Trường / cơ sở đào tạo<input id="institution" name="institution" maxlength="180"></label>
+<div class="flow-grid-two"><label>Thời gian học mỗi ngày<select id="studyTime" name="studyTime"><option value="">Chưa chọn</option><option>15 phút</option><option>30 phút</option><option>45 phút</option><option>60 phút</option><option>90 phút</option><option>Trên 2 giờ</option></select></label><label>Hình thức học ưa thích<select id="learningStyle" name="learningStyle"><option value="">Chưa chọn</option><option value="theory_examples">Lý thuyết và ví dụ</option><option value="practice_first">Thực hành trước</option><option value="step_by_step">Giải thích từng bước</option><option value="video_lecture">Bài giảng / video</option><option value="project">Dự án thực tế</option><option value="mixed">Kết hợp nhiều hình thức</option></select></label></div>
+<div id="university-profile-fields" hidden><h3>2. Hồ sơ cao đẳng / đại học</h3>
+<div class="flow-grid-two"><label>Chọn trường trong danh mục<select id="universityId" name="universityId"><option value="">Chọn trường (không bắt buộc)</option></select></label><label>Chọn khoa trong trường<select id="facultyId" name="facultyId"><option value="">Chọn khoa</option></select></label></div>
+<label>Trường đại học / cơ sở đào tạo (có thể nhập nếu chưa có trong danh mục)<input id="universityName" name="universityName" maxlength="180" placeholder="Tên trường"></label>
+<div class="flow-grid-two"><label>Khoa (tên hiển thị)<input id="facultyName" name="facultyName" maxlength="180"></label><label>Lĩnh vực đào tạo<select id="fieldId" name="fieldId"><option value="">Chọn lĩnh vực</option></select><input id="fieldName" name="fieldName" maxlength="180" placeholder="Hoặc nhập CNTT, Kinh tế, Kỹ thuật…"></label></div>
+<div class="flow-grid-two"><label>Nhóm ngành<select id="disciplineGroupId" name="disciplineGroupId"><option value="">Chọn nhóm ngành</option></select><input id="disciplineGroupName" name="disciplineGroupName" maxlength="180" placeholder="Hoặc nhập nhóm ngành"></label><label>Ngành học<select id="majorId" name="majorId"><option value="">Chọn ngành</option></select><input id="majorName" name="majorName" maxlength="180" placeholder="Hoặc nhập Khoa học máy tính, Cơ điện tử…"></label></div>
+<div class="flow-grid-two"><label>Chuyên ngành / định hướng<select id="specializationId" name="specializationId"><option value="">Chọn chuyên ngành</option></select><input id="specializationName" name="specializationName" maxlength="180"></label><label>Chương trình đào tạo<select id="trainingProgramId" name="trainingProgramId"><option value="">Chọn chương trình</option></select><input id="trainingProgramName" name="trainingProgramName" maxlength="180"></label></div>
+<div id="university-program-courses" class="data-list"><p class="flow-status">Chọn chương trình đào tạo để xem học phần liên quan nếu catalog có dữ liệu.</p></div>
+<div class="flow-grid-two"><label>Khóa tuyển sinh<input id="cohort" name="cohort" maxlength="40" placeholder="K2025"></label><label>Năm học<input id="academicYear" name="academicYear" maxlength="40" placeholder="Năm 2"></label></div>
+<label>Học kỳ<input id="semester" name="semester" maxlength="40" placeholder="Học kỳ 1"></label></div>
+<h3>3. Mục tiêu và sở thích học</h3>
+<label>Mục tiêu học tập (ngăn cách bằng dấu phẩy)<textarea id="learningGoals" name="learningGoals" rows="3" placeholder="Ví dụ: TOEIC 750, học C++, đạt điểm cao môn Toán"></textarea></label>
+<label>Môn học / lĩnh vực quan tâm (ngăn cách bằng dấu phẩy)<textarea id="learningInterests" name="learningInterests" rows="2" placeholder="Ví dụ: Lập trình, Kinh tế, IELTS"></textarea></label>
+<label>Điểm mạnh<input id="learningStrengths" name="learningStrengths" maxlength="500" placeholder="Logic, đọc hiểu, thực hành…"></label>
+<label>Điểm cần cải thiện<input id="learningWeaknesses" name="learningWeaknesses" maxlength="500" placeholder="Debug code, nghe tiếng Anh…"></label>
+<div class="flow-actions"><button class="button button-primary" type="submit">Lưu và đồng bộ hồ sơ</button><span id="flow-status" class="flow-status" role="status"></span><a id="profile-next-step" class="button button-secondary" href="placement.html" hidden>3. Làm bài kiểm tra đầu vào →</a></div>
+</form>
+<section class="flow-card" style="margin-top:18px"><h3>Hồ sơ đang được dùng cho lộ trình</h3><div id="learning-profile-summary" class="data-list"><p class="flow-status">Đang đọc hồ sơ và Learning Plan…</p></div><a class="button button-primary" href="lo-trinh-hoc-tap.html">Xem lộ trình cá nhân hóa →</a></section>
+</section>
+</div></main>
+<script src="assets/js/api.js?v=39.0.0"></script><script src="assets/platform/flow-pages.js?v=39.0.0"></script><script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body></html>

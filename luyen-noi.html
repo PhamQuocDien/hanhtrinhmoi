@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <title>Luyện Nói Cùng Bé</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff9ff3;
+            --secondary: #54a0ff;
+            --accent: #feca57;
+            --success: #1dd1a1;
+            --danger: #ff6b6b;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+        }
+
+        body {
+            background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="%23ffffff" fill-opacity="0.2"/></svg>'), linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-size: 150px 150px, cover;
+            font-family: 'Baloo 2', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        /* Tiêu đề Game */
+        .game-title {
+            color: #fff;
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 20px 0 10px 0;
+            text-align: center;
+            text-shadow: 0 6px 0 var(--secondary), 0 10px 15px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+            animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Thẻ hiển thị Level */
+        .level-badge {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 8px 25px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            box-shadow: 0 4px 0 #e1b12c, 0 8px 10px rgba(0,0,0,0.15);
+            margin-bottom: 25px;
+            border: 3px solid #fff;
+        }
+
+        /* Khu vực thẻ câu hỏi */
+        .card-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sentence-card {
+            background: rgba(255, 255, 255, 0.95);
+            width: 90%;
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), inset 0 0 0 6px var(--light);
+            border: 4px solid var(--secondary);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        .sentence-card::before {
+            content: '⭐ Bé đọc to nhé ⭐';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #2e86de;
+            white-space: nowrap;
+        }
+
+        #target-phrase {
+            color: var(--dark);
+            font-size: 2.2rem;
+            margin: 15px 0 0 0;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        /* Nút Micro 3D */
+        .mic-container {
+            position: relative;
+            margin: 10px auto 30px auto;
+            width: 110px; 
+            height: 110px;
+        }
+
+        .mic-btn {
+            width: 100%; height: 100%;
+            border-radius: 50%; border: none;
+            background: linear-gradient(135deg, var(--primary) 0%, #f368e0 100%);
+            color: white; font-size: 3.5rem;
+            cursor: pointer; 
+            box-shadow: 0 10px 0 #d980fa, 0 15px 25px rgba(255, 159, 243, 0.5);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+            border: 4px solid #fff;
+        }
+
+        .mic-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #d980fa, 0 5px 10px rgba(255, 159, 243, 0.5);
+        }
+
+        /* Trạng thái đang thu âm */
+        .mic-btn.active { 
+            background: linear-gradient(135deg, var(--danger) 0%, #ee5253 100%);
+            box-shadow: 0 10px 0 #c8d6e5, 0 0 30px var(--danger);
+            animation: pulse-mic 1s infinite;
+        }
+
+        .listening-ring {
+            position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%; border: 4px solid var(--danger);
+            z-index: 1; opacity: 0; pointer-events: none;
+        }
+        .mic-btn.active + .listening-ring { animation: ripple 1.5s linear infinite; }
+
+        /* Khu vực kết quả */
+        .result-box {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #result-text {
+            font-size: 1.2rem; color: #7f8c8d; margin: 0 0 10px 0; font-style: italic;
+        }
+
+        #score-area h3 {
+            font-size: 1.5rem; margin: 0; font-weight: 800;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Nút điều hướng */
+        .nav-buttons {
+            display: flex; gap: 15px; justify-content: center; width: 100%; flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 30px; border-radius: 30px; border: none; font-weight: 800;
+            font-size: 1.1rem; cursor: pointer; color: white; font-family: inherit;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.15); transition: 0.2s;
+            border: 3px solid #fff;
+        }
+        .nav-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
+        .btn-home { background: #8395a7; box-shadow: 0 6px 0 #576574; }
+        .btn-next { background: var(--success); box-shadow: 0 6px 0 #10ac84; display: none; }
+
+        /* Animations */
+        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes ripple { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+        @keyframes pulse-mic { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        @media (max-width: 480px) {
+            .game-title { font-size: 2.2rem; }
+            #target-phrase { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+    <h1 class="game-title">🎤 Họa Mi Tập Hót</h1>
+    
+    <div class="level-badge">Cấp độ: <span id="current-level-display">1</span></div>
+
+    <div class="card-container">
+        
+        <div class="sentence-card">
+            <div id="target-phrase">"Con mèo trèo cây cau"</div>
+        </div>
+        
+        <div class="mic-container">
+            <button id="record-btn" class="mic-btn">🎙️</button>
+            <div class="listening-ring"></div>
+        </div>
+        
+        <div class="result-box">
+            <p id="result-text">Nhấn vào Micro để bắt đầu nhé!</p>
+            <div id="score-area"></div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button onclick="window.location.href='index.html'" class="nav-btn btn-home">🏠 Về Nhà</button>
+            <button id="next-btn" class="nav-btn btn-next" onclick="nextSentence()">Câu Tiếp ➡️</button>
+        </div>
+
+    </div>
+
+    <script>
+        const phrases = [
+            "Bà", "Mẹ", "Bố", "Cá", "Gà", 
+            "Quả cam", "Con mèo", "Cái bàn", "Quyển sách", "Đi học",
+            "Bé đi học", "Mẹ đi làm", "Bố đọc báo", "Bà kể chuyện", "Em ăn cơm",
+            "Gà cục tác", "Mèo meo meo", "Chó gâu gâu", "Cây xanh xanh", "Hoa đỏ thắm",
+            "Lấp lánh", "Lung linh", "Náo nức", "Ninh ních", "Tròn trĩnh",
+            "Chăm chỉ", "Sạch sẽ", "Xinh xắn", "Mũm mĩm", "Lon ton",
+            "Gia đình em rất vui", "Trường của em rất đẹp", "Cô giáo em hiền dịu",
+            "Bạn bè cùng trang lứa", "Học tập thật chăm chỉ", "Vâng lời ông bà cha mẹ",
+            "Giúp đỡ bạn bè khó khăn", "Giữ gìn vệ sinh chung", "Ăn quả nhớ kẻ trồng cây",
+            "Uống nước nhớ nguồn",
+            "Lúa nếp là lúa nếp làng", "Lúa lên lớp lớp lòng nàng lâng lâng",
+            "Con lươn nó luồn qua lườn", "Chị lặt rau rồi luộc", 
+            "Buổi trưa ăn bưởi chua", "Lá lành đùm lá rách",
+            "Ông bụt ở chùa bùi cầm bùa đuổi chuột", "Đầu làng có con lợn nái",
+            "Con cá rô rục rịch trong rổ", "Trèo trẹo chân trượt trẹo chân",
+            "Công cha như núi Thái Sơn", "Nghĩa mẹ như nước trong nguồn chảy ra",
+            "Bầu ơi thương lấy bí cùng", "Tuy rằng khác giống nhưng chung một giàn",
+            "Nhiễu điều phủ lấy giá gương", "Người trong một nước phải thương nhau cùng",
+            "Anh em như thể tay chân", "Rách lành đùm bọc dở hay đỡ đần",
+            "Một cây làm chẳng nên non", "Ba cây chụm lại nên hòn núi cao",
+            "Bầu trời hôm nay trong xanh và cao vút", 
+            "Những đám mây trắng bồng bềnh trôi nhẹ nhàng",
+            "Tiếng chim hót líu lo chào ngày mới",
+            "Cánh đồng lúa chín vàng ươm trải dài tít tắp",
+            "Em cảm thấy rất hạnh phúc khi được điểm mười",
+            "Mùa hè ve kêu râm ran khắp phố phường",
+            "Mùa thu lá vàng rơi xào xạc trên sân trường",
+            "Mùa đông gió bấc thổi lạnh buốt đôi bàn tay",
+            "Mùa xuân hoa đào nở rực rỡ cả một góc trời",
+            "Dòng sông quê hương hiền hòa chảy quanh năm",
+            "Nồi đồng nấu ốc nồi đất nấu ếch", 
+            "Ông nấu ốc nồi đồng tôi nấu ếch nồi đất",
+            "Lúc nào lên núi lấy nứa về làm lán",
+            "Phụ nữ Việt Nam trung hậu đảm đang",
+            "Giặc đến nhà đàn bà cũng đánh",
+            "Con két con kẹp con két cái",
+            "Con cá mòi béo để gốc quéo cho mèo đói ăn",
+            "Luộc hột vịt lộn luộc lộn hột vịt lạc",
+            "Ăn hột vịt lộn lại luộc lại hột vịt lộn",
+            "Vạch vách đút bánh đúc cho chồng ăn",
+            "Hạt gạo làng ta / Có vị phù sa / Của sông Kinh Thầy",
+            "Có hương sen thơm / Trong hồ nước đầy / Có lời mẹ hát",
+            "Đường vô xứ Nghệ quanh quanh / Non xanh nước biếc như tranh họa đồ",
+            "Tháp Mười đẹp nhất bông sen / Việt Nam đẹp nhất có tên Bác Hồ",
+            "Trăm năm trong cõi người ta / Chữ tài chữ mệnh khéo là ghét nhau",
+            "Cày đồng đang buổi ban trưa / Mồ hôi thánh thót như mưa ruộng cày",
+            "Ai ơi bưng bát cơm đầy / Dẻo thơm một hạt đắng cay muôn phần",
+            "Quê hương là chùm khế ngọt / Cho con trèo hái mỗi ngày",
+            "Quê hương là đường đi học / Con về rợp bướm vàng bay",
+            "Việt Nam đất nước ta ơi / Mênh mông biển lúa đâu trời đẹp hơn",
+            "Tôi yêu tiếng nước tôi từ khi mới ra đời người ơi",
+            "Tiếng Việt phong phú và giàu bản sắc văn hóa dân tộc",
+            "Giữ gìn sự trong sáng của Tiếng Việt là trách nhiệm của mỗi người",
+            "Dù ai đi ngược về xuôi nhớ ngày giỗ tổ mùng mười tháng ba",
+            "Non sông gấm vóc Việt Nam do phụ nữ ta trẻ cũng như già dệt thêu mà thêm tốt đẹp rực rỡ",
+            "Đoàn kết đoàn kết đại đoàn kết thành công thành công đại thành công",
+            "Học thầy không tày học bạn học vạn sự đời",
+            "Đi một ngày đàng học một sàng khôn",
+            "Lá rụng về cội nước chảy về nguồn con người nhớ về tổ tiên",
+            "Chúc mừng bé đã hoàn thành xuất sắc thử thách luyện nói tiếng Việt"
+        ];        
+        
+        let currentLevel = 1;
+        let currentIndex = 0;
+
+        async function init() {
+            try {
+                const res = await fetch('/api/user/progress');
+                if (res.ok) {
+                    const data = await res.json();
+                    currentLevel = data.vietSpeechLevel || 1; 
+                }
+            } catch(e) { console.error("Lỗi tải cấp độ:", e); }
+
+            currentIndex = currentLevel - 1; 
+            document.getElementById('current-level-display').textContent = currentLevel;
+            showCurrentSentence();
+        }
+
+        function showCurrentSentence() {
+            if (currentIndex >= phrases.length) currentIndex = phrases.length - 1;
+            targetEl.textContent = `"${phrases[currentIndex]}"`;
+            scoreArea.innerHTML = "";
+            resultText.textContent = "Nhấn Micro để bắt đầu nhé!";
+            nextBtn.style.display = 'none';
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const btn = document.getElementById('record-btn');
+        const resultText = document.getElementById('result-text');
+        const scoreArea = document.getElementById('score-area');
+        const targetEl = document.getElementById('target-phrase');
+        const nextBtn = document.getElementById('next-btn');
+
+        if (!SpeechRecognition) {
+            alert("Trình duyệt không hỗ trợ. Hãy dùng Google Chrome!");
+            btn.disabled = true;
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            btn.onclick = () => {
+                try {
+                    recognition.start();
+                    btn.classList.add('active');
+                    resultText.textContent = "Bé nói đi, máy đang nghe nè...";
+                    resultText.style.color = "#e67e22";
+                    scoreArea.innerHTML = "";
+                    nextBtn.style.display = 'none';
+                } catch(e) {}
+            };
+
+            recognition.onend = () => { btn.classList.remove('active'); };
+
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                resultText.textContent = `Bé vừa nói: "${text}"`;
+                resultText.style.color = "#34495e";
+                checkResult(text);
+            };
+        }
+
+        function similarity(s1, s2) {
+            let longer = s1, shorter = s2;
+            if (s1.length < s2.length) { longer = s2; shorter = s1; }
+            let longerLength = longer.length;
+            if (longerLength === 0) return 1.0;
+            return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+        }
+
+        function editDistance(s1, s2) {
+            s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
+            let costs = new Array();
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i == 0) costs[j] = j;
+                    else {
+                        if (j > 0) {
+                            let newValue = costs[j - 1];
+                            if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                                newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                            costs[j - 1] = lastValue;
+                            lastValue = newValue;
+                        }
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        function checkResult(spokenText) {
+            const target = phrases[currentIndex];
+            const cleanSpoken = spokenText.toLowerCase().replace(/[.,!?;:"-]/g, '').trim().replace(/\s+/g, ' ');
+            const cleanTarget = target.toLowerCase().replace(/[.,!?;:"-]/g, '').trim().replace(/\s+/g, ' ');
+
+            const score = similarity(cleanSpoken, cleanTarget);
+            const percent = Math.round(score * 100);
+            
+            console.log(`Độ giống: ${percent}%`);
+
+            if (percent >= 75) {
+                scoreArea.innerHTML = `<h3 style='color:var(--success);'>🎉 XUẤT SẮC! (${percent}%) 🎉</h3>`;
+                nextBtn.style.display = 'block';
+                
+                // --- THÊM HIỆU ỨNG PHÁO HOA KHI ĐÚNG ---
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+                
+                fetch('/api/game/viet-speech-win', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ level: currentLevel, timeTaken: 0 }) 
+                })        
+                .then(res => res.json())
+                .then(data => {
+                    if (data.newLevel) {
+                        currentLevel = data.newLevel;
+                        document.getElementById('current-level-display').textContent = currentLevel;
+                    }
+                });
+            } else {
+                scoreArea.innerHTML = `<h3 style='color:var(--danger);'>Chưa đúng lắm (${percent}%)! Thử lại nhé 💪</h3>`;
+            }
+        }
+
+        function nextSentence() {
+            currentIndex = (currentIndex + 1) % phrases.length;
+            showCurrentSentence();
+        }
+
+        init();
+    </script>    
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

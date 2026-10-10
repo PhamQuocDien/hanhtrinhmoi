@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điều Khiển Của Phụ Huynh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container { max-width: 800px; margin: 40px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: left; }
+        #parent-code-wrapper { background: #eee; padding: 15px; border-radius: 8px; }
+        #parent-code { font-weight: bold; font-size: 1.2rem; color: #e74c3c; user-select: all; }
+        .child-record { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #eee; }
+        .child-record h3 { margin-top: 0; color: #3498db; }
+        .history-list { list-style-type: none; padding-left: 0; }
+        .history-list li { margin-bottom: 10px; color: #555; border-left: 3px solid #1abc9c; padding-left: 15px; }
+        .history-list li .time { font-size: 0.9em; color: #888; display: block; }
+        .education-summary { margin: 14px 0; padding: 14px; border-radius: 14px; background: #eef5ff; border: 1px solid #cfe0fb; }
+        .education-head { display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap; }
+        .education-level { padding:6px 10px; border-radius:999px; background:#245bd7; color:white; font-weight:800; }
+        .education-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0; }
+        .education-stats div { background:white; border-radius:10px; padding:9px; text-align:center; border:1px solid #dbe6f6; }
+        .education-stats b { display:block; font-size:1.08rem; color:#1746a2; }
+        .subject-table { width:100%; border-collapse:collapse; font-size:.86rem; }
+        .subject-table th,.subject-table td { padding:7px; border-bottom:1px solid #d9e3f2; text-align:left; }
+        .subject-table th { color:#52627d; }
+        .support-note { color:#67738a; font-size:.82rem; line-height:1.45; }
+        @media(max-width:650px){.dashboard-container{margin:12px 8px;padding:18px}.education-stats{grid-template-columns:repeat(2,1fr)}.subject-scroll{overflow:auto}.subject-table{min-width:520px}}
+    </style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+  <link rel="stylesheet" href="assets/platform/legacy-flow.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body class="my-home-bg" data-legacy-flow="parent">
+    <h1 class="page-header header-home">👤 Bảng Điều Khiển Của Phụ Huynh</h1>
+    <div class="dashboard-container" id="dashboard-content">
+        <p>Đang tải dữ liệu...</p>
+    </div>
+    <a href="index.html" class="back-button">Về Trang Chủ</a>
+    <script>
+        const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        const semesterLabel = value => value === 'semester-2' ? 'Học kỳ II' : value === 'year' ? 'Cả năm' : 'Học kỳ I';
+        function renderLearning(learning) {
+            if (!learning) return '<div class="education-summary"><p>Chưa có dữ liệu lộ trình học tập.</p></div>';
+            const rows = (learning.subjectResults || []).slice().sort((a,b) => b.attempted - a.attempted || b.average - a.average).slice(0,8);
+            return `<section class="education-summary">
+                <div class="education-head"><div><b>🎓 Hồ sơ học tập lớp ${learning.grade}</b><br><small>${escapeHtml(learning.stage?.name || '')} • ${escapeHtml(learning.schoolYear)} • ${semesterLabel(learning.semester)}</small></div><span class="education-level">${escapeHtml(learning.overall)}</span></div>
+                <div class="education-stats"><div><b>${learning.passedLessons || 0}</b>Bài đã đạt</div><div><b>${learning.masteredLessons || 0}</b>Bài thành thạo</div><div><b>${Number(learning.averageBestScore || 0).toFixed(1)}</b>Điểm tốt nhất TB</div><div><b>${learning.streak || 0}</b>Ngày liên tục</div></div>
+                <p><b>Gợi ý:</b> ${escapeHtml(learning.recommendation || 'Tiếp tục duy trì học đều.')}</p>
+                <div class="subject-scroll"><table class="subject-table"><thead><tr><th>Môn</th><th>Đã học</th><th>Đã đạt</th><th>Điểm TB</th><th>Mức hỗ trợ</th></tr></thead><tbody>${rows.map(row=>`<tr><td>${escapeHtml(row.icon || '')} ${escapeHtml(row.name)}</td><td>${row.attempted}/${row.totalLessons}</td><td>${row.passed}</td><td>${Number(row.average || 0).toFixed(1)}</td><td>${escapeHtml(row.level)}</td></tr>`).join('') || '<tr><td colspan="5">Chưa bắt đầu bài học.</td></tr>'}</tbody></table></div>
+                <p class="support-note">${escapeHtml(learning.disclaimer)}</p>
+            </section>`;
+        }
+        document.addEventListener('DOMContentLoaded', async () => {
+            const dashboardContent = document.getElementById('dashboard-content');
+            try {
+                const res = await fetch('/api/parent/dashboard');
+                if (res.status === 401 || res.status === 403) { window.location.href = '/login.html'; return; }
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Không thể tải dữ liệu.');
+                const childrenHTML = !data.children?.length
+                    ? '<p>Chưa có tài khoản nào của con được liên kết. Hãy đưa mã kết nối cho bé khi đăng ký.</p>'
+                    : data.children.map(child => {
+                        const history = !child.history?.length ? '<li>Chưa có hoạt động nào được ghi lại.</li>' : child.history.map(log => `<li><strong>${escapeHtml(log.activity)}</strong><span class="time">${new Date(log.timestamp).toLocaleString('vi-VN')}</span></li>`).join('');
+                        return `<article class="child-record"><h3>Tài khoản của bé: ${escapeHtml(child.username)}</h3>${renderLearning(child.learning)}<details><summary><b>Hoạt động gần đây</b></summary><ul class="history-list">${history}</ul></details></article>`;
+                    }).join('');
+                dashboardContent.innerHTML = `<div id="parent-code-wrapper"><p>Đưa mã này cho con để liên kết tài khoản:</p><p id="parent-code">${escapeHtml(data.parentCode || '')}</p></div><h2 style="margin-top:30px">Theo dõi học tập của các con</h2><div id="children-container">${childrenHTML}</div>`;
+            } catch (error) {
+                dashboardContent.innerHTML = `<p style="color:red">Lỗi: ${escapeHtml(error.message)}. Vui lòng thử đăng nhập lại.</p>`;
+            }
+        });
+    </script>
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+  <script src="assets/js/api.js?v=39.0.0"></script>
+  <script src="assets/platform/legacy-flow.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

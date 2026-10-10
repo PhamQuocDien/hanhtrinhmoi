@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-2735044868175045">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2735044868175045" crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Xưởng Vẽ Diệu Kỳ - 100 Cấp Độ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --primary: #e74c3c; --accent: #f1c40f; --bg: #f0f2f5; --wood: #5d4037; }
+        body { margin: 0; font-family: 'Baloo 2', cursive; background: var(--bg); overflow-x: hidden; touch-action: none; }
+        
+        /* --- HEADER --- */
+        .header { width: 100%; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .score-tag { font-weight: 800; color: #e67e22; background: #fff3e0; padding: 5px 15px; border-radius: 20px; }
+
+        /* --- WORKSPACE --- */
+        .workspace { display: flex; gap: 20px; padding: 20px; max-width: 1300px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+
+        /* Sidebar bên trái */
+        .sidebar { width: 260px; display: flex; flex-direction: column; gap: 15px; }
+        .info-card { background: white; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; }
+        .level-badge { background: var(--primary); color: white; padding: 8px; border-radius: 15px; font-weight: 800; font-size: 1.2rem; margin-bottom: 10px; }
+
+        .palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .color-btn { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #eee; cursor: pointer; transition: 0.2s; }
+        .color-btn.active { border-color: #333; transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+
+        /* Khu vực vẽ chính */
+        .canvas-area { flex: 1; min-width: 320px; max-width: 600px; position: relative; background: white; border-radius: 30px; border: 12px solid #ddd; box-shadow: inset 0 0 20px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; overflow: hidden; aspect-ratio: 1/1; }
+        canvas, svg { position: absolute; top:0; left:0; width: 100%; height: 100%; cursor: crosshair; }
+        .colorable { cursor: pointer; transition: fill 0.2s; }
+        .colorable:hover { filter: brightness(0.9); }
+
+        /* Sidebar bên phải (Nhiệm vụ & Level) */
+        .mission-panel { width: 260px; display: flex; flex-direction: column; gap: 15px; }
+        .model-box { background: #fff; padding: 15px; border-radius: 20px; text-align: center; border: 4px dashed #ccc; }
+        .model-icon { font-size: 4rem; margin: 10px 0; }
+        
+        .level-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; max-height: 250px; overflow-y: auto; padding: 10px; background: #eee; border-radius: 15px; }
+        .lvl-btn { padding: 5px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: inherit; }
+        .lvl-btn.locked { opacity: 0.4; cursor: not-allowed; background: #bbb; }
+        .lvl-btn.unlocked { background: #2ecc71; color: white; }
+        .lvl-btn.current { background: var(--accent); color: #333; transform: scale(1.1); box-shadow: 0 0 10px var(--accent); }
+
+        /* --- BUTTONS --- */
+        .btn { padding: 12px; border: none; border-radius: 50px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.2s; font-size: 1rem; }
+        .btn-check { background: #2ecc71; color: white; box-shadow: 0 5px 0 #27ae60; width: 100%; }
+        .btn-check:active { transform: translateY(3px); box-shadow: none; }
+        .btn-clear { background: #95a5a6; color: white; margin-top: 5px; width: 100%; }
+
+        /* --- MODAL --- */
+        #result-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: white; padding: 30px; border-radius: 40px; text-align: center; width: 100%; max-width: 350px; animation: pop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
+        @keyframes pop { from { transform: scale(0.5); } to { transform: scale(1); } }
+        .star-row { font-size: 2.5rem; margin: 15px 0; color: var(--accent); text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+/* TỐI ƯU CHO ĐIỆN THOẠI */
+@media (max-width: 768px) {
+    .workspace { 
+        padding: 5px; 
+        gap: 10px;
+        flex-direction: column; /* Xếp dọc */
+    }
+    
+    /* 1. Đưa Khung vẽ lên đầu tiên */
+    .canvas-area { 
+        order: -1; 
+        width: 100% !important; 
+        max-width: 100%;
+        aspect-ratio: 1/1; /* Giữ khung vuông */
+        border-width: 5px; /* Viền mỏng lại */
+    }
+
+    /* 2. Gom nhóm Công cụ & Nhiệm vụ xuống dưới */
+    .sidebar, .mission-panel { 
+        width: 100%; 
+        max-width: 100%;
+    }
+
+    /* 3. Tối ưu bảng màu cho ngón tay chạm */
+    .palette {
+        grid-template-columns: repeat(8, 1fr); /* 2 hàng ngang */
+    }
+    .color-btn {
+        width: 35px; height: 35px;
+    }
+    
+    .level-grid {
+        grid-template-columns: repeat(8, 1fr); /* Nhiều cột hơn trên mobile */
+    }
+}
+</style>
+    <link rel="stylesheet" href="modern-ui.css">
+  <link rel="stylesheet" href="assets/ui/ui-v11.css">
+  <link rel="stylesheet" href="assets/ui/ux-v13.css">
+    <link rel="stylesheet" href="assets/css/ai-autopilot.css?v=39.0.0">
+</head>
+<body>
+
+<div class="header">
+    <button onclick="location.href='thanh-pho-sang-tao.html'" style="border:none; background:none; font-size:1.8rem; cursor:pointer;">🏠</button>
+    <h2 style="margin:0; color:var(--primary); font-size: 1.4rem;">🎨 XƯỞNG VẼ 100 CẤP</h2>
+    <div class="score-tag">💎 <span id="user-score">0</span></div>
+</div>
+
+<div class="workspace">
+    <div class="sidebar">
+        <div class="info-card">
+            <div class="level-badge">CẤP ĐỘ: <span id="level-txt">1</span></div>
+            <h3>🎨 Bảng Màu</h3>
+            <div class="palette" id="palette"></div>
+            
+            <div style="margin-top: 20px; text-align: left;">
+                <label>✏️ Cỡ bút:</label>
+                <input type="range" id="brush-size" min="3" max="40" value="12" style="width:100%; accent-color: var(--primary);">
+            </div>
+        </div>
+        <button class="btn btn-check" onclick="evaluateDrawing()">⭐ CHẤM ĐIỂM</button>
+        <button class="btn btn-clear" onclick="clearCanvas()">🧹 XÓA VẼ LẠI</button>
+    </div>
+
+    <div class="canvas-area" id="paper">
+        <svg id="svg-layer" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet"></svg>
+        <canvas id="main-canvas" width="500" height="500"></canvas>
+    </div>
+
+    <div class="mission-panel">
+        <div class="model-box">
+            <h3>🖼️ Mẫu Vẽ</h3>
+            <div class="model-icon" id="model-display">🏠</div>
+            <p id="theme-desc" style="font-weight: bold; color: var(--primary);"></p>
+        </div>
+        
+        <div class="info-card">
+            <h3 style="margin-top:0">🗺️ Bản Đồ</h3>
+            <div class="level-grid" id="level-list"></div>
+        </div>
+    </div>
+</div>
+
+<div id="result-modal">
+    <div class="modal-content">
+        <h2 id="score-msg">Tuyệt vời!</h2>
+        <div id="star-row" class="star-row"></div>
+        <h1 id="score-val" style="font-size: 4rem; margin: 0; color: #e67e22;">10</h1>
+        <p style="font-weight: bold; color: #888;">ĐIỂM SỐ</p>
+        <button class="btn btn-check" style="background: var(--primary); box-shadow: 0 5px 0 #c0392b;" onclick="nextLevel()">TIẾP TỤC ➡️</button>
+    </div>
+</div>
+
+<script>
+    const svgLayer = document.getElementById('svg-layer');
+    const canvas = document.getElementById('main-canvas');
+    const ctx = canvas.getContext('2d');
+    let currentLevel = 1;
+    let maxLevelReached = 1;
+    let selectedColor = '#FF0000';
+    let isDrawing = false;
+    let isProcessing = false;
+
+    const colors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#2ecc71', '#3498db', '#0000FF', '#9b59b6', '#8e44ad', '#000000', '#FFFFFF', '#F4C2C2', '#8B4513', '#7F8C8D', '#1abc9c', '#d35400'];
+
+    // --- 1. DỮ LIỆU 100 MÀN (Mẫu tiêu biểu) ---
+// --- DỮ LIỆU HOÀN CHỈNH 100 CẤP ĐỘ ---
+const levels = {
+    // === GIAI ĐOẠN 1: TÔ MÀU SVG THEO MẪU (Cấp 1 - 20) ===
+    1: { type: 'svg', icon: '🏠', theme: 'Ngôi nhà hạnh phúc', data: '<path class="colorable" d="M150,400 L150,200 L250,100 L350,200 L350,400 Z" stroke="#333" stroke-width="8" fill="#fff"/><rect class="colorable" x="210" y="300" width="80" height="100" stroke="#333" stroke-width="5" fill="#fff"/>' },
+    2: { type: 'svg', icon: '🌻', theme: 'Bông hoa mặt trời', data: '<circle class="colorable" cx="250" cy="200" r="60" stroke="#333" stroke-width="8" fill="#fff"/><path class="colorable" d="M250,260 Q250,400 250,450" stroke="green" stroke-width="12" fill="none"/>' },
+    3: { type: 'svg', icon: '⭐', theme: 'Ngôi sao may mắn', data: '<path class="colorable" d="M250,50 L315,180 L450,180 L340,270 L380,410 L250,330 L120,410 L160,270 L50,180 L185,180 Z" stroke="#333" stroke-width="8" fill="#fff"/>' },
+    4: { type: 'svg', icon: '🐱', theme: 'Mèo con tinh nghịch', data: '<circle class="colorable" cx="250" cy="280" r="100" stroke="#333" stroke-width="8" fill="#fff"/><path d="M170,210 L140,120 L220,190 Z" fill="#fff" stroke="#333" stroke-width="5" class="colorable"/><path d="M330,210 L360,120 L280,190 Z" fill="#fff" stroke="#333" stroke-width="5" class="colorable"/>' },
+    5: { type: 'svg', icon: '🚀', theme: 'Tên lửa vào vũ trụ', data: '<path class="colorable" d="M200,400 L200,150 Q250,20 300,150 L300,400 Z" stroke="#333" stroke-width="8" fill="#fff"/><path class="colorable" d="M200,300 L140,400 L200,400 Z" stroke="#333" fill="#fff"/><path class="colorable" d="M300,300 L360,400 L300,400 Z" stroke="#333" fill="#fff"/>' },
+    6: { type: 'svg', icon: '🌳', theme: 'Cây xanh tỏa bóng', data: '<rect class="colorable" x="230" y="300" width="40" height="150" fill="#fff" stroke="#333" stroke-width="5"/><circle class="colorable" cx="250" cy="200" r="100" fill="#fff" stroke="#333" stroke-width="8"/><circle class="colorable" cx="190" cy="160" r="50" fill="#fff" stroke="#333" stroke-width="5"/>' },
+    7: { type: 'svg', icon: '🚗', theme: 'Xe hơi tí hon', data: '<path class="colorable" d="M100,350 L100,250 L180,250 L220,180 L350,180 L400,250 L450,250 L450,350 Z" stroke="#333" stroke-width="8" fill="#fff"/><circle class="colorable" cx="170" cy="350" r="40" stroke="#333" fill="#fff"/><circle class="colorable" cx="380" cy="350" r="40" stroke="#333" fill="#fff"/>' },
+    8: { type: 'svg', icon: '🐟', theme: 'Cá vàng bơi lội', data: '<path class="colorable" d="M100,250 Q250,100 400,250 Q250,400 100,250" stroke="#333" stroke-width="8" fill="#fff"/><path class="colorable" d="M400,250 L480,180 L480,320 Z" stroke="#333" fill="#fff"/>' },
+    9: { type: 'svg', icon: '🍦', theme: 'Kem dâu ngọt ngào', data: '<path class="colorable" d="M250,450 L150,250 L350,250 Z" stroke="#333" stroke-width="8" fill="#fff"/><circle class="colorable" cx="250" cy="200" r="70" stroke="#333" fill="#fff"/>' },
+    10: { type: 'svg', icon: '⛵', theme: 'Thuyền buồm trên biển', data: '<path class="colorable" d="M100,350 L400,350 L350,430 L150,430 Z" stroke="#333" stroke-width="8" fill="#fff"/><path class="colorable" d="M240,100 L240,350 L400,350 Z" stroke="#333" fill="#fff"/>' },
+    11: { type: 'svg', icon: '🦋', theme: 'Bướm xinh bay lượn', data: '<ellipse class="colorable" cx="250" cy="250" rx="20" ry="100" stroke="#333" fill="#fff"/><path class="colorable" d="M270,250 Q400,100 450,250 Q400,400 270,250" stroke="#333" fill="#fff"/><path class="colorable" d="M230,250 Q100,100 50,250 Q100,400 230,250" stroke="#333" fill="#fff"/>' },
+    12: { type: 'svg', icon: '🎁', theme: 'Hộp quà bí mật', data: '<rect class="colorable" x="150" y="200" width="200" height="200" stroke="#333" stroke-width="8" fill="#fff"/><rect class="colorable" x="130" y="150" width="240" height="60" stroke="#333" fill="#fff"/>' },
+    13: { type: 'svg', icon: '🤖', theme: 'Người máy (Robot)', data: '<rect class="colorable" x="175" y="100" width="150" height="120" rx="15" stroke="#333" stroke-width="8" fill="#fff"/><rect class="colorable" x="150" y="230" width="200" height="180" rx="10" stroke="#333" fill="#fff"/>' },
+    14: { type: 'svg', icon: '🚁', theme: 'Trực thăng trên cao', data: '<ellipse class="colorable" cx="280" cy="300" rx="120" ry="80" stroke="#333" stroke-width="8" fill="#fff"/><rect class="colorable" x="150" y="210" width="260" height="20" stroke="#333" fill="#fff"/>' },
+    15: { type: 'svg', icon: '🍎', theme: 'Quả táo đỏ', data: '<path class="colorable" d="M250,400 Q150,400 150,250 Q150,120 250,150 Q350,120 350,250 Q350,400 250,400" stroke="#333" stroke-width="8" fill="#fff"/>' },
+    16: { type: 'svg', icon: '🎈', theme: 'Chùm bóng bay', data: '<circle class="colorable" cx="200" cy="200" r="60" stroke="#333" fill="#fff"/><circle class="colorable" cx="300" cy="200" r="60" stroke="#333" fill="#fff"/><circle class="colorable" cx="250" cy="120" r="60" stroke="#333" fill="#fff"/>' },
+    17: { type: 'svg', icon: '🍄', theme: 'Cây nấm nhỏ', data: '<path class="colorable" d="M100,250 Q250,50 400,250 Z" stroke="#333" stroke-width="8" fill="#fff"/><rect class="colorable" x="200" y="250" width="100" height="150" rx="20" stroke="#333" fill="#fff"/>' },
+    18: { type: 'svg', icon: '🏰', theme: 'Lâu đài cát', data: '<rect class="colorable" x="150" y="250" width="200" height="200" stroke="#333" stroke-width="5" fill="#fff"/><path class="colorable" d="M100,200 L135,130 L170,200 Z" stroke="#333" fill="#fff"/><path class="colorable" d="M330,200 L365,130 L400,200 Z" stroke="#333" fill="#fff"/>' },
+    19: { type: 'svg', icon: '🐢', theme: 'Bạn rùa đáng yêu', data: '<path class="colorable" d="M150,350 Q250,150 400,350 Z" stroke="#333" stroke-width="8" fill="#fff"/><circle class="colorable" cx="420" cy="340" r="40" stroke="#333" fill="#fff"/>' },
+    20: { type: 'svg', icon: '🚂', theme: 'Đoàn tàu xe lửa', data: '<rect class="colorable" x="100" y="200" width="150" height="200" stroke="#333" stroke-width="5" fill="#fff"/><rect class="colorable" x="250" y="300" width="150" height="100" stroke="#333" fill="#fff"/>' },
+
+    // === GIAI ĐOẠN 2: VẼ SÁNG TẠO TỰ DO (Cấp 21 - 100) ===
+    
+    // --- Chủ đề: Thế giới động vật & Thiên nhiên (21-40) ---
+    21: { type: 'draw', theme: 'Vẽ một chú cá đang bơi dưới đại dương' },
+    22: { type: 'draw', theme: 'Vẽ ông mặt trời đang tỏa nắng' },
+    23: { type: 'draw', theme: 'Vẽ một vườn hoa rực rỡ sắc màu' },
+    24: { type: 'draw', theme: 'Vẽ một chú cún con đang chạy nhảy' },
+    25: { type: 'draw', theme: 'Vẽ một cái cây cổ thụ thật to' },
+    26: { type: 'draw', theme: 'Vẽ một chú mèo lười đang ngủ trưa' },
+    27: { type: 'draw', theme: 'Vẽ những đám mây hình thù ngộ nghĩnh' },
+    28: { type: 'draw', theme: 'Vẽ một đàn chim đang bay về tổ' },
+    29: { type: 'draw', theme: 'Vẽ cảnh cầu vồng sau cơn mưa' },
+    30: { type: 'draw', theme: 'Vẽ một chú thỏ đang ăn cà rốt' },
+    31: { type: 'draw', theme: 'Vẽ một khu rừng bí ẩn vào ban đêm' },
+    32: { type: 'draw', theme: 'Vẽ một chú voi con đang phun nước' },
+    33: { type: 'draw', theme: 'Vẽ cảnh bãi biển mùa hè sôi động' },
+    34: { type: 'draw', theme: 'Vẽ một chú hươu cao cổ' },
+    35: { type: 'draw', theme: 'Vẽ một trang trại vui vẻ (Farm)' },
+    36: { type: 'draw', theme: 'Vẽ một con rồng lửa dũng mãnh' },
+    37: { type: 'draw', theme: 'Vẽ nàng tiên cá dưới biển sâu' },
+    38: { type: 'draw', theme: 'Vẽ một chú gấu Bắc cực trên băng' },
+    39: { type: 'draw', theme: 'Vẽ một đàn bướm bay lượn' },
+    40: { type: 'draw', theme: 'Vẽ một con quái vật dễ thương' },
+
+    // --- Chủ đề: Công nghệ, Phiêu lưu & Tưởng tượng (41-60) ---
+    41: { type: 'draw', theme: 'Vẽ một chú Robot làm việc nhà' }, // MỐC
+    42: { type: 'draw', theme: 'Vẽ một chiếc phi thuyền không gian' },
+    43: { type: 'draw', theme: 'Vẽ người ngoài hành tinh thân thiện' },
+    44: { type: 'draw', theme: 'Vẽ một ngọn núi lửa đang phun trào' },
+    45: { type: 'draw', theme: 'Vẽ một thế giới dưới đáy biển sâu' }, // MỐC
+    46: { type: 'draw', theme: 'Vẽ một chiếc ô tô biết bay' },
+    47: { type: 'draw', theme: 'Vẽ cảnh tuyết rơi mùa đông' },
+    48: { type: 'draw', theme: 'Vẽ một chú khủng long bạo chúa (T-Rex)' },
+    49: { type: 'draw', theme: 'Vẽ một chiếc khinh khí cầu bay cao' },
+    50: { type: 'draw', theme: 'Vẽ một rạp xiếc vui nhộn' }, // MỐC
+    51: { type: 'draw', theme: 'Vẽ chú hề đang biểu diễn' },
+    52: { type: 'draw', theme: 'Vẽ một lâu đài bay trên trời' },
+    53: { type: 'draw', theme: 'Vẽ một chiếc xe đua công thức 1' },
+    54: { type: 'draw', theme: 'Vẽ một chiếc tàu ngầm thám hiểm' },
+    55: { type: 'draw', theme: 'Vẽ một hòn đảo giấu vàng của hải tặc' }, // MỐC
+    56: { type: 'draw', theme: 'Vẽ bản đồ kho báu bí mật' },
+    57: { type: 'draw', theme: 'Vẽ một cơn bão lớn trên biển cả' },
+    58: { type: 'draw', theme: 'Vẽ một chiếc xe cứu hỏa đang làm nhiệm vụ' },
+    59: { type: 'draw', theme: 'Vẽ một sân vận động bóng đá náo nhiệt' },
+    60: { type: 'draw', theme: 'Vẽ một đoàn tàu xuyên qua núi tuyết' }, // MỐC
+
+    // --- Chủ đề: Cuộc sống, Tương lai & Ước mơ (61-80) ---
+    61: { type: 'draw', theme: 'Vẽ cảnh hoàng hôn tuyệt đẹp' },
+    62: { type: 'draw', theme: 'Vẽ một công viên nước giải trí' },
+    63: { type: 'draw', theme: 'Vẽ các hành tinh trong hệ mặt trời' },
+    64: { type: 'draw', theme: 'Vẽ một ngôi nhà trên cây độc đáo' },
+    65: { type: 'draw', theme: 'Vẽ cảnh gia đình bé đi cắm trại' }, // MỐC
+    66: { type: 'draw', theme: 'Vẽ một buổi tiệc sinh nhật tưng bừng' },
+    67: { type: 'draw', theme: 'Vẽ người hùng (siêu nhân) trong lòng bé' },
+    68: { type: 'draw', theme: 'Vẽ một chiếc máy bay phản lực' },
+    69: { type: 'draw', theme: 'Vẽ một thành phố dưới lòng đất' },
+    70: { type: 'draw', theme: 'Vẽ một thành phố tương lai có xe bay' }, // MỐC
+    71: { type: 'draw', theme: 'Vẽ các robot đang xây dựng thành phố' },
+    72: { type: 'draw', theme: 'Vẽ một cỗ máy thời gian' },
+    73: { type: 'draw', theme: 'Vẽ cảnh con người sống trên sao Hỏa' },
+    74: { type: 'draw', theme: 'Vẽ một trạm vũ trụ không gian khổng lồ' },
+    75: { type: 'draw', theme: 'Vẽ cuộc chiến giữa các vì sao' }, // MỐC
+    76: { type: 'draw', theme: 'Vẽ một hố đen vũ trụ bí ẩn' },
+    77: { type: 'draw', theme: 'Vẽ các phi hành gia đang đi bộ ngoài không gian' },
+    78: { type: 'draw', theme: 'Vẽ một khu rừng nguyên sinh cổ đại' },
+    79: { type: 'draw', theme: 'Vẽ trái đất đang bị nóng lên (Chủ đề môi trường)' },
+    80: { type: 'draw', theme: 'Vẽ một vườn bách thú đầy kỳ quan' }, // MỐC
+
+    // --- Chủ đề: Trừu tượng, Cảm xúc & Tác phẩm để đời (81-100) ---
+    81: { type: 'draw', theme: 'Vẽ các loài động vật quý hiếm cần bảo vệ' },
+    82: { type: 'draw', theme: 'Vẽ cảnh đại dương sạch đẹp không rác thải' },
+    83: { type: 'draw', theme: 'Vẽ các nguồn năng lượng sạch (gió, mặt trời)' },
+    84: { type: 'draw', theme: 'Vẽ cảnh mọi người cùng nhau trồng cây' },
+    85: { type: 'draw', theme: 'Vẽ bức tranh về hòa bình thế giới' }, // MỐC
+    86: { type: 'draw', theme: 'Vẽ biểu tượng của tình yêu thương' },
+    87: { type: 'draw', theme: 'Vẽ một thế giới không có chiến tranh' },
+    88: { type: 'draw', theme: 'Vẽ tình bạn giữa các trẻ em trên thế giới' },
+    89: { type: 'draw', theme: 'Vẽ một phát minh vĩ đại trong tương lai' },
+    90: { type: 'draw', theme: 'Vẽ một mê cung huyền bí' }, // MỐC
+    91: { type: 'draw', theme: 'Vẽ lại một giấc mơ kỳ lạ nhất của bé' },
+    92: { type: 'draw', theme: 'Vẽ cảm xúc của bé ngay lúc này (Vui/Buồn...)' },
+    93: { type: 'draw', theme: 'Vẽ chân dung của bé 20 năm sau' },
+    94: { type: 'draw', theme: 'Vẽ một thế giới cổ tích mà bé thích nhất' },
+    95: { type: 'draw', theme: 'Vẽ ước mơ nghề nghiệp của bé khi lớn lên' }, // MỐC
+    96: { type: 'draw', theme: 'Vẽ một điều ước nếu bé có phép thuật' },
+    97: { type: 'draw', theme: 'Vẽ cảnh đẹp nhất của đất nước Việt Nam' },
+    98: { type: 'draw', theme: 'Vẽ một lễ hội truyền thống náo nhiệt' },
+    99: { type: 'draw', theme: 'Vẽ lời cảm ơn gửi đến ba mẹ và thầy cô' },
+    100: { type: 'draw', theme: 'Hành tinh mơ ước của em - Kiệt tác cuối cùng' } // MỐC VỀ ĐÍCH
+};
+        // --- 2. KHỞI TẠO ---
+    async function init() {
+        setupPalette();
+        setupCanvasDrawing();
+        await loadProgress();
+    }
+
+    function setupPalette() {
+        const p = document.getElementById('palette');
+        p.innerHTML = '';
+        colors.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'color-btn';
+            div.style.background = c;
+            div.onclick = () => {
+                selectedColor = c;
+                document.querySelectorAll('.color-btn').forEach(el => el.classList.remove('active'));
+                div.classList.add('active');
+            };
+            p.appendChild(div);
+        });
+        document.querySelector('.color-btn').classList.add('active');
+    }
+
+    async function loadProgress() {
+        try {
+            const res = await fetch('/api/user/progress');
+            const data = await res.json();
+            document.getElementById('user-score').innerText = (data.score || 0).toLocaleString();
+            maxLevelReached = data.shapeLevel || 1;
+            renderLevel(maxLevelReached);
+        } catch(e) { console.error("Lỗi nạp tiến độ"); renderLevel(1); }
+    }
+
+    function renderLevel(lvl) {
+        currentLevel = lvl;
+        const config = levels[lvl] || { type: 'draw', theme: 'Chủ đề tự do màn ' + lvl };
+        
+        document.getElementById('level-txt').innerText = lvl;
+        document.getElementById('theme-desc').innerText = config.theme;
+        
+        if (lvl <= 20 && config.type === 'svg') {
+            svgLayer.style.display = 'block';
+            canvas.style.display = 'none';
+            svgLayer.innerHTML = config.data;
+            document.getElementById('model-display').innerText = config.icon || '🖼️';
+            // Gán sự kiện click cho SVG
+            svgLayer.querySelectorAll('.colorable').forEach(part => {
+                part.onclick = (e) => {
+                    e.stopPropagation();
+                    part.style.fill = selectedColor;
+                };
+            });
+        } else {
+            svgLayer.style.display = 'none';
+            canvas.style.display = 'block';
+            document.getElementById('model-display').innerText = '🎨';
+            clearCanvas();
+        }
+        renderLevelList();
+    }
+
+    function renderLevelList() {
+        const list = document.getElementById('level-list');
+        list.innerHTML = '';
+        for(let i=1; i<=100; i++) {
+            const btn = document.createElement('button');
+            btn.className = `lvl-btn ${i <= maxLevelReached ? 'unlocked' : 'locked'} ${i === currentLevel ? 'current' : ''}`;
+            btn.innerText = i;
+            if(i <= maxLevelReached) btn.onclick = () => renderLevel(i);
+            list.appendChild(btn);
+        }
+    }
+
+    // --- 3. LOGIC VẼ CANVAS ---
+    function setupCanvasDrawing() {
+        const getPos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            // Hỗ trợ cả Touch và Mouse
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            return { 
+                x: (clientX - rect.left) * (500 / rect.width), 
+                y: (clientY - rect.top) * (500 / rect.height) 
+            };
+        };
+
+        const start = (e) => { isDrawing = true; ctx.beginPath(); draw(e); };
+        const end = () => { isDrawing = false; ctx.closePath(); };
+        const draw = (e) => {
+            if (!isDrawing || canvas.style.display === 'none') return;
+            const pos = getPos(e);
+            ctx.lineWidth = document.getElementById('brush-size').value;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = selectedColor;
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.moveTo(pos.x, pos.y);
+        };
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', end);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
+    }
+
+    function clearCanvas() {
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if(currentLevel <= 20) renderLevel(currentLevel); // Reset SVG
+    }
+
+    // --- 4. CHẤM ĐIỂM "AI" ---
+async function evaluateDrawing() {
+        if(isProcessing) return;
+        isProcessing = true;
+
+        let score = 0;
+        
+        // --- LOGIC CHẤM ĐIỂM THỬ THÁCH CHO CẤP 1-20 ---
+        if (currentLevel <= 20) {
+            const parts = svgLayer.querySelectorAll('.colorable');
+            let colored = 0;
+            const colorsUsed = new Set();
+            
+            parts.forEach(p => {
+                // Kiểm tra xem đã tô màu chưa (Khác màu gốc/trắng/trong suốt)
+                const fill = p.style.fill;
+                if (fill && fill !== 'rgb(255, 255, 255)' && fill !== '#fff' && fill !== 'none' && fill !== '') {
+                    colored++;
+                    colorsUsed.add(fill);
+                }
+            });
+
+            if (parts.length > 0) {
+                const completion = colored / parts.length; // Tỷ lệ hoàn thành (0.0 -> 1.0)
+                let rawScore = 0;
+
+                // QUY TẮC 1: PHẢI TÔ KÍN (Trên 95% diện tích)
+                if (completion < 0.95) {
+                    // Nếu còn sót nhiều chỗ trắng: Điểm tối đa chỉ là 7 (Rớt)
+                    // Tính theo tỷ lệ: ví dụ tô một nửa (0.5) thì được 3.5đ -> làm tròn thành 4.
+                    rawScore = completion * 7.4; 
+                } else {
+                    // Nếu đã tô kín hết: Bắt đầu tính điểm "Thử thách"
+                    
+                    // Trường hợp đặc biệt: Hình chỉ có 1 miếng (vd: Ngôi sao, Quả táo)
+                    if (parts.length === 1) {
+                         // Tô kín là được 10 luôn vì không thể phối màu
+                        rawScore = 10;
+                    } else {
+                        // Trường hợp hình phức tạp (nhiều miếng)
+                        // Điểm sàn khi tô kín là 7.5
+                        rawScore = 7.5; 
+                        
+                        // QUY TẮC 2: THƯỞNG ĐA DẠNG MÀU SẮC (Chống lười)
+                        // Nếu dùng > 1 màu, mỗi màu thêm 1 điểm. Tối đa thêm 2.5 điểm.
+                        // Ví dụ: Dùng 1 màu -> cộng 0đ -> Tổng 7.5 (Làm tròn 8 - Vừa đủ đậu)
+                        // Ví dụ: Dùng 2 màu -> cộng 1đ -> Tổng 8.5 (Làm tròn 9 - Tốt)
+                        // Ví dụ: Dùng 3 màu -> cộng 2đ -> Tổng 9.5 (Làm tròn 10 - Xuất sắc)
+                        if (colorsUsed.size > 1) {
+                            rawScore += Math.min((colorsUsed.size - 1) * 1, 2.5);
+                        }
+                    }
+                }
+                
+                score = Math.round(rawScore);
+            }
+        
+        // --- LOGIC CHO CẤP 21-100 (Vẽ tự do - Giữ nguyên) ---
+        } else {
+            const imgData = ctx.getImageData(0, 0, 500, 500).data;
+            let drawPixels = 0; 
+            const usedColors = new Set();
+            for (let i = 0; i < imgData.length; i += 4) {
+                if (imgData[i] < 250 || imgData[i+1] < 250 || imgData[i+2] < 250) {
+                    drawPixels++;
+                    const r = Math.floor(imgData[i]/10)*10;
+                    const g = Math.floor(imgData[i+1]/10)*10;
+                    const b = Math.floor(imgData[i+2]/10)*10;
+                    usedColors.add(`${r},${g},${b}`);
+                }
+            }
+            const coverage = drawPixels / (500 * 500);
+            if (coverage < 0.01) {
+                score = 2; 
+            } else {
+                let rawScore = (coverage * 20) + (usedColors.size * 1.5);
+                score = Math.min(10, Math.max(6, Math.round(rawScore)));
+            }
+        }
+
+        // Giới hạn điểm từ 1 đến 10
+        score = Math.min(10, Math.max(1, score));
+
+        // Show Modal Kết Quả
+        document.getElementById('score-val').innerText = score;
+        document.getElementById('star-row').innerText = '⭐'.repeat(score);
+        
+        // Thông báo dựa trên điểm số (Cần 8 điểm để qua)
+        const scoreMsg = document.getElementById('score-msg');
+        if (score >= 8) {
+            scoreMsg.innerText = score === 10 ? "TUYỆT ĐỐI! HOÀN HẢO! 🤩" : "LÀM TỐT LẮM! 🥳";
+            scoreMsg.style.color = "#2ecc71";
+            confetti();
+            if (currentLevel === maxLevelReached) {
+                await saveWin(score);
+            }
+            if (score >= 9) await saveToGallery();
+        } else {
+            // Thông báo cụ thể hơn khi điểm thấp
+            if (score <= 4) scoreMsg.innerText = "Bé nhớ tô kín hình nhé! 💪";
+            else scoreMsg.innerText = "Thử phối thêm màu sắc xem sao? 🎨";
+            scoreMsg.style.color = "#e67e22";
+        }
+        
+        document.getElementById('result-modal').style.display = 'flex';
+        isProcessing = false;
+    }
+
+    async function saveWin(s) {
+        try {
+            const res = await fetch('/api/game/shape-win', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ level: currentLevel, score: s })
+            });
+            const data = await res.json();
+            if(data.newLevel) {
+                maxLevelReached = data.newLevel;
+                document.getElementById('user-score').innerText = data.newScore.toLocaleString();
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function saveToGallery() {
+        let imgData = "";
+        if (currentLevel <= 20) {
+            const svgData = new XMLSerializer().serializeToString(svgLayer);
+            const canvasTmp = document.createElement("canvas");
+            canvasTmp.width = 500; canvasTmp.height = 500;
+            const ctxTmp = canvasTmp.getContext("2d");
+            const img = new Image();
+            imgData = await new Promise((resolve) => {
+                img.onload = () => {
+                    ctxTmp.fillStyle = "white"; ctxTmp.fillRect(0, 0, 500, 500);
+                    ctxTmp.drawImage(img, 0, 0); resolve(canvasTmp.toDataURL("image/png"));
+                };
+                img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+            });
+        } else {
+            imgData = canvas.toDataURL("image/png");
+        }
+        
+        await fetch('/api/house/save-drawing', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ level: currentLevel, image: imgData })
+        });
+        console.log("Đã treo tranh vào bảo tàng!");
+    }
+
+    function nextLevel() {
+        document.getElementById('result-modal').style.display = 'none';
+        if (currentLevel < 100 && currentLevel < maxLevelReached) {
+            renderLevel(currentLevel + 1);
+        } else if (currentLevel < 100) {
+            renderLevel(maxLevelReached); // Mở màn mới nhất vừa unlock
+        }
+    }
+
+    // CHẠY HỆ THỐNG
+    init();
+</script>
+
+    <script src="modern-ui.js"></script>
+  <script src="assets/ui/ui-v11.js"></script>
+  <script src="assets/ui/connection-v13.js"></script>
+  <script src="assets/ui/ux-v13.js"></script>
+<script src="assets/js/ai-autopilot.js?v=39.0.0"></script>
+</body>
+</html>

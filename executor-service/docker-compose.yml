@@ -1,0 +1,30 @@
+services:
+  code-executor:
+    build: .
+    restart: unless-stopped
+    environment:
+      EXECUTOR_PORT: 8090
+      CODE_EXECUTOR_TOKEN: ${CODE_EXECUTOR_TOKEN:?Set a long random CODE_EXECUTOR_TOKEN}
+      EXECUTOR_MAX_TIMEOUT_MS: 10000
+      EXECUTOR_WORK_ROOT: /srv/runtime-work
+      EXECUTOR_HOST_WORK_ROOT: ${EXECUTOR_HOST_WORK_ROOT:?Set EXECUTOR_HOST_WORK_ROOT to an absolute host path}
+    # Keep the endpoint bound to loopback; do not expose to the public Internet.
+    ports:
+      - "127.0.0.1:8090:8090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${EXECUTOR_HOST_WORK_ROOT:?Set EXECUTOR_HOST_WORK_ROOT to an absolute host path}:/srv/runtime-work:rw
+    read_only: true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=32m
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 128m
+
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:8090/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
