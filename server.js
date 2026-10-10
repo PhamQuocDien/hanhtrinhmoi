@@ -126,7 +126,7 @@ app.use('/assets', (req, res, next) => {
 });
 app.use('/assets', express.static(path.join(__dirname, 'assets'), publicStaticOptions));
 const publicFiles = new Set([
-    '/login.html', '/index.html', '/status.html', '/style.css', '/modern-ui.css', '/modern-ui.js',
+     '/','/login.html', '/index.html', '/status.html', '/style.css', '/modern-ui.css', '/modern-ui.js',
     '/global-client.js', '/heartbeat.js', '/ads.txt',
     '/tournament-v9.css', '/tournament-v9.js'
 ]);
