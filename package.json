@@ -1,0 +1,38 @@
+{
+  "name": "hanh-trinh-moi-learning-platform",
+  "version": "8.0.4",
+  "private": true,
+  "description": "Hanh Trinh Moi V8.0.4 - full-screen IT course workspace and cache-safe UI",
+  "main": "apps/api/server.js",
+  "scripts": {
+    "start": "node apps/api/server.js",
+    "dev": "node --watch apps/api/server.js",
+    "test": "node --test apps/api/test/*.test.js",
+    "check": "node --check apps/api/server.js && node --check apps/api/src/utils/validation.js && node --check apps/api/src/middleware/security.js && node --check apps/api/src/routes/auth.routes.js && node --check apps/api/src/routes/survey.routes.js && node --check apps/api/src/routes/admin.routes.js && node --check apps/api/src/routes/learning.routes.js && node --check apps/api/src/services/learning-ai.service.js && node --check apps/api/src/services/learning-policy.js && node --check apps/api/src/models/LearningProgress.js && node --check apps/api/src/models/AssessmentAttempt.js && node --check apps/api/src/models/PlacementAssessment.js && node --check scripts/database/seed-question-bank.js && node --check content/curriculum/primary/primary-curriculum.js && node --input-type=module --check < apps/web/src/js/api.js && node --input-type=module --check < apps/web/src/js/home.js && node --input-type=module --check < apps/web/src/js/login.js && node --input-type=module --check < apps/web/src/js/register.js && node --input-type=module --check < apps/web/src/js/survey.js && node --input-type=module --check < apps/web/src/js/dashboard.js && node --input-type=module --check < apps/web/src/js/admin-login.js && node --input-type=module --check < apps/web/src/js/admin.js && node --input-type=module --check < apps/web/src/js/learning.js && node --input-type=module --check < apps/web/src/js/lesson.js && node --input-type=module --check < apps/web/src/js/exam.js && node --check apps/api/test/primary-curriculum.test.js && node --check apps/api/src/models/QuestionBankItem.js && node --check apps/api/src/models/AssessmentSession.js && node --check apps/api/src/services/assessment-generator.js && node --check content/curriculum/index.js && node --check content/curriculum/lower-secondary/lower-secondary-curriculum.js && node --check content/question-banks/index.js && node --check content/question-banks/lower-secondary/question-bank.js && node --check scripts/database/seed-question-bank.js && node --check apps/api/test/lower-secondary-assessments.test.js && node --check content/curriculum/high-school/high-school-curriculum.js && node --check content/video-links/index.js && node --check apps/api/src/models/ActivityLog.js && node --check apps/api/src/models/ContentEntry.js && node --check apps/api/src/services/activity-log.js && node --check apps/api/src/services/word-import.js && node --check apps/api/test/high-school-curriculum.test.js && node --input-type=module --check < apps/web/src/js/admin.js && node --input-type=module --check < apps/web/src/js/lesson.js && node --check apps/api/src/services/progress-state.js && node --check apps/api/test/progress-state.test.js && node --check apps/api/test/high-school-curriculum.test.js && node --check apps/api/test/lower-secondary-assessments.test.js && node --check content/career-paths/software-development/index.js && node --check apps/api/src/models/Classroom.js && node --check apps/api/src/models/TeacherAssignment.js && node --check apps/api/src/models/AssignmentSubmission.js && node --check apps/api/src/models/CareerEnrollment.js && node --check apps/api/src/routes/career.routes.js && node --check apps/api/src/routes/teacher.routes.js && node --check apps/api/src/routes/assignments.routes.js && node --check apps/api/src/services/teacher-registration-policy.js && node --check apps/api/src/services/career-assessment-generator.js && node --check apps/api/src/services/career-assessment-policy.js && node --check apps/api/src/utils/email-identity.js && node --check apps/api/src/models/CareerQuestionBankItem.js && node --check apps/api/src/models/CareerAssessmentSession.js && node --check scripts/database/normalize-user-emails.js && node --check scripts/database/seed-career-question-bank.js && node --check apps/api/test/email-identity.test.js && node --check apps/api/test/career-assessment-generator.test.js && node --check apps/api/test/software-development-v510.test.js && node --check apps/api/test/software-development.test.js && node --check apps/api/test/teacher-auth.test.js && node --input-type=module --check < apps/web/src/js/career.js && node --input-type=module --check < apps/web/src/js/teacher.js && node --input-type=module --check < apps/web/src/js/assignments.js && node --input-type=module --check < apps/web/src/js/career.js && node --input-type=module --check < apps/web/src/js/teacher.js && node --input-type=module --check < apps/web/src/js/admin.js && node --input-type=module --check < apps/web/src/js/login.js && node --check content/curriculum/curriculum-alignment.js && node --check scripts/database/audit-curriculum.js && node --check apps/api/test/curriculum-alignment.test.js && node --check content/career-paths/catalog.js && node --check content/career-paths/it-groups/index.js && node --check content/career-paths/software-development/question-bank.js && node --check apps/api/src/services/code-runner.service.js && node --check apps/api/test/it-career-pathways.test.js && node --check apps/api/test/code-runner-v610.test.js && node --input-type=module --check < apps/web/src/js/career.js && node --check scripts/database/audit-it-curriculum.js && node --check content/quality/learning-quality.js && node --check scripts/database/audit-learning-quality.js && node --check apps/api/test/learning-quality-v611.test.js && node --check content/quality/theory-content.js && node --check scripts/database/audit-theory-content.js && node --check apps/api/test/theory-content-v800.test.js && node --input-type=module --check < apps/web/src/js/career.js && node --check apps/api/src/config-trust-proxy.js && node --check apps/api/src/services/legacy-user-index-migration.js && node --check apps/api/src/utils/mongo-errors.js && node --check scripts/database/migrate-legacy-user-indexes.js && node --check apps/api/test/deployment-hotfix-v801.test.js && node --check content/quality/it-course-quality.js && node --check apps/api/test/it-course-quality-v803.test.js && node --check scripts/database/audit-it-course-quality.js",
+    "seed:question-bank": "node scripts/database/seed-question-bank.js",
+    "repair:emails": "node scripts/database/normalize-user-emails.js",
+    "seed:career-question-bank": "node scripts/database/seed-career-question-bank.js",
+    "audit:curriculum": "node scripts/database/audit-curriculum.js",
+    "audit:it-curriculum": "node scripts/database/audit-it-curriculum.js",
+    "audit:quality": "node scripts/database/audit-learning-quality.js",
+    "audit:theory": "node scripts/database/audit-theory-content.js",
+    "audit:it-course-quality": "node scripts/database/audit-it-course-quality.js",
+    "migrate:user-indexes": "node scripts/database/migrate-legacy-user-indexes.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.9.5",
+    "mammoth": "^1.9.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}

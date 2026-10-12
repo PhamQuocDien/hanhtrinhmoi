@@ -1,0 +1,233 @@
+.career-page{background:#f8fafc;color:#102a43}.career-header{height:76px;padding:0 max(24px,calc((100vw - 1220px)/2));display:flex;align-items:center;justify-content:space-between;gap:24px;background:rgba(255,255,255,.95);border-bottom:1px solid #e5edf4;position:sticky;top:0;z-index:20;backdrop-filter:blur(18px)}.career-nav{display:flex;align-items:center;gap:25px;height:100%;font-size:12px;font-weight:700;color:#627d98}.career-nav a{height:100%;display:flex;align-items:center;position:relative}.career-nav a.active,.career-nav a:hover{color:#102a43}.career-nav a.active:after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:#ed9b5a}.career-actions{display:flex;align-items:center;gap:10px}.career-shell{width:min(1220px,calc(100% - 48px));margin:0 auto}.career-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;padding:74px 0 45px}.career-hero-copy{min-width:0}.career-breadcrumb{font-size:11px;color:#8296a8;font-weight:700;margin:24px 0 8px}.career-breadcrumb span{margin:0 8px;color:#ed9b5a}.career-hero h1{font-size:clamp(42px,5.8vw,70px);line-height:1.02;letter-spacing:-.065em;margin:12px 0 19px;font-weight:850}.career-hero h1>span{color:#ed9b5a}.career-hero h1 em{font-style:normal;color:#8aa0b3;font-size:.64em;letter-spacing:-.045em}.career-lead{max-width:640px;font-size:15px;line-height:1.9;color:#627d98}.career-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:27px}.career-trust{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px;color:#71869a;font-size:10px;font-weight:700}.career-trust span{padding:7px 10px;border:1px solid #e4ebf1;border-radius:99px;background:#fff}.career-visual{position:relative;min-height:340px;border-radius:22px;background:#102a43;overflow:hidden;box-shadow:0 28px 65px rgba(16,42,67,.19);color:#d9e2ec}.career-visual:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 86% 15%,rgba(237,155,90,.2),transparent 36%),linear-gradient(130deg,rgba(59,130,246,.13),transparent 48%)}.code-topbar{position:relative;display:flex;align-items:center;gap:6px;height:49px;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.09);font-size:10px;color:#8aa0b3}.code-topbar i{width:7px;height:7px;border-radius:50%;background:#ed9b5a}.code-topbar i:nth-child(2){background:#5bbda0}.code-topbar i:nth-child(3){background:#7aa7ed}.code-topbar span{margin-left:12px}.code-lines{position:relative;padding:28px clamp(18px,3vw,38px);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(11px,1.2vw,14px);line-height:2.15}.code-lines p{margin:0;color:#d9e2ec}.code-lines b{color:#7bb6ff;font-weight:700}.code-lines em{color:#f0b57d;font-style:normal}.code-lines strong{color:#6dd7b4}.code-lines .indent{padding-left:28px}.code-call{margin-top:17px!important;color:#8aa0b3!important}.code-call strong{color:#ed9b5a!important}.code-call span{color:#ed9b5a}.visual-bottom{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding:14px 20px;border-top:1px solid rgba(255,255,255,.09);font-size:8px;font-weight:800;letter-spacing:.11em;color:#91a8bc}.career-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:12px 0 78px}.career-metrics article{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid #e4ebf2;border-radius:15px;padding:18px 19px;min-width:0}.metric-icon{display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:12px;background:#eaf2ff;color:#416fc0;font-size:11px;font-weight:850}.metric-icon-green{background:#e6f8f0;color:#2e9872}.metric-icon-orange{background:#fff0e2;color:#be7738}.metric-icon-violet{background:#f0eafd;color:#805cc0}.career-metrics strong{display:block;font-size:25px;line-height:1.2;letter-spacing:-.04em}.career-metrics article div>span{display:block;color:#8496a8;font-size:10px;margin-top:4px}.career-section{padding:12px 0 76px}.career-section-heading{display:flex;justify-content:space-between;gap:35px;align-items:flex-end;margin-bottom:27px}.career-section-heading h2,.other-groups h2{font-size:clamp(28px,3vw,40px);line-height:1.15;letter-spacing:-.055em;margin:12px 0 8px}.career-section-heading h2 span{color:#8299ad}.career-section-heading p,.other-groups>div>p{max-width:540px;color:#71869a;font-size:12px;line-height:1.9;margin:0}.pathway-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.pathway-card{position:relative;display:flex;flex-direction:column;min-height:247px;padding:22px 20px 18px;background:#fff;border:1px solid #e2eaf1;border-radius:17px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;text-align:left}.pathway-card:hover,.pathway-card.is-selected{transform:translateY(-3px);border-color:#9eb5c9;box-shadow:0 15px 34px rgba(16,42,67,.08)}.pathway-card.is-selected{background:linear-gradient(160deg,#fff,#f3f8fd)}.pathway-number{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:#102a43;color:#fff;font-size:12px;font-weight:850}.pathway-card:nth-child(2) .pathway-number{background:#3877d2}.pathway-card:nth-child(3) .pathway-number{background:#289875}.pathway-card:nth-child(4) .pathway-number{background:#a16ac8}.pathway-card h3{font-size:16px;line-height:1.35;letter-spacing:-.035em;margin:18px 0 7px}.pathway-card p{color:#72879a;font-size:11px;line-height:1.75;margin:0 0 15px}.pathway-skills{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}.pathway-skills span{border:1px solid #e6edf4;background:#f8fafc;color:#5e768c;border-radius:6px;padding:4px 6px;font-size:8px;font-weight:750}.pathway-footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;color:#8094a7;font-size:9px;font-weight:800;letter-spacing:.05em}.pathway-footer b{color:#ed9b5a;font-size:15px}.course-section{padding-top:10px}.course-heading{align-items:flex-end}.course-filters{display:flex;flex-direction:column;gap:6px;width:min(310px,100%)}.course-filters label{font-size:10px;font-weight:800;color:#627d98}.course-filters input{height:42px;border:1px solid #dce6ef;border-radius:10px;background:#fff;padding:0 12px;color:#102a43;outline:none}.course-filters input:focus{border-color:#7ea2c6;box-shadow:0 0 0 3px rgba(59,130,246,.1)}.course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.career-course-card{display:flex;flex-direction:column;padding:21px;background:#fff;border:1px solid #e2eaf1;border-radius:16px;min-height:294px;transition:transform .2s,box-shadow .2s,border-color .2s}.career-course-card:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(16,42,67,.07);border-color:#c9d7e5}.course-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.course-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:9px;font-weight:800;color:#5d7690;letter-spacing:.05em;border:1px solid #e2eaf1;border-radius:6px;padding:5px 7px}.course-level{font-size:9px;font-weight:800;color:#8c9cab}.career-course-card h3{font-size:18px;line-height:1.35;letter-spacing:-.035em;margin:17px 0 7px}.career-course-card .course-tagline{font-size:11px;color:#6c8195;line-height:1.8;margin:0 0 14px}.course-skill-list{display:flex;gap:5px;flex-wrap:wrap}.course-skill-list span{font-size:9px;color:#4f6a83;background:#f3f7fa;border-radius:5px;padding:4px 7px}.course-card-meta{display:flex;justify-content:space-between;gap:12px;margin-top:16px;color:#8094a6;font-size:10px}.course-progress{height:5px;border-radius:20px;background:#eef2f6;margin:11px 0 15px;overflow:hidden}.course-progress i{display:block;height:100%;background:#3dba91;border-radius:20px}.course-card-actions{display:flex;gap:8px;margin-top:auto}.course-card-actions .button{flex:1;min-width:0;padding-inline:10px;font-size:10px}.course-card-actions .button-quiet{background:#fbfcfe}.course-enrolled{color:#26946f;font-size:9px;font-weight:800}.other-groups{padding:50px 0 48px;border-top:1px solid #e4ebf2}.other-groups>div:first-child{max-width:730px}.other-group-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:25px}.other-group-grid article{display:grid;grid-template-columns:30px 1fr;gap:11px;align-items:start;background:#fff;border:1px solid #e6edf3;border-radius:12px;padding:14px 12px;min-width:0}.other-group-grid article>span{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#f1f5f9;color:#6e8295;font-size:9px;font-weight:850}.other-group-grid h3{font-size:11px;line-height:1.4;margin:1px 0 5px}.other-group-grid p{font-size:9px;color:#8296a7;margin:0;line-height:1.6}.other-group-grid b{grid-column:2;font-size:8px;letter-spacing:.07em;color:#9aabba}.career-disclaimer{padding:18px 20px;border:1px solid #f1dfc9;background:#fffaf4;border-radius:12px;color:#8b775f;font-size:10px;line-height:1.8;margin:18px 0 50px}.career-disclaimer strong{color:#99682e}.career-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:21px 0 28px;border-top:1px solid #e5edf4;color:#879aab;font-size:10px}.career-footer>a:last-child{font-weight:800;color:#536d83}.career-footer .brand-mark{width:31px;height:31px;border-radius:9px;font-size:16px}.career-footer .brand-name{font-size:11px}.course-dialog{width:min(860px,calc(100% - 24px));max-height:min(88vh,860px);padding:0;border:1px solid #dbe5ee;border-radius:20px;box-shadow:0 30px 100px rgba(16,42,67,.3);color:#102a43}.course-dialog::backdrop{background:rgba(9,27,44,.56);backdrop-filter:blur(4px)}.dialog-heading{display:flex;gap:22px;justify-content:space-between;padding:25px 28px 17px;background:#f7fafc;border-bottom:1px solid #e6edf4}.dialog-heading h2{font-size:25px;letter-spacing:-.04em;margin:8px 0 7px}.dialog-heading p{font-size:12px;color:#687f94;line-height:1.8;margin:0;max-width:680px}.dialog-close{flex-shrink:0;width:36px;height:36px;border:1px solid #dfe7ef;border-radius:10px;background:#fff;color:#536d83;font-size:24px;cursor:pointer}.dialog-course-meta{display:flex;gap:8px;flex-wrap:wrap;padding:14px 28px;border-bottom:1px solid #edf1f5}.dialog-course-meta span{padding:6px 9px;border-radius:7px;background:#f3f7fa;font-size:10px;color:#60788d;font-weight:750}.dialog-modules{padding:14px 28px 22px;max-height:42vh;overflow:auto}.dialog-module{border:1px solid #e5ecf3;border-radius:12px;margin:10px 0;overflow:hidden}.dialog-module summary{display:flex;align-items:center;gap:10px;padding:13px 15px;cursor:pointer;list-style:none}.dialog-module summary::-webkit-details-marker{display:none}.module-number{display:grid;place-items:center;width:29px;height:29px;flex-shrink:0;border-radius:8px;background:#edf3f8;color:#496780;font-size:10px;font-weight:850}.dialog-module summary strong{display:block;font-size:12px}.dialog-module summary small{display:block;color:#8294a4;font-size:10px;margin-top:2px}.module-lessons{border-top:1px solid #edf1f5;padding:0 14px 8px}.module-lesson{display:grid;grid-template-columns:27px 1fr auto;gap:10px;align-items:center;padding:12px 3px;border-bottom:1px solid #f0f3f6}.module-lesson:last-child{border-bottom:0}.lesson-index{display:grid;place-items:center;width:25px;height:25px;border-radius:7px;background:#f4f7fa;color:#7b8ea0;font-size:9px;font-weight:850}.module-lesson strong{display:block;font-size:11px}.module-lesson small{display:block;color:#8a9cac;font-size:9px;margin-top:3px}.module-lesson button{min-height:31px;padding:0 10px;font-size:9px}.module-lesson button:disabled{cursor:not-allowed;opacity:.45}.lesson-study-panel{margin:0 28px 22px;padding:20px;border:1px solid #dce9f5;border-radius:13px;background:#f5f9fd}.lesson-study-panel h3{margin:4px 0 9px;font-size:17px}.lesson-study-panel p{font-size:11px;line-height:1.85;color:#526c83}.lesson-study-panel .lesson-study-label{font-size:9px;letter-spacing:.1em;color:#8197ab;font-weight:850}.lesson-study-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.lesson-study-grid article{border:1px solid #e0eaf3;background:#fff;border-radius:10px;padding:12px}.lesson-study-grid strong{display:block;font-size:10px}.lesson-study-grid p{margin:6px 0 0}.dialog-actions{display:flex;gap:10px;justify-content:flex-end;padding:16px 28px;border-top:1px solid #e7edf3;background:#fff}.catalog-loading,.skeleton-card{min-height:150px;border:1px dashed #d9e4ed;border-radius:15px;padding:20px;color:#7e93a6;display:flex;align-items:center;justify-content:center}.skeleton-card{background:linear-gradient(90deg,#f4f7fa,#fff,#f4f7fa);background-size:200% 100%;animation:career-shimmer 1.4s infinite}@keyframes career-shimmer{to{background-position:-200% 0}}@media(max-width:1000px){.career-header{padding-inline:20px}.career-nav{gap:15px}.career-hero{gap:25px}.career-metrics{grid-template-columns:repeat(2,1fr)}.pathway-grid{grid-template-columns:repeat(2,1fr)}.course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.other-group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:720px){.career-header{height:auto;min-height:68px;flex-wrap:wrap;padding:12px 18px;gap:12px}.career-nav{order:3;width:100%;height:35px;justify-content:space-between;gap:9px;font-size:10px}.career-nav a{white-space:nowrap}.career-actions{margin-left:auto}.career-actions .user-chip{display:none}.career-shell{width:min(100% - 30px,1220px)}.career-hero{grid-template-columns:1fr;padding:44px 0 32px;gap:28px}.career-hero h1{font-size:clamp(43px,12vw,62px)}.career-visual{min-height:285px}.career-trust{gap:7px}.career-trust span{font-size:9px}.career-metrics{gap:8px;margin-bottom:50px}.career-metrics article{padding:12px;gap:9px}.metric-icon{width:32px;height:32px;border-radius:9px}.career-metrics strong{font-size:21px}.career-metrics article div>span{font-size:9px}.career-section{padding-bottom:54px}.career-section-heading{display:block}.career-section-heading>p{margin-top:10px}.pathway-grid,.course-grid{grid-template-columns:1fr}.pathway-card{min-height:0}.course-heading .course-filters{margin-top:18px;width:100%}.career-course-card{min-height:0}.other-group-grid{grid-template-columns:1fr}.career-footer{flex-wrap:wrap}.dialog-heading{padding:20px 17px 14px}.dialog-heading h2{font-size:20px}.dialog-course-meta{padding:12px 17px}.dialog-modules{padding:10px 17px 18px;max-height:40vh}.module-lesson{grid-template-columns:25px 1fr}.module-lesson button{grid-column:2;justify-self:start}.lesson-study-panel{margin:0 17px 16px;padding:15px}.lesson-study-grid{grid-template-columns:1fr}.dialog-actions{padding:12px 17px}.dialog-actions .button{flex:1}}
+/* V6.1.0: lesson assessment workspace */
+.career-practice-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0;padding:14px;border:1px dashed #cddce9;border-radius:11px;background:#fff}.career-practice-actions .footer-muted,.career-quiz-submit-row .footer-muted{font-size:10px;line-height:1.7;color:#73889b}.career-quiz-panel{margin:0 0 20px;padding:18px;border:1px solid #d8e5f0;border-radius:14px;background:#fff}.career-quiz-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:2px 0 14px;border-bottom:1px solid #e6edf4}.career-quiz-heading h4,.career-quiz-result h4{font-size:16px;margin:6px 0}.career-quiz-heading p,.career-quiz-result p{font-size:11px;color:#647b90;line-height:1.75;margin:5px 0}.career-quiz-pill{flex-shrink:0;padding:6px 9px;border-radius:20px;background:#edf7f2;color:#28795f;font-size:10px;font-weight:800}.career-quiz-question{padding:15px 0;border-bottom:1px solid #edf1f5}.career-quiz-question:last-of-type{border-bottom:0}.career-quiz-question-meta{display:flex;justify-content:space-between;gap:10px;color:#8094a6;font-size:9px;font-weight:800;letter-spacing:.04em}.career-quiz-question h4{font-size:12px;line-height:1.75;margin:8px 0 12px;white-space:pre-wrap}.career-quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}.career-quiz-options label{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border:1px solid #e2eaf2;border-radius:9px;background:#fbfdff;font-size:11px;line-height:1.65;cursor:pointer}.career-quiz-options label:has(input:checked){border-color:#70bba0;background:#f0faf6}.career-quiz-options input{margin-top:3px;accent-color:#27956e}.career-quiz-response{width:100%;min-height:86px;padding:10px;border:1px solid #dce5ed;border-radius:9px;resize:vertical;font:inherit;font-size:11px;line-height:1.7}.career-quiz-short-input{width:min(100%,540px);padding:10px;border:1px solid #dce5ed;border-radius:9px;font:inherit;font-size:11px}.career-quiz-submit-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #e6edf4}.career-quiz-result{padding:10px 2px}.career-quiz-error{padding:12px;border:1px solid #f2c9c3;border-radius:9px;background:#fff8f7;color:#a5392d;font-size:12px;line-height:1.7}.career-quiz-panel .button:disabled{opacity:.55;cursor:wait}@media(max-width:720px){.career-quiz-panel{padding:13px}.career-quiz-options{grid-template-columns:1fr}.career-quiz-heading,.career-quiz-submit-row{align-items:stretch;flex-direction:column}.career-quiz-pill{align-self:flex-start}}
+
+.career-practice-actions>label{display:flex;flex-direction:column;gap:5px;font-size:10px;font-weight:800;color:#496479;min-width:160px}.career-practice-actions .form-input{min-width:160px;padding:9px 10px;border:1px solid #d9e4ee;border-radius:8px;background:#fff;color:#19344a;font:inherit;font-size:11px}.career-practice-actions .footer-muted{flex-basis:100%}@media(max-width:620px){.career-practice-actions>label,.career-practice-actions .form-input,.career-practice-actions #startCareerPractice{width:100%;min-width:0}}
+
+/* V6.1.1 learning-quality profile block. */
+.career-quality-profile{margin:14px 0;padding:15px 17px;border:1px solid #dbe9f5;background:#f6fbff;border-radius:12px;color:#4c6b82}.career-quality-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.career-quality-heading>span{font-size:9px;font-weight:900;letter-spacing:.08em;color:#397eae}.career-quality-heading small,.career-quality-profile>small{font-size:9px;line-height:1.6;color:#7e95a7}.career-quality-profile p{font-size:10px;line-height:1.65;margin:9px 0;color:#59758b}.career-quality-profile ul{margin:8px 0;padding-left:19px;display:grid;gap:5px}.career-quality-profile li{font-size:10px;line-height:1.6;color:#42637b}.career-quality-profile>small{display:block;margin-top:8px}
+
+/* V8.0.0 — university IT lessons show full theory before examples, practice and code. */
+.career-theory-card{margin:16px 0;padding:18px;border:1px solid #cbdfee;border-radius:13px;background:linear-gradient(145deg,#fff,#f3f9ff);color:#375c76}.career-theory-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.career-theory-kicker{display:block;font-size:9px;font-weight:900;letter-spacing:.1em;color:#287bb0;margin-bottom:7px}.career-theory-card h4{font-size:16px;line-height:1.45;color:#163d5a;margin:0}.career-theory-draft{flex-shrink:0;padding:6px 8px;background:#fff3df;border:1px solid #f0dfbd;border-radius:99px;color:#8d6424;font-size:9px;font-weight:800}.career-theory-summary{font-size:12px;line-height:1.85;color:#4d6c83;margin:12px 0}.career-theory-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}.career-theory-section{min-width:0;background:#fff;border:1px solid #e1ebf4;border-radius:9px;padding:12px}.career-theory-section h5{font-size:11px;line-height:1.5;color:#285779;margin:0 0 7px}.career-theory-section p,.career-theory-section li{font-size:10px;line-height:1.8;color:#526f86;margin:0 0 6px;overflow-wrap:anywhere}.career-theory-section ul{padding-left:18px;margin:0;display:grid;gap:5px}.career-theory-section code{padding:2px 4px;border-radius:4px;background:#edf4fa}.career-theory-card>small{display:block;border-top:1px dashed #d5e3ef;margin-top:12px;padding-top:10px;font-size:9px;line-height:1.7;color:#7b91a4}@media(max-width:720px){.career-theory-card-head{flex-direction:column}.career-theory-sections{grid-template-columns:1fr}}
+
+
+/* V8.0.3: make the IT course workspace readable and use one main scroll area. */
+.course-dialog{width:min(1240px,calc(100vw - 32px));max-width:none;max-height:min(94vh,1100px);overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;border-radius:20px;font-size:15px;line-height:1.7}
+.course-dialog .dialog-heading{position:sticky;top:0;z-index:5;align-items:flex-start;padding:26px 32px 20px;gap:24px}
+.course-dialog .dialog-heading h2{font-size:clamp(25px,2.1vw,32px);line-height:1.25}
+.course-dialog .dialog-heading p{font-size:15px;line-height:1.75;max-width:900px}
+.course-dialog .dialog-close{width:42px;height:42px;font-size:27px}
+.course-dialog .dialog-course-meta{padding:16px 32px;gap:10px}
+.course-dialog .dialog-course-meta span{font-size:12px;padding:7px 11px}
+.course-dialog .dialog-modules{max-height:none;overflow:visible;padding:12px 32px 24px}
+.course-dialog .dialog-module{margin:12px 0;border-radius:14px}
+.course-dialog .dialog-module summary{padding:16px 18px;gap:13px}
+.course-dialog .module-number{width:36px;height:36px;font-size:12px}
+.course-dialog .dialog-module summary strong{font-size:16px;line-height:1.45}
+.course-dialog .dialog-module summary small{font-size:13px;line-height:1.6;margin-top:4px}
+.course-dialog .module-lessons{padding:2px 18px 8px}
+.course-dialog .module-lesson{grid-template-columns:34px minmax(0,1fr) auto;gap:14px;padding:15px 4px}
+.course-dialog .lesson-index{width:31px;height:31px;font-size:12px}
+.course-dialog .module-lesson strong{font-size:15px;line-height:1.55}
+.course-dialog .module-lesson small{font-size:13px;line-height:1.7;margin-top:5px}
+.course-dialog .module-lesson button{min-height:40px;padding:0 15px;font-size:13px}
+.course-dialog .lesson-study-panel{margin:0 32px 26px;padding:26px;border-radius:16px}
+.course-dialog .lesson-study-panel h3{font-size:clamp(23px,2vw,29px);line-height:1.3}
+.course-dialog .lesson-study-panel p{font-size:15px;line-height:1.85}
+.course-dialog .lesson-study-panel .lesson-study-label{font-size:11px;letter-spacing:.09em}
+.course-dialog .lesson-study-grid{gap:14px}
+.course-dialog .lesson-study-grid article{padding:17px;border-radius:12px}
+.course-dialog .lesson-study-grid strong{font-size:13px;line-height:1.5}
+.course-dialog .dialog-actions{position:sticky;bottom:0;z-index:5;padding:16px 32px;background:rgba(255,255,255,.97);backdrop-filter:blur(12px)}
+.course-dialog .dialog-actions .button{min-height:44px;font-size:13px}
+.course-dialog .career-theory-card{padding:22px;margin:20px 0;border-radius:14px}
+.course-dialog .career-theory-kicker{font-size:11px}
+.course-dialog .career-theory-card h4{font-size:20px;line-height:1.45}
+.course-dialog .career-theory-summary{font-size:15px;line-height:1.85}
+.course-dialog .career-theory-section{padding:16px}
+.course-dialog .career-theory-section h5{font-size:14px}
+.course-dialog .career-theory-section p,.course-dialog .career-theory-section li{font-size:14px;line-height:1.8}
+.course-dialog .career-theory-card>small{font-size:12px}
+.course-dialog .career-quality-profile{padding:18px;margin:18px 0}
+.course-dialog .career-quality-heading>span{font-size:11px}
+.course-dialog .career-quality-heading small,.course-dialog .career-quality-profile>small{font-size:12px}
+.course-dialog .career-quality-profile p,.course-dialog .career-quality-profile li{font-size:13px;line-height:1.75}
+.course-dialog .career-practice-actions{gap:14px;padding:18px;margin:20px 0}
+.course-dialog .career-practice-actions>label{font-size:13px;min-width:190px}
+.course-dialog .career-practice-actions .form-input{min-width:190px;font-size:14px;padding:11px 12px}
+.course-dialog .career-practice-actions .footer-muted,.course-dialog .career-quiz-submit-row .footer-muted{font-size:13px;line-height:1.7}
+.course-dialog .career-quiz-panel{padding:22px;margin:0 0 22px;border-radius:16px}
+.course-dialog .career-quiz-heading h4,.course-dialog .career-quiz-result h4{font-size:21px;line-height:1.4}
+.course-dialog .career-quiz-heading p,.course-dialog .career-quiz-result p{font-size:14px;line-height:1.8}
+.course-dialog .career-quiz-pill{font-size:12px;padding:8px 12px}
+.course-dialog .career-quiz-question{padding:21px 0}
+.course-dialog .career-quiz-question-meta{font-size:12px}
+.course-dialog .career-quiz-question h4{font-size:16px;line-height:1.8;margin:10px 0 14px}
+.course-dialog .career-quiz-options{gap:10px}
+.course-dialog .career-quiz-options label{font-size:14px;line-height:1.75;padding:13px 15px}
+.course-dialog .career-quiz-response{min-height:120px;font-size:15px;line-height:1.75;padding:13px}
+.course-dialog .career-quiz-short-input{font-size:15px;padding:12px}
+.course-dialog .career-quiz-submit-row{padding-top:18px;gap:16px}
+.course-dialog .career-quiz-error,.course-dialog .career-quiz-help{font-size:14px;line-height:1.8}
+.course-dialog .career-quiz-panel .button{min-height:44px;font-size:13px}
+.course-final-assessment{margin:0 32px 28px;padding:24px;border:1px solid #d5e4f0;border-radius:16px;background:linear-gradient(135deg,#f5faff,#fff 70%)}
+.course-final-heading{display:flex;justify-content:space-between;align-items:center;gap:24px}
+.course-final-heading h3{font-size:24px;line-height:1.35;margin:6px 0 8px;color:#102a43}
+.course-final-heading p{font-size:14px;line-height:1.8;color:#587186;margin:0;max-width:720px}
+.course-final-heading .button{min-height:46px;flex-shrink:0;font-size:13px}
+.course-final-heading .button:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+#courseFinalQuizPanel:not([hidden]){margin-top:22px}
+@media(max-width:720px){
+  .course-dialog{width:calc(100vw - 12px);max-height:96dvh;border-radius:14px}
+  .course-dialog .dialog-heading{padding:20px 16px 15px;gap:12px}
+  .course-dialog .dialog-heading h2{font-size:23px}
+  .course-dialog .dialog-heading p{font-size:14px}
+  .course-dialog .dialog-course-meta{padding:13px 16px}
+  .course-dialog .dialog-modules{padding:8px 12px 18px}
+  .course-dialog .dialog-module summary{padding:13px 12px}
+  .course-dialog .module-lessons{padding:0 10px 6px}
+  .course-dialog .module-lesson{grid-template-columns:29px minmax(0,1fr);gap:10px;padding:14px 0}
+  .course-dialog .module-lesson button{grid-column:2;justify-self:start}
+  .course-dialog .lesson-study-panel{margin:0 12px 18px;padding:17px}
+  .course-dialog .lesson-study-grid{grid-template-columns:1fr}
+  .course-dialog .dialog-actions{padding:12px 16px}
+  .course-dialog .dialog-actions .button{flex:1}
+  .course-final-assessment{margin:0 12px 18px;padding:17px}
+  .course-final-heading{align-items:stretch;flex-direction:column;gap:15px}
+  .course-final-heading h3{font-size:22px}
+  .course-final-heading .button{width:100%}
+  .course-dialog .career-quiz-panel{padding:15px}
+  .course-dialog .career-quiz-heading,.course-dialog .career-quiz-submit-row{align-items:stretch;flex-direction:column}
+  .course-dialog .career-quiz-options{grid-template-columns:1fr}
+  .course-dialog .career-theory-card-head{flex-direction:column}
+}
+
+/* V8.0.3 — outcome-driven course and lesson guides. */
+.dialog-course-quality{padding:0 32px 8px}
+.career-course-quality-card,.career-lesson-guide{margin:8px 0 20px;padding:22px;border:1px solid #d6e5f1;border-radius:16px;background:linear-gradient(145deg,#f8fbff,#fff 72%);color:#36546b}
+.career-course-quality-head,.career-lesson-guide>header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.career-course-quality-head h3,.career-lesson-guide>header h4{margin:0;color:#153d59;font-size:21px;line-height:1.4}
+.course-quality-outcomes{margin:17px 0;padding:16px;background:#fff;border:1px solid #e1ebf3;border-radius:12px}
+.course-quality-outcomes>strong{font-size:14px;color:#234e6d}
+.course-quality-outcomes ul,.course-quality-acceptance,.lesson-guide-outcomes ul,.lesson-guide-checks{padding-left:21px;margin:10px 0 0;display:grid;gap:7px}
+.course-quality-outcomes li,.course-quality-acceptance li,.lesson-guide-outcomes li,.lesson-guide-checks li{font-size:14px;line-height:1.7;color:#4a687f}
+.course-quality-details,.lesson-guide-details{margin-top:10px;background:#fff;border:1px solid #e1eaf2;border-radius:11px;overflow:hidden}
+.course-quality-details>summary,.lesson-guide-details>summary{cursor:pointer;padding:14px 16px;font-size:14px;font-weight:850;line-height:1.5;color:#254f6e;background:#f5f9fc}
+.course-quality-details>p{margin:12px 16px;font-size:14px;line-height:1.8;color:#4c6c82}
+.course-quality-table-wrap{width:100%;overflow-x:auto;margin:10px 0}
+.course-quality-table{width:100%;min-width:520px;border-collapse:collapse;background:#fff}
+.course-quality-table th,.course-quality-table td{padding:10px 12px;border:1px solid #e1e9f0;text-align:left;vertical-align:top;font-size:13px;line-height:1.65;color:#4a667b}
+.course-quality-table th{background:#f4f8fb;color:#214b69;font-size:12px}
+.course-quality-table td:nth-child(2){white-space:nowrap;font-weight:850;color:#236a95}
+.course-quality-acceptance{margin:8px 18px 16px}
+.course-quality-milestones{padding:8px 16px 14px;display:grid;gap:12px}
+.course-quality-milestone{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;padding:11px 0;border-bottom:1px solid #e8eff5}
+.course-quality-milestone:last-child{border-bottom:0}
+.course-quality-milestone>span,.lesson-guide-steps>li>span{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#e8f3fb;color:#22628b;font-weight:900;font-size:12px}
+.course-quality-milestone strong{font-size:14px;color:#254f6d}
+.course-quality-milestone p,.course-quality-milestone small{display:block;margin:5px 0 0;font-size:13px;line-height:1.7;color:#5a7488}
+.course-quality-assessment-mix{display:flex;flex-wrap:wrap;gap:8px;padding:15px 16px 8px}
+.course-quality-assessment-mix span{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid #dce8f1;border-radius:99px;background:#f7fbfe;color:#41647d;font-size:12px}
+.course-quality-assessment-mix b{color:#166e9c}
+.course-quality-note{display:block;margin:12px 0 0;font-size:12px;line-height:1.75;color:#71879a}
+.career-lesson-guide{background:#fbfdff;border-color:#dbe8f3}
+.career-lesson-guide>header{align-items:center}
+.career-lesson-guide>header h4{font-size:19px}
+.lesson-guide-time{flex-shrink:0;padding:7px 11px;border-radius:99px;background:#e7f4fc;color:#22658e;font-weight:850;font-size:12px}
+.lesson-guide-prerequisite{margin:13px 0;padding:11px 13px;background:#fff8e9;border:1px solid #f0e1bc;border-radius:9px;color:#6c5a35;font-size:13px;line-height:1.7}
+.lesson-guide-outcomes{padding:15px 16px;background:#fff;border:1px solid #e2edf5;border-radius:11px}
+.lesson-guide-outcomes>strong{font-size:14px;color:#234e6d}
+.lesson-guide-timeplan{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
+.lesson-guide-timeplan span{display:flex;flex-direction:column;gap:4px;justify-content:center;padding:10px;background:#edf6fc;border-radius:9px;color:#4e6b81;font-size:11px;line-height:1.45}
+.lesson-guide-timeplan b{font-size:15px;color:#1b628f}
+.lesson-guide-steps{list-style:none;margin:0;padding:14px 16px;display:grid;gap:12px}
+.lesson-guide-steps>li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:11px;align-items:start;color:#4d697e;font-size:14px;line-height:1.75}
+.lesson-guide-levels{padding:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lesson-guide-levels article{padding:13px;background:#f7fafc;border:1px solid #e4edf4;border-radius:9px}
+.lesson-guide-levels strong{font-size:13px;color:#245674}
+.lesson-guide-levels p{font-size:13px;line-height:1.7;color:#526f83;margin:8px 0 0}
+.lesson-guide-details>.course-quality-table-wrap{padding:0 12px;box-sizing:border-box}
+.career-course-quality-card .career-theory-draft{white-space:nowrap}
+@media(max-width:720px){.dialog-course-quality{padding:0 12px 8px}.career-course-quality-card,.career-lesson-guide{padding:15px;margin:10px 0 16px}.career-course-quality-head,.career-lesson-guide>header{flex-direction:column}.career-course-quality-head h3,.career-lesson-guide>header h4{font-size:18px}.lesson-guide-timeplan{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-guide-levels{grid-template-columns:1fr}.course-quality-table{min-width:480px}.career-course-quality-card .career-theory-draft{white-space:normal}}
+
+
+/* V8.0.4: course learning opens as a real full-screen workspace, not a small dialog.
+   Keep these overrides last so older desktop/mobile modal rules cannot shrink it. */
+.course-dialog{
+  position:fixed;
+  inset:0;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  margin:0;
+  width:100vw;
+  max-width:none;
+  height:100vh;
+  height:100dvh;
+  max-height:100vh;
+  max-height:100dvh;
+  min-width:0;
+  min-height:0;
+  box-sizing:border-box;
+  padding:0;
+  border:0;
+  border-radius:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  transform:none;
+  zoom:1;
+  background:#fff;
+  font-size:16px;
+  line-height:1.7;
+}
+.course-dialog[open]{display:block;}
+.course-dialog .dialog-heading{
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-sizing:border-box;
+  width:100%;
+}
+.course-dialog .dialog-course-meta,
+.course-dialog .dialog-course-quality,
+.course-dialog .dialog-modules,
+.course-dialog .course-final-assessment,
+.course-dialog .lesson-study-panel{
+  box-sizing:border-box;
+  width:100%;
+  max-width:none;
+}
+.course-dialog .dialog-actions{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  box-sizing:border-box;
+  width:100%;
+  min-height:72px;
+  padding:16px clamp(16px,3vw,48px);
+  background:rgba(255,255,255,.97);
+  border-top:1px solid #e2eaf1;
+  backdrop-filter:blur(12px);
+}
+.course-dialog .dialog-course-meta{padding-inline:clamp(16px,3vw,48px)}
+.course-dialog .dialog-course-quality{padding-inline:clamp(16px,3vw,48px)}
+.course-dialog .dialog-modules{padding:16px clamp(16px,3vw,48px) 28px}
+.course-dialog .course-final-assessment{margin:0 0 28px;padding:clamp(16px,2.4vw,32px)}
+.course-dialog .lesson-study-panel{margin:0 clamp(16px,3vw,48px) 28px;padding:clamp(16px,2.4vw,32px);width:auto}
+.course-dialog .lesson-study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.course-dialog::backdrop{background:rgba(9,27,44,.68);backdrop-filter:blur(5px)}
+@media(max-width:720px){
+  .course-dialog{width:100vw;max-width:none;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0;padding:0}
+  .course-dialog .dialog-heading{padding:17px 16px 14px;gap:12px}
+  .course-dialog .dialog-heading h2{font-size:clamp(21px,6vw,26px)}
+  .course-dialog .dialog-course-meta{padding:12px 16px}
+  .course-dialog .dialog-course-quality{padding:0 12px 8px}
+  .course-dialog .dialog-modules{padding:10px 12px 20px}
+  .course-dialog .course-final-assessment{margin:0 12px 18px;width:calc(100% - 24px);padding:16px}
+  .course-dialog .lesson-study-panel{margin:0 12px 18px;width:calc(100% - 24px);padding:16px}
+  .course-dialog .lesson-study-grid{grid-template-columns:1fr}
+  .course-dialog .dialog-actions{padding:12px 16px;gap:10px}
+}
